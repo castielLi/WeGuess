@@ -1,0 +1,3 @@
+rootProject.name = 'WeGuess'
+
+include ':app'
