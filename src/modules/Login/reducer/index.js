@@ -10,7 +10,7 @@ const initialState = {
     status: null,
 };
 
-export default function user(state=initialState, action){
+export default function LoginStore(state=initialState, action){
 
     switch(action.type){
         case TYPES.LOGGED_DOING:

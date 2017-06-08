@@ -1,0 +1,49 @@
+/**
+ * Created by apple on 2017/6/8.
+ */
+import  * as config from './NetworkConfig'
+import * as commons from './Common'
+import 'whatwg-fetch'
+
+function initRequestObject(headers,Method,params){
+    let requestObject = Object.assign({},{ method : Method ,
+     body: commons.isObjectEmpty(params)? JSON.stringify(params):""})
+
+    if(!commons.isObjectEmpty(headers)){
+        return editHttpHeaders(requestObject,headers)
+    }
+    return requestObject;
+}
+
+function editHttpHeaders(requestObject,headers){
+    for(let item in config){
+        Object.assign(requestObject,{headers:{ item: config[item]}})
+    }
+    return requestObject
+}
+
+function promiseRequest(requestURL,requestObject,callback){
+    let promise = Promise.race([
+        fetch( config.baseURL + requestURL, requestObject ),
+        new Promise(function (resolve, reject) {
+            setTimeout(() => reject(new Error('request timeout')), config.timeOut)
+        })
+    ])
+    promise.then(response => {
+        callback(response,null)
+    })
+    promise.catch(error => {
+        callback(null,error)
+    })
+}
+
+
+export function httpRequestGET(requestURL,headers={},callback){
+    let requestObject = initRequestObject(headers,"GET",{},callback)
+    promiseRequest(requestURL,requestObject)
+}
+
+export function httpRequestPOST(requestURL,params,headers={},callback){
+    let requestObject= initRequestObject(headers,"POST",params,callback)
+    promiseRequest(requestURL,requestObject)
+}

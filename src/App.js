@@ -5,8 +5,9 @@
 
 import React, {Component} from 'react';
 import { Provider } from 'react-redux';
-import Root from './root'
+import Root from './modules/Root/root'
 import configureStore from './store'
+import configureNetwork from './Networking/configureNetwork'
 
 let store = configureStore();
 
@@ -19,6 +20,9 @@ export default class App extends Component {
             isLoading: true,
             store: configureStore(()=>{this.setState({isLoading: false})})
         }
+
+        //初始化app的http组件
+        configureNetwork({"Content-Type":"application/json"},'fetch',false)
     }
 
     render() {

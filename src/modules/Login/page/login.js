@@ -47,15 +47,17 @@ export default class Login extends Component {
 
                 <Text style={styles.forgotPassword}>Forgotten password?</Text>
                 <View style={styles.buttons}>
+                    <View style={styles.touchView}>
                     <TouchableHighlight
                         style={styles.signin}
                         onPress={this.onButtonPress}>
-                        <View style={styles.thirdPartButton}>
-                                <Text style={styles.facebook}>
-                                    Login with facebook!
-                                </Text>
+                        <View style={styles.touchButton}>
+                            <Text style={styles.signInText}>
+                                Sign In
+                            </Text>
                         </View>
                     </TouchableHighlight>
+                    </View>
                     <Text style={styles.midText}>------- OR -------</Text>
                     <View style={styles.touchView}>
                         <TouchableHighlight
@@ -122,9 +124,13 @@ const styles = StyleSheet.create({
     buttons:{
         flex:1,
         alignItems: 'center',
+        marginTop:15
+    },
+    signInText:{
+        color:'white',
+        fontSize:16
     },
     signin:{
-        marginTop:15,
         height:40,
         width:310,
         backgroundColor:'#cbcd00',
@@ -133,7 +139,8 @@ const styles = StyleSheet.create({
     midText:{
         color:'white',
         fontSize:16,
-        marginTop:30
+        marginTop:30,
+
     },
     touchLighted:{
         marginTop:15,

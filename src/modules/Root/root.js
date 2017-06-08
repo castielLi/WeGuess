@@ -6,8 +6,8 @@
 import React, { Component } from 'react';
 import { Navigator } from 'react-native-deprecated-custom-components';
 import { connect } from 'react-redux';
-import Route from './router'
-import Login from './modules/Login/page/login'
+import Route from '../../route/router'
+import Login from '../Login/page/login'
 
 let initialRoute = {
     id:'module/login',
@@ -52,11 +52,11 @@ class Root extends Component {
 }
 
 
-function select(store){
+function MapState(store){
     return {
         isLoggedIn: store.loginStore.isLoggedIn
     }
 }
 
 
-export default connect(select)(Root);
+export default connect(MapState)(Root);
