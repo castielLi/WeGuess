@@ -1,4 +1,6 @@
 rootProject.name = 'WeGuess'
+include ':react-native-filesystem'
+project(':react-native-filesystem').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-filesystem/android')
 include ':react-native-sound'
 project(':react-native-sound').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sound/android')
 include ':react-native-audio'

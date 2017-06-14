@@ -15,6 +15,9 @@ import {
 
 import Sound from 'react-native-sound';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
+import FMDB from '../../../Common/DatabaseHelper'
+var uuid = require('react-native-uuid');
+import Filesystem from '../../../Common/Filesystem'
 
 class AudioExample extends Component {
 
@@ -23,8 +26,8 @@ class AudioExample extends Component {
         recording: false,
         stoppedRecording: false,
         finished: false,
-        audioPath: AudioUtils.DocumentDirectoryPath + '/test.aac',
-        hasPermission: undefined,
+        audioPath: AudioUtils.DocumentDirectoryPath,
+        hasPermission: undefined
     };
 
     prepareRecordingPath(audioPath){
@@ -165,6 +168,12 @@ class AudioExample extends Component {
         }
 
         if(this.state.stoppedRecording){
+            let basePath = this.state.audioPath + "／" + new Date()
+            if(Filesystem.checkFileIsExist(basePath)){
+                console.log("has file");
+            }
+
+            let path = basePath + "／" + uuid.v1()
             this.prepareRecordingPath(this.state.audioPath);
         }
 

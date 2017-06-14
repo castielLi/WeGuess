@@ -7,7 +7,8 @@ import React, {Component} from 'react';
 import { Provider } from 'react-redux';
 import Root from './modules/Root/root'
 import configureStore from './store'
-import configureNetwork from './Networking/configureNetwork'
+import configureNetwork from './Common/Networking/configureNetwork'
+import FMDB from './Common/DatabaseHelper'
 
 let store = configureStore();
 
@@ -23,6 +24,9 @@ export default class App extends Component {
 
         //初始化app的http组件
         configureNetwork({"Content-Type":"application/json"},'fetch',false)
+
+        //初始化app的database
+        FMDB.initDatabase()
     }
 
     render() {

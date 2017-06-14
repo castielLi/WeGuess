@@ -22,6 +22,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		182670441EF0E47A00938198 /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = 182670431EF0E47A00938198 /* test.db */; };
 		283F3BC6F56B43CCA229DAD4 /* libRNAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B893B872A54E461F868BF6FC /* libRNAudio.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -37,6 +38,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* WeGuessTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* WeGuessTests.m */; };
 		4DD74734EEF0401995D226D9 /* libSQLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B43F0055748245BEABC8A0B5 /* libSQLite.a */; };
 		56CC3FE0FC71400D94ABCD5F /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E790612E3F4A0B94349821 /* libsqlite3.0.tbd */; };
+		57EBF4A304EF41F288408B79 /* libRNFileSystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E86EDF2CA9DC4AC18459F616 /* libRNFileSystem.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		AF28076F644D4164A76A82FA /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FE6A9DBA436438492DBDA4E /* libRNSound.a */; };
@@ -126,6 +128,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = E23D7B471ACEFE2A00C59171;
 			remoteInfo = SQLite;
+		};
+		182670891EF1362D00938198 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA72ED4CDFB34EBF896754C9 /* RNFileSystem.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25BF7C2E1DC139EC00CB3A3E;
+			remoteInfo = RNFileSystem;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -275,6 +284,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = WeGuess/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = WeGuess/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		182670431EF0E47A00938198 /* test.db */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.db; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* WeGuess-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WeGuess-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* WeGuess-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WeGuess-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -287,6 +297,8 @@
 		AE735CA2429341E29A8A45B1 /* RNAudio.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNAudio.xcodeproj; path = "../node_modules/react-native-audio/ios/RNAudio.xcodeproj"; sourceTree = "<group>"; };
 		B43F0055748245BEABC8A0B5 /* libSQLite.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSQLite.a; sourceTree = "<group>"; };
 		B893B872A54E461F868BF6FC /* libRNAudio.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNAudio.a; sourceTree = "<group>"; };
+		CA72ED4CDFB34EBF896754C9 /* RNFileSystem.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFileSystem.xcodeproj; path = "../node_modules/react-native-filesystem/ios/RNFileSystem.xcodeproj"; sourceTree = "<group>"; };
+		E86EDF2CA9DC4AC18459F616 /* libRNFileSystem.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFileSystem.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +329,7 @@
 				AF28076F644D4164A76A82FA /* libRNSound.a in Frameworks */,
 				4DD74734EEF0401995D226D9 /* libSQLite.a in Frameworks */,
 				56CC3FE0FC71400D94ABCD5F /* libsqlite3.0.tbd in Frameworks */,
+				57EBF4A304EF41F288408B79 /* libRNFileSystem.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +446,7 @@
 		13B07FAE1A68108700A75B9A /* WeGuess */ = {
 			isa = PBXGroup;
 			children = (
+				182670421EF0E47A00938198 /* www */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -483,6 +497,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		182670421EF0E47A00938198 /* www */ = {
+			isa = PBXGroup;
+			children = (
+				182670431EF0E47A00938198 /* test.db */,
+			);
+			name = www;
+			path = ../www;
+			sourceTree = "<group>";
+		};
+		1826706C1EF1362D00938198 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1826708A1EF1362D00938198 /* libRNFileSystem.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -518,6 +549,7 @@
 				AE735CA2429341E29A8A45B1 /* RNAudio.xcodeproj */,
 				66ECD2CD6DD048DE863FC0BC /* RNSound.xcodeproj */,
 				AB7CD85B16614EE295EA84C2 /* SQLite.xcodeproj */,
+				CA72ED4CDFB34EBF896754C9 /* RNFileSystem.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -715,6 +747,10 @@
 					ProjectRef = AE735CA2429341E29A8A45B1 /* RNAudio.xcodeproj */;
 				},
 				{
+					ProductGroup = 1826706C1EF1362D00938198 /* Products */;
+					ProjectRef = CA72ED4CDFB34EBF896754C9 /* RNFileSystem.xcodeproj */;
+				},
+				{
 					ProductGroup = 18266FF61EF0CDF100938198 /* Products */;
 					ProjectRef = 66ECD2CD6DD048DE863FC0BC /* RNSound.xcodeproj */;
 				},
@@ -809,6 +845,13 @@
 			fileType = archive.ar;
 			path = libSQLite.a;
 			remoteRef = 182670401EF0D32300938198 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1826708A1EF1362D00938198 /* libRNFileSystem.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFileSystem.a;
+			remoteRef = 182670891EF1362D00938198 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3DAD3E841DF850E9000B6D8A /* libRCTImage-tvOS.a */ = {
@@ -944,6 +987,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				182670441EF0E47A00938198 /* test.db in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -1073,12 +1117,14 @@
 					"$(SRCROOT)/../node_modules/react-native-audio/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
+					"$(SRCROOT)/../node_modules/react-native-filesystem/ios/RNFileSystem",
 				);
 				INFOPLIST_FILE = WeGuessTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1102,12 +1148,14 @@
 					"$(SRCROOT)/../node_modules/react-native-audio/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
+					"$(SRCROOT)/../node_modules/react-native-filesystem/ios/RNFileSystem",
 				);
 				INFOPLIST_FILE = WeGuessTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1132,6 +1180,7 @@
 					"$(SRCROOT)/../node_modules/react-native-audio/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
+					"$(SRCROOT)/../node_modules/react-native-filesystem/ios/RNFileSystem",
 				);
 				INFOPLIST_FILE = WeGuess/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1155,6 +1204,7 @@
 					"$(SRCROOT)/../node_modules/react-native-audio/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
+					"$(SRCROOT)/../node_modules/react-native-filesystem/ios/RNFileSystem",
 				);
 				INFOPLIST_FILE = WeGuess/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1185,11 +1235,13 @@
 					"$(SRCROOT)/../node_modules/react-native-audio/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
+					"$(SRCROOT)/../node_modules/react-native-filesystem/ios/RNFileSystem",
 				);
 				INFOPLIST_FILE = "WeGuess-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1223,11 +1275,13 @@
 					"$(SRCROOT)/../node_modules/react-native-audio/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
+					"$(SRCROOT)/../node_modules/react-native-filesystem/ios/RNFileSystem",
 				);
 				INFOPLIST_FILE = "WeGuess-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1262,6 +1316,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.WeGuess-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1286,6 +1341,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
