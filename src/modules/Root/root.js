@@ -10,7 +10,7 @@ import Route from '../../route/router'
 import Login from '../Login/page/login'
 
 let initialRoute = {
-    id:'module/login',
+    id:'module/recode',
     paras:{}
 }
 

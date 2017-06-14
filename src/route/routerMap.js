@@ -13,10 +13,12 @@
  */
 import Login from '../modules/Login/page/login'
 import MainTabbar from '../modules/MainTabbar/page/mainTabbar'
+import AudioExample from '../modules/Recode/page'
 
 const RouteMap = {
     'module/login': {component: Login, params: {}},
-    'modeule/maintabbar':{component:MainTabbar,params:{}}
+    'modeule/maintabbar':{component:MainTabbar,params:{}},
+    'module/recode': {component: AudioExample, params: {}},
 };
 
 export default RouteMap;

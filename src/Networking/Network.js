@@ -2,7 +2,7 @@
  * Created by apple on 2017/5/15.
  */
 'use strict';
-import  * as methodsAxios from './NetworkAxios'
+// import  * as methodsAxios from './NetworkAxios'
 import  * as methodsFetch from './NetworkFetch'
 import  * as commons from './Common'
 
@@ -21,7 +21,7 @@ var UsingFramework = ""
 var NeedAuth = false;
 
 
-export class netWorking {
+export default class netWorking {
   constructor() {
     if (__instance()) return __instance();
 
