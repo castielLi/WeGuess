@@ -27,7 +27,7 @@ export default class FMDB{
             db.transaction((tx) => {
 
                     tx.executeSql(sql, params, (tx, results) => {
-                        console.log('create success');
+                        console.log('query success');
                     },errorDB);
 
             });

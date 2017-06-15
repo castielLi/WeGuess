@@ -15,9 +15,10 @@ import {
 
 import Sound from 'react-native-sound';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
-import FMDB from '../../../Common/DatabaseHelper'
-// var uuid = require('react-native-uuid');
-import Filesystem from '../../../Common/Filesystem'
+import UUIDGenerator from 'react-native-uuid-generator';
+import FileHelper from '../../../Common/Filesystem'
+import TimeHelper from '../../../Common/TimeHelper'
+import * as actions from '../action'
 
 class AudioExample extends Component {
 
@@ -26,8 +27,9 @@ class AudioExample extends Component {
         recording: false,
         stoppedRecording: false,
         finished: false,
-        audioPath: AudioUtils.DocumentDirectoryPath + "/test.acc",
-        hasPermission: undefined
+        audioPath: AudioUtils.CachesDirectoryPath + "/" + TimeHelper.format('yyyy-MM-dd'),
+        hasPermission: undefined,
+        recodeFileName: undefined
     };
 
     prepareRecordingPath(audioPath){
@@ -46,7 +48,15 @@ class AudioExample extends Component {
 
             if (!hasPermission) return;
 
-            this.prepareRecordingPath(this.state.audioPath);
+            FileHelper.createFileIfNotExist(this.state.audioPath)
+
+            UUIDGenerator.getRandomUUID().then((uuid) => {
+                let path = this.state.audioPath + "/" + uuid + ".aac";
+                this.setState({recodeFileName: uuid+".aac" });
+                this.prepareRecordingPath(path);
+            });
+
+            // this.prepareRecordingPath(this.state.audioPath);
 
             AudioRecorder.onProgress = (data) => {
                 this.setState({currentTime: Math.floor(data.currentTime)});
@@ -118,6 +128,11 @@ class AudioExample extends Component {
 
         this.setState({stoppedRecording: true, recording: false});
 
+        actions.storeVoiceData(this.state.audioPath,[this.state.recodeFileName,'1','2'])
+        this.setState({recodeFileName: undefined});
+
+
+
         try {
             const filePath = await AudioRecorder.stopRecording();
 
@@ -168,13 +183,10 @@ class AudioExample extends Component {
         }
 
         if(this.state.stoppedRecording){
-            // let basePath = this.state.audioPath + "／" + new Date()
-            // if(Filesystem.checkFileIsExist(basePath)){
-            //     console.log("has file");
-            // }
-
-            // let path = basePath + "／" + uuid.v1()
-            this.prepareRecordingPath(this.state.audioPath);
+            UUIDGenerator.getRandomUUID().then((uuid) => {
+                let path = this.state.audioPath + "／" + uuid;
+                this.prepareRecordingPath(path);
+            });
         }
 
         this.setState({recording: true});
