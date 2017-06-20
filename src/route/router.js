@@ -31,6 +31,19 @@ class Route {
         return <Component navigator={navigator} {...params} />;
     }
 
+
+    static getComponentByRouteId(routeId){
+        let id = routeId,
+            routeObj = routerMap[id],
+            Component;
+        if (routeObj) {
+            Component = routeObj.component;
+        } else {
+            // Component = Error;
+            // params = {message: '当前页面没有找到：' + id};
+        }
+        return <Component/>;
+    }
 }
 
 export default Route;

@@ -14,11 +14,13 @@
 import Login from '../modules/Login/page/login'
 import MainTabbar from '../modules/MainTabbar/page/mainTabbar'
 import AudioExample from '../modules/Recode/page'
+import Xmpp from '../modules/Xmpp/page'
 
 const RouteMap = {
     'module/login': {component: Login, params: {}},
-    'modeule/maintabbar':{component:MainTabbar,params:{}},
+    'module/maintabbar':{component:MainTabbar,params:{}},
     'module/recode': {component: AudioExample, params: {}},
+    'module/xmpp': {component: Xmpp, params: {}},
 };
 
 export default RouteMap;

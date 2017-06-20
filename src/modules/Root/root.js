@@ -10,7 +10,7 @@ import Route from '../../route/router'
 import Login from '../Login/page/login'
 
 let initialRoute = {
-    id:'module/recode',
+    id:'module/maintabbar',
     paras:{}
 }
 
@@ -20,10 +20,10 @@ class Root extends Component {
 
         if(props.isLoggedIn){
 
-            initialRoute = {
-                id:'modules/maintabbar',
-                paras:{}
-            }
+            // initialRoute = {
+            //     id:'modules/maintabbar',
+            //     paras:{}
+            // }
         }
     }
 
