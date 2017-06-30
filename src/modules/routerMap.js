@@ -11,10 +11,10 @@
  * 路由配置项
  * 可配置默认参数 props: params
  */
-import Login from '../modules/Login/page/login'
-import MainTabbar from '../modules/MainTabbar/page/mainTabbar'
-import AudioExample from '../modules/Recode/page'
-import Xmpp from '../modules/Xmpp/page'
+import Login from './Login/page/login'
+import MainTabbar from './MainTabbar/page/mainTabbar'
+import AudioExample from './Recode/page/index'
+import Xmpp from './Xmpp/page/index'
 
 const RouteMap = {
     'module/login': {component: Login, params: {}},

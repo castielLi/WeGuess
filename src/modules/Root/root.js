@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import { Navigator } from 'react-native-deprecated-custom-components';
 import { connect } from 'react-redux';
-import Route from '../../route/router'
+import Route from '../../Framework/route/router'
 import Login from '../Login/page/login'
 
 let initialRoute = {

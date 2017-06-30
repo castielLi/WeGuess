@@ -4,8 +4,9 @@
 'use strict';
 
 import React from 'react';
-import routerMap from './routerMap'
+// import routerMap from '../../modules/routerMap'
 
+var routerMap = {};
 
 class Route {
 
@@ -15,6 +16,12 @@ class Route {
      *              有严格的映射关系，会根据传入 ID 同名的文件夹去取路由对应的页面
      * @param {any} params Component 用到的参数
      */
+
+    static initRouteMap(map){
+        routerMap = Object.assign(routerMap,map);
+    }
+
+
     static getRoutePage (route, navigator) {
         let id = route.id,
             params = route.params || {},

@@ -10,4 +10,4 @@ import {
 
 import App from './src/App'
 
-AppRegistry.registerComponent('WeGuess', () => App);
+AppRegistry.registerComponent('WeGuess', App);
