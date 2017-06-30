@@ -14,8 +14,11 @@ import Route from './Framework/route/router'
 import RouteMap from './modules/routerMap'
 
 
+
 export default function App(){
 
+
+    let store = configureStore();
 
     //初始化app的http组件
     configureNetwork({"Content-Type":"application/json"},'fetch',false)
@@ -26,16 +29,15 @@ export default function App(){
     //初始化路由表
     Route.initRouteMap(RouteMap);
 
-    let store = configureStore();
 
     class InitApp extends BaseComponent {
         constructor() {
             super();
 
-            // this.state = {
-            //     isLoading: true,
-            //     store: configureStore(()=>{this.setState({isLoading: false})})
-            // }
+            this.state = {
+                isLoading: true,
+                store: configureStore(()=>{this.setState({isLoading: false})})
+            }
         }
 
         render() {
