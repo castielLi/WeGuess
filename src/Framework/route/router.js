@@ -4,6 +4,7 @@
 'use strict';
 
 import React from 'react';
+import { Navigator } from 'react-native';
 // import routerMap from '../../modules/routerMap'
 
 var routerMap = {};
@@ -23,14 +24,15 @@ class Route {
 
 
     static getRoutePage (route, navigator) {
-        let id = route.id,
+        let id = route.key,
             params = route.params || {},
             routeObj = routerMap[id],
             Component;
         if (routeObj) {
-            Component = routeObj.component;
+            let ComponentInfo = routeObj[route.routeId]
+            Component = ComponentInfo.component;
             //合并默认参数
-            Object.assign(params, routeObj.params);
+            Object.assign(params, ComponentInfo.params);
         } else {
             // Component = Error;
             // params = {message: '当前页面没有找到：' + id};
@@ -39,18 +41,64 @@ class Route {
     }
 
 
-    static getComponentByRouteId(routeId){
-        let id = routeId,
+    static getComponentByRouteId(key,routeId){
+        let id = key,
             routeObj = routerMap[id],
             Component;
         if (routeObj) {
-            Component = routeObj.component;
+            let ComponentInfo = routeObj[routeId];
+            Component = ComponentInfo.component;
         } else {
             // Component = Error;
             // params = {message: '当前页面没有找到：' + id};
         }
         return <Component/>;
     }
+
+
+    static push(props, route,navigator) {
+        // let routesList = navigator.getCurrentRoutes()
+        // let nextIndex = routesList[routesList.length - 1].index + 1
+        // route.props = props
+        // route.index = nextIndex
+        navigator.push(route)
+    }
+
+
+    static pop(navigator) {
+        navigator.pop()
+    }
+
+    // toLogin(props){
+    //     this.push(props, {
+    //         page: LoginPage,
+    //         name: 'login-page',
+    //         sceneConfig: customFloatFromRight
+    //     })
+    // }
+    //
+    // toMain(props){
+    //     this.push(props, {
+    //         page: MainPage,
+    //         name: 'main-page',
+    //         sceneConfig: customFloatFromRight
+    //     })
+    // }
+    //
+    //
+    //
+    // replaceWithHome() {
+    //     this.navigator.popToTop()
+    // }
+    //
+    // resetToLogin(){
+    //     this.navigator.resetTo({
+    //         name: 'login-page',
+    //         page: LoginPage,
+    //         //sceneConfig: customFloatFromRight,
+    //     })
+    // }
+
 }
 
 export default Route;

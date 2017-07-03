@@ -3,33 +3,40 @@
  */
 
 import React, { Component } from 'react';
-import {
-    Text,
-    StyleSheet
-} from 'react-native';
+import { Navigator } from 'react-native-deprecated-custom-components';
+import Route from '../../../Framework/route/router'
 
-// import StyleSheetHelper from '../../../Common/StyleSheet'
-import BaseComponent from '../../../Framework/Component'
 
-export default class Xmpp extends BaseComponent {
+let initialRoute = {
+    key:'Xmpp',
+    routeId:'Xmpp'
+}
 
-    componentWillMount(){
-        currentStyle = super.componentWillMount(currentStyle)
+export default class Xmpp extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    renderScene(route, navigator) {
+        this.navigator = navigator;
+        let component = Route.getRoutePage(route, navigator);
+        return component;
+    }
+
+    configureScene(route){
+        if(route.sceneConfig){
+            return route.sceneConfig;
+        }
+        return Navigator.SceneConfigs.FloatFromRight;
     }
 
     render() {
-
-        return <Text style={currentStyle.signout}>List of all contacts</Text>
+        return (
+            <Navigator
+                initialRoute={initialRoute}
+                configureScene={this.configureScene.bind(this)}
+                renderScene={this.renderScene.bind(this)}
+            />
+        );
     }
 }
-
-let currentStyle = StyleSheet.create({
-    signin:{
-        height:40,
-        width:310,
-        backgroundColor:'#cbcd00',
-        borderRadius:8,
-    }
-});
-
-

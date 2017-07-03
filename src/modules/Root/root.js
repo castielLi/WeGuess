@@ -10,8 +10,8 @@ import Route from '../../Framework/route/router'
 import Login from '../Login/page/login'
 
 let initialRoute = {
-    id:'module/maintabbar',
-    paras:{}
+    key:'Root',
+    routeId:'Root'
 }
 
 class Root extends Component {

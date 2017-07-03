@@ -12,7 +12,7 @@ export default class TabTwo extends Component{
     }
 
     render(){
-        const TabComponent = Route.getComponentByRouteId("module/xmpp");
+        const TabComponent = Route.getComponentByRouteId("MainTabbar",this.constructor.name);
         return (
             TabComponent
         )

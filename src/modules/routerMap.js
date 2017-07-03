@@ -15,12 +15,30 @@ import Login from './Login/page/login'
 import MainTabbar from './MainTabbar/page/mainTabbar'
 import AudioExample from './Recode/page/index'
 import Xmpp from './Xmpp/page/index'
+import XmppMain from './Xmpp/page/xmpp'
 
 const RouteMap = {
-    'module/login': {component: Login, params: {}},
-    'module/maintabbar':{component:MainTabbar,params:{}},
-    'module/recode': {component: AudioExample, params: {}},
-    'module/xmpp': {component: Xmpp, params: {}},
+    'Root': {
+        'Root':{component:MainTabbar,params:{}}
+    },
+    'MainTabbar':{
+        'TabOne':{component: AudioExample, params: {}},
+        'TabTwo':{component: Xmpp, params: {}}
+    },
+    'Xmpp':{
+       'Xmpp':{component:XmppMain,params:{}},
+       'Login':{component: AudioExample, params: {}}
+    },
+    'Login':{
+        'Login':{component: Login, params: {}}
+    }
+
+
 };
 
 export default RouteMap;
+
+// 'module/login': {component: Login, params: {}},
+// 'module/maintabbar':{component:MainTabbar,params:{}},
+// 'module/recode': {component: AudioExample, params: {}},
+// 'module/xmpp': {component: Xmpp, params: {}},

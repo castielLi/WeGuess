@@ -12,7 +12,7 @@ export default class TabOne extends Component{
     }
 
     render(){
-        const TabComponent = Route.getComponentByRouteId("module/recode");
+        const TabComponent = Route.getComponentByRouteId("MainTabbar",this.constructor.name);
         return (
             TabComponent
         )
