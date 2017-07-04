@@ -27,7 +27,7 @@ const RouteMap = {
     },
     'Xmpp':{
        'Xmpp':{component:XmppMain,params:{}},
-       'Login':{component: AudioExample, params: {}}
+       'Login':{component: Login, params: {}}
     },
     'Login':{
         'Login':{component: Login, params: {}}

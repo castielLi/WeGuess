@@ -10,8 +10,8 @@ import Route from '../../Framework/route/router'
 import Login from '../Login/page/login'
 
 let initialRoute = {
-    key:'Root',
-    routeId:'Root'
+    key:'Login',
+    routeId:'Login'
 }
 
 class Root extends Component {
@@ -20,12 +20,10 @@ class Root extends Component {
 
         if(props.isLoggedIn){
 
-            // initialRoute = {
-            //     id:'modules/maintabbar',
-            //     paras:{}
-            // }
         }
     }
+
+
 
     renderScene(route, navigator) {
         // this.route = route;

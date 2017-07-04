@@ -12,7 +12,9 @@ import TabTwo from './TabTwo'
 
 const MainTabbar = TabNavigator({
     tabone : { screen : TabOne},
-    tabtwo : { screen : TabTwo}
-});
+    tabtwo : { screen : TabTwo }
+},{navigationOptions: {
+    tabBarVisible: true
+}});
 
 export default MainTabbar;

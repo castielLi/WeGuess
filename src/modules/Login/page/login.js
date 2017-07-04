@@ -15,6 +15,8 @@ import {
     TouchableHighlight
 } from 'react-native';
 var Dimensions = require('Dimensions');
+import WeGuessSDK from '../../../Framework/WeguessSDK'
+
 
 export default class Login extends Component {
 
@@ -25,7 +27,7 @@ export default class Login extends Component {
 
 
     onButtonPress(){
-        console.log('log in');
+        WeGuessSDK.clientManager().autoLogin("grower1","111111");
     }
 
     render() {

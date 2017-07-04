@@ -40,10 +40,10 @@ function promiseRequest(requestURL,requestObject,callback){
 
 export function httpRequestGET(requestURL,headers={},callback){
     let requestObject = initRequestObject(headers,"GET",{},callback)
-    promiseRequest(requestURL,requestObject)
+    promiseRequest(requestURL,requestObject,callback);
 }
 
 export function httpRequestPOST(requestURL,params,headers={},callback){
     let requestObject= initRequestObject(headers,"POST",params,callback)
-    promiseRequest(requestURL,requestObject)
+    promiseRequest(requestURL,requestObject,callback);
 }

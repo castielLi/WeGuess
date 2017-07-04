@@ -57,10 +57,6 @@ class Route {
 
 
     static push(props, route,navigator) {
-        // let routesList = navigator.getCurrentRoutes()
-        // let nextIndex = routesList[routesList.length - 1].index + 1
-        // route.props = props
-        // route.index = nextIndex
         navigator.push(route)
     }
 
@@ -68,37 +64,6 @@ class Route {
     static pop(navigator) {
         navigator.pop()
     }
-
-    // toLogin(props){
-    //     this.push(props, {
-    //         page: LoginPage,
-    //         name: 'login-page',
-    //         sceneConfig: customFloatFromRight
-    //     })
-    // }
-    //
-    // toMain(props){
-    //     this.push(props, {
-    //         page: MainPage,
-    //         name: 'main-page',
-    //         sceneConfig: customFloatFromRight
-    //     })
-    // }
-    //
-    //
-    //
-    // replaceWithHome() {
-    //     this.navigator.popToTop()
-    // }
-    //
-    // resetToLogin(){
-    //     this.navigator.resetTo({
-    //         name: 'login-page',
-    //         page: LoginPage,
-    //         //sceneConfig: customFloatFromRight,
-    //     })
-    // }
-
 }
 
 export default Route;
