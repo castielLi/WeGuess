@@ -4,9 +4,9 @@
 
 export function isObjectEmpty(model){
   if (typeof model === "object" && !(model instanceof Array)){
-    var hasProp = false;
+    var hasProp = true;
     for (var prop in model){
-      hasProp = true;
+      hasProp = false;
       break;
     }
     //if (!hasProp){

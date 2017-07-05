@@ -7,7 +7,7 @@ import 'whatwg-fetch'
 
 function initRequestObject(headers,Method,params){
     let requestObject = Object.assign({},{ method : Method ,
-     body: commons.isObjectEmpty(params)? JSON.stringify(params):""})
+        body: commons.isObjectEmpty(params)? "":JSON.stringify(params)})
 
     if(!commons.isObjectEmpty(headers)){
         return editHttpHeaders(requestObject,headers)
@@ -16,20 +16,20 @@ function initRequestObject(headers,Method,params){
 }
 
 function editHttpHeaders(requestObject,headers){
-    for(let item in config){
-        Object.assign(requestObject,{headers:{ item: config[item]}})
-    }
-    return requestObject
+    headers = Object.assign({},headers,{"Accept": "application/json"});
+    Object.assign(requestObject,{"headers":headers});
+    return requestObject;
 }
 
 function promiseRequest(requestURL,requestObject,callback){
     let promise = Promise.race([
-        fetch( config.baseURL + requestURL, requestObject ),
+        fetch( config.baseURL + requestURL, requestObject )
+            ,
         new Promise(function (resolve, reject) {
             setTimeout(() => reject(new Error('request timeout')), config.timeOut)
         })
     ])
-    promise.then(response => {
+    promise.then(response =>{
         callback(response,null)
     })
     promise.catch(error => {

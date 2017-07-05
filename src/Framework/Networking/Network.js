@@ -82,7 +82,7 @@ export default class netWorking {
              if(NeedAuth){
                AuthToken = result.response.headers["Auth_Token"];
              }
-             res(result);
+             res(result.json());
            }else {
              rej(result);
            }
@@ -90,7 +90,7 @@ export default class netWorking {
 
        }).then(
          (result)=>{
-           callback(result.data);
+           callback(result.Data);
          },
          (result)=>{
            console.log(result)

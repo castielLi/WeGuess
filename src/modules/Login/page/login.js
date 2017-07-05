@@ -3,7 +3,7 @@
  */
 
 'use strict';
-
+import 'whatwg-fetch'
 import React, { Component } from 'react';
 import {
     View,
