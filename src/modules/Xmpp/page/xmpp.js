@@ -24,7 +24,7 @@ export default class XmppMain extends BaseComponent {
             handler: ()=>{
                 let page = {
                     key : "Xmpp",
-                    routeId: "Login"
+                    routeId: "TestRefresh"
                 };
                 Route.push(this.props.navigator,page,this.props.navigator)
             }

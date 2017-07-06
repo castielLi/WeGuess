@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 var Dimensions = require('Dimensions');
 import WeGuessSDK from '../../../Framework/WeguessSDK'
+import Route from '../../.././Framework/route/router'
 
 
 export default class Login extends Component {
@@ -23,11 +24,20 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {username: '',password:''};
+        this.onButtonPress = this.onButtonPress.bind(this);
     }
 
 
     onButtonPress(){
-        WeGuessSDK.clientManager().autoLogin("grower1","111111");
+        WeGuessSDK.clientManager().autoLogin("grower1","111111",function(result,navigator){
+            if(result,navigator) {
+                let page = {
+                    key: "TestRefresh",
+                    routeId: "TestRefresh"
+                };
+                Route.push(navigator, page, navigator)
+            }
+        },this.props.navigator);
     }
 
     render() {

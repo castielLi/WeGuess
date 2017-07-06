@@ -8,6 +8,11 @@ import Style from '../../Common/StyleSheet/style'
 
 export default class BaseComponent extends Component {
 
+    constructor(props){
+        super(props);
+        this.viewModel = {};
+    }
+
     componentDidMount(){
         console.log( this.constructor.name + "已经加入展示界面" )
     }

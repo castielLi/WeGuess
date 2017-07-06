@@ -28,7 +28,8 @@ const RouteMap = {
     },
     'Xmpp':{
        'Xmpp':{component:XmppMain,params:{}},
-       'Login':{component: Login, params: {}}
+       'Login':{component: Login, params: {}},
+        'TestRefresh':{component: TestRefresh, params: {}}
     },
     'Login':{
         'Login':{component: Login, params: {}}

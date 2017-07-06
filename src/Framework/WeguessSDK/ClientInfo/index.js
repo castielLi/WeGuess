@@ -26,10 +26,15 @@ export default class ClientInfo {
         this.network = netWork;
     }
 
-    autoLogin(account,password){
+    autoLogin(account,password,callback,otherParams){
         //构造请求参数
          let params = {"username":account,"password":"111111","devicetoken":"","devicetype":"1"};
-         this.network.methodPOST(URLs.client_login,params,didLoginFinished,false);
+
+         const requestFinished = (result)=>{
+             callback(didLoginFinished(result),otherParams);
+         }
+
+         this.network.methodPOST(URLs.client_login,params,requestFinished,false);
     }
 
     getClientInfo(mirror){
@@ -40,8 +45,6 @@ export default class ClientInfo {
 //缓存client对象
 function didLoginFinished(result){
     console.log(result);
-    clientModel = result;
-
-    let client = new ClientInfo();
-    client.getClientInfo(["Username","PostCode","hello"]);
+    clientModel = result.Data;
+    return result.Success;
 }

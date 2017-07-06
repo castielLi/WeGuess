@@ -6,47 +6,52 @@ import React, { Component } from 'react';
 import {
     Text,
     StyleSheet,
-    View
+    View,
+    TouchableHighlight
 } from 'react-native';
 
-import Route from '../../../Framework/route/router'
-import BaseComponent from '../../../Framework/Component'
-import NavigatorBar from 'react-native-navbar';
+import BaseComponent from '../../Framework/Component'
+import DisplayOne from './displayOne'
+import DisplayTwo from './displayTwo'
+import WeGuessSDK from '../../Framework/WeguessSDK'
+
 export default class TestRefresh extends BaseComponent {
+
+    constructor(props){
+        super(props);
+        this.onButtonPress = this.onButtonPress.bind(this);
+    }
 
     componentWillMount(){
         currentStyle = super.componentWillMount(currentStyle)
+
+        this.viewModel = WeGuessSDK.clientManager().getClientInfo(["Username","PostCode","hello"]);
     }
 
-    _renderNavBar(){
-        var rightButtonConfig = {
-            title: 'center',
-            handler: ()=>{
-                let page = {
-                    key : "Xmpp",
-                    routeId: "Login"
-                };
-                Route.push(this.props.navigator,page,this.props.navigator)
-            }
-        };
+    onButtonPress(){
 
-        var titleConfig = {
-            title: 'XmppMain',
-        };
-        return <NavigatorBar style={currentStyle.navbar}
-                             title={titleConfig}
-                             rightButton={rightButtonConfig}
-        />;
     }
 
     render() {
-        return (
+        let name = this.viewModel["Username"];
+        let code = this.viewModel["PostCode"];
+            return (
+
 
             <View style={[currentStyle.main, currentStyle.wrapper]}>
-                {this._renderNavBar()}
                 <View style={currentStyle.container}>
                     <Text style={currentStyle.signout}>List of all contacts</Text>
+                    <DisplayOne viewModel = {name}/>
+                    <DisplayTwo viewModel = {code}/>
                 </View>
+                <TouchableHighlight
+                    onPress={this.onButtonPress}>
+                    <View >
+                        <Text >
+                            Sign In
+                        </Text>
+                    </View>
+                </TouchableHighlight>
             </View>
         )
 

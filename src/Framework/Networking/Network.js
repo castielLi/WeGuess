@@ -90,7 +90,7 @@ export default class netWorking {
 
        }).then(
          (result)=>{
-           callback(result.Data);
+           callback(result);
          },
          (result)=>{
            console.log(result)
