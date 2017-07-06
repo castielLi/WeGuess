@@ -17,4 +17,5 @@ export default class ContainerComponent extends BaseComponent {
             network.methodPOST(requestURL,params,callback,false);
         }
     }
+
 }

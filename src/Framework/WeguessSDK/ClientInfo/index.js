@@ -5,6 +5,7 @@
 import netWorking from '../../Networking/Network'
 import * as URLs from './clientApiSetting'
 import FMDB from '../../../Common/DatabaseHelper'
+import * as methods from '../Common'
 
 const netWork = new netWorking()
 var clientModel = {};
@@ -32,14 +33,7 @@ export default class ClientInfo {
     }
 
     getClientInfo(mirror){
-        let mirrorModel = {};
-        for(item in mirror){
-           let prop = clientModel[mirror[item]];
-           if(prop != undefined){
-               mirrorModel[mirror[item]] =  prop;
-           }
-        }
-        return mirrorModel;
+        return methods.GetMirror(mirror,clientModel);
     }
 }
 

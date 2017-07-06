@@ -16,6 +16,7 @@ import MainTabbar from './MainTabbar/page/mainTabbar'
 import AudioExample from './Recode/page/index'
 import Xmpp from './Xmpp/page/index'
 import XmppMain from './Xmpp/page/xmpp'
+import TestRefresh from './testRefresh'
 
 const RouteMap = {
     'Root': {
@@ -31,6 +32,9 @@ const RouteMap = {
     },
     'Login':{
         'Login':{component: Login, params: {}}
+    },
+    'TestRefresh':{
+        'TestRefresh':{component: TestRefresh, params: {}}
     }
 
 
