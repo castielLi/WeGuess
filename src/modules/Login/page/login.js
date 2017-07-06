@@ -29,8 +29,9 @@ export default class Login extends Component {
 
 
     onButtonPress(){
-        WeGuessSDK.clientManager().autoLogin("grower1","111111",function(result,navigator){
-            if(result,navigator) {
+        //这里跳转有bug，需要利用redux 来实现page的替换
+        WeGuessSDK.clientManager().autoLogin("grower1","111111",function(result){
+            if(result) {
                 let page = {
                     key: "TestRefresh",
                     routeId: "TestRefresh"
