@@ -29,7 +29,7 @@ export default class TestRefresh extends BaseComponent {
     }
 
     onButtonPress(){
-
+        this.viewModel = {"Username":"旋转的周胖子","PostCode":"400015"}
     }
 
     render() {

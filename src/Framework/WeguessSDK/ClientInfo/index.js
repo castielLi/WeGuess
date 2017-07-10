@@ -26,12 +26,13 @@ export default class ClientInfo {
         this.network = netWork;
     }
 
-    autoLogin(account,password,callback){
+    autoLogin(account,password,callback,store){
         //构造请求参数
          let params = {"username":account,"password":"111111","devicetoken":"","devicetype":"1"};
 
          const requestFinished = (result)=>{
-             callback(didLoginFinished(result));
+             didLoginFinished(result)
+             callback(store);
          }
 
          this.network.methodPOST(URLs.client_login,params,requestFinished,false);

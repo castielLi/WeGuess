@@ -17,6 +17,7 @@ import AudioExample from './Recode/page/index'
 import Xmpp from './Xmpp/page/index'
 import XmppMain from './Xmpp/page/xmpp'
 import TestRefresh from './testRefresh'
+import Socket from './socket'
 
 const RouteMap = {
     'Root': {
@@ -30,6 +31,9 @@ const RouteMap = {
        'Xmpp':{component:XmppMain,params:{}},
        'Login':{component: Login, params: {}},
         'TestRefresh':{component: TestRefresh, params: {}}
+    },
+    'Socket':{
+        'Socket':{component: Socket, params: {}}
     },
     'Login':{
         'Login':{component: Login, params: {}}

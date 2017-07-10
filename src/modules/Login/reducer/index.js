@@ -5,41 +5,29 @@
 import * as TYPES from './actionTypes';
 
 const initialState = {
-    isLoggedIn: false,
-    user: {},
-    status: null,
+    isLoggedIn : false
 };
 
-export default function LoginStore(state=initialState, action){
+export default function loginStore(state=initialState, action){
 
     switch(action.type){
-        case TYPES.LOGGED_DOING:
-            return {
-                ...state,
-                status: 'doing'
-            };
+
 
         case TYPES.LOGGED_IN:
             return {
                 ...state,
-                isLoggedIn: true,
-                user: action.user,
-                status: 'done'
+                isLoggedIn: true
             };
 
         case TYPES.LOGGED_OUT:
             return {
                 ...state,
-                isLoggedIn: false,
-                user: {},
-                status: null
+                isLoggedIn: false
             };
         case TYPES.LOGGED_ERROR:
             return {
                 ...state,
-                isLoggedIn: false,
-                user: {},
-                status: null
+                isLoggedIn: false
             }
 
         default:

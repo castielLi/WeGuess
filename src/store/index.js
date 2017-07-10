@@ -33,6 +33,6 @@ export default function configureStore(onComplete){
         transform: [],
         //whitelist: ['userStore'],
     };
-    persistStore(store, opt, onComplete);
+    // persistStore(store, opt, onComplete);
     return store;
 }

@@ -14,12 +14,13 @@ import {
     Button,
     TouchableHighlight
 } from 'react-native';
+import { connect } from 'react-redux';
 var Dimensions = require('Dimensions');
 import WeGuessSDK from '../../../Framework/WeguessSDK'
 import Route from '../../.././Framework/route/router'
+import * as LoginMethods from '../reducer/action'
 
-
-export default class Login extends Component {
+class Login extends Component {
 
     constructor(props) {
         super(props);
@@ -30,16 +31,12 @@ export default class Login extends Component {
 
     onButtonPress(){
         //这里跳转有bug，需要利用redux 来实现page的替换
-        WeGuessSDK.clientManager().autoLogin("grower1","111111",function(result){
-            if(result) {
-                let page = {
-                    key: "TestRefresh",
-                    routeId: "TestRefresh"
-                };
-                Route.push(navigator, page, navigator)
-            }
-        },this.props.navigator);
+        // WeGuessSDK.clientManager().autoLogin("grower1","111111",function(store){
+        //     store.dispatch(LoginMethods.login)
+        // },this.props);
+        this.props.dispatch(LoginMethods.signIn());
     }
+
 
     render() {
         return (
@@ -186,3 +183,12 @@ const styles = StyleSheet.create({
     }
 
 });
+
+function select(store){
+    return {
+        loggedIn : store.loginStore.isLoggedIn,
+    }
+}
+
+
+export default connect(select)(Login);
