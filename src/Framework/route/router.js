@@ -8,6 +8,7 @@ import { Navigator } from 'react-native';
 // import routerMap from '../../modules/routerMap'
 
 var routerMap = {};
+var mainPage = {};
 
 class Route {
 
@@ -18,8 +19,9 @@ class Route {
      * @param {any} params Component 用到的参数
      */
 
-    static initRouteMap(map){
+    static initRouteMap(map,main){
         routerMap = Object.assign(routerMap,map);
+        mainPage =  main;
     }
 
 
@@ -60,6 +62,10 @@ class Route {
         navigator.push(route)
     }
 
+
+    static toMain(navigator){
+        navigator.push(mainPage);
+    }
 
     static pop(navigator) {
         navigator.pop()

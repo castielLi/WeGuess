@@ -11,7 +11,7 @@ import configureNetwork from './Framework/Networking/configureNetwork'
 import FMDB from './Common/DatabaseHelper'
 import BaseComponent from './Framework/Component'
 import Route from './Framework/route/router'
-import RouteMap from './modules/routerMap'
+import {RouteMap , MainPage} from './modules/routerMap'
 
 
 
@@ -27,7 +27,7 @@ export default function App(){
     FMDB.initDatabase()
 
     //初始化路由表
-    Route.initRouteMap(RouteMap);
+    Route.initRouteMap(RouteMap,MainPage);
 
 
     class InitApp extends BaseComponent {

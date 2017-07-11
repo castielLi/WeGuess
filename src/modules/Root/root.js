@@ -17,12 +17,17 @@ let initialRoute = {
 class Root extends Component {
     constructor(props){
         super(props);
-
-        if(props.isLoggedIn){
-
-        }
     }
 
+
+    componentWillUpdate(){
+        if(this.props.isLoggedIn){
+            initialRoute = {
+                key:'TestRefresh',
+                routeId:'TestRefresh'
+            }
+        }
+    }
 
 
     renderScene(route, navigator) {

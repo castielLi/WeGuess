@@ -19,7 +19,14 @@ import XmppMain from './Xmpp/page/xmpp'
 import TestRefresh from './testRefresh'
 import Socket from './socket'
 
-const RouteMap = {
+
+export const MainPage = {
+    key:'Root',
+    routeId:'Root'
+}
+
+
+export const RouteMap = {
     'Root': {
         'Root':{component:MainTabbar,params:{}}
     },
@@ -45,7 +52,6 @@ const RouteMap = {
 
 };
 
-export default RouteMap;
 
 // 'module/login': {component: Login, params: {}},
 // 'module/maintabbar':{component:MainTabbar,params:{}},

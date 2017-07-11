@@ -17,28 +17,49 @@ import {
 import { connect } from 'react-redux';
 var Dimensions = require('Dimensions');
 import WeGuessSDK from '../../../Framework/WeguessSDK'
-import Route from '../../.././Framework/route/router'
+import BaseComponent from '../../.././Framework/Component'
 import * as LoginMethods from '../reducer/action'
 
-class Login extends Component {
+class Login extends BaseComponent {
 
     constructor(props) {
         super(props);
         this.state = {username: '',password:''};
         this.onButtonPress = this.onButtonPress.bind(this);
+        this.toMain =  this.toMain.bind(this);
+        this.render =  this.render.bind(this);
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        if(nextProps.isLoggedIn != this.props.isLoggedIn && nextProps.isLoggedIn === true){
+            this.toMain();
+            return false;
+        }
+
+        return true;
+    }
+
+    toMain(){
+        this.route.toMain(this.props.navigator);
+    }
 
     onButtonPress(){
+
+        // this.confirm();
+
+        this.showLoading();
+
         //这里跳转有bug，需要利用redux 来实现page的替换
         // WeGuessSDK.clientManager().autoLogin("grower1","111111",function(store){
-        //     store.dispatch(LoginMethods.login)
+        //     store.dispatch(LoginMethods.signIn())
         // },this.props);
-        this.props.dispatch(LoginMethods.signIn());
     }
 
 
     render() {
+        let Popup = this.PopContent;
+        let Loading = this.Loading;
         return (
             <View style={styles.container}>
                 <View style={styles.enter}>
@@ -92,12 +113,20 @@ class Login extends Component {
                         </TouchableHighlight>
                     </View>
                 </View>
+                <Popup ref={ popup => this.popup = popup}/>
+                <Loading ref = { loading => this.loading = loading}/>
             </View>
         );
+
     }
 }
 
-
+function select(store){
+    return {
+        isLoggedIn : store.loginStore.isLoggedIn,
+    }
+}
+export default connect(select)(Login);
 
 const styles = StyleSheet.create({
     container: {
@@ -184,11 +213,3 @@ const styles = StyleSheet.create({
 
 });
 
-function select(store){
-    return {
-        loggedIn : store.loginStore.isLoggedIn,
-    }
-}
-
-
-export default connect(select)(Login);
