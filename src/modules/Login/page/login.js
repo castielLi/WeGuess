@@ -17,10 +17,10 @@ import {
 import { connect } from 'react-redux';
 var Dimensions = require('Dimensions');
 import WeGuessSDK from '../../../Framework/WeguessSDK'
-import BaseComponent from '../../.././Framework/Component'
+import ContainerComponent from '../../.././Framework/Component/ContainerComponent'
 import * as LoginMethods from '../reducer/action'
 
-class Login extends BaseComponent {
+class Login extends ContainerComponent {
 
     constructor(props) {
         super(props);
