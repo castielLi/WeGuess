@@ -6,6 +6,7 @@ import netWorking from '../../Networking/Network'
 import * as URLs from './clientApiSetting'
 import FMDB from '../../../Common/DatabaseHelper'
 import * as methods from '../Common'
+import BaseManager from '../baseManager'
 
 const netWork = new netWorking()
 var clientModel = {};
@@ -18,21 +19,22 @@ let __instance = (function () {
     }
 }());
 
-export default class ClientInfo {
+export default class ClientInfo extends BaseManager{
     constructor() {
         if (__instance()) return __instance();
-
+        super();
         __instance(this);
         this.network = netWork;
     }
 
-    autoLogin(account,password,callback,store){
+    autoLogin(account,password,callback,component){
         //构造请求参数
          let params = {"username":account,"password":"111111","devicetoken":"","devicetype":"1"};
-
+         this.showLoading(component)
          const requestFinished = (result)=>{
              didLoginFinished(result)
-             callback(store);
+             this.hideLoading(component);
+             callback(component);
          }
 
          this.network.methodPOST(URLs.client_login,params,requestFinished,false);

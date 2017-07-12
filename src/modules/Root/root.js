@@ -6,44 +6,28 @@
 import React, { Component } from 'react';
 import { Navigator } from 'react-native-deprecated-custom-components';
 import { connect } from 'react-redux';
-import Route from '../../Framework/route/router'
-import Login from '../Login/page/login'
+import BaseComponent from '../../Framework/Component'
+import * as router from '../routerMap'
 
-let initialRoute = {
-    key:'Login',
-    routeId:'Login'
-}
 
-class Root extends Component {
+class Root extends BaseComponent {
     constructor(props){
         super(props);
+        this.render = this.render.bind(this);
     }
 
-
-    componentWillUpdate(){
-        if(this.props.isLoggedIn){
-            initialRoute = {
-                key:'TestRefresh',
-                routeId:'TestRefresh'
-            }
-        }
-    }
-
-
-    renderScene(route, navigator) {
+    renderScene(Route, navigator) {
         // this.route = route;
         this.navigator = navigator;
-        return Route.getRoutePage(route, navigator);
+        return this.route.getRoutePage(Route, navigator);
     }
 
     configureScene(route){
-        if(route.sceneConfig){
-            return route.sceneConfig;
-        }
         return Navigator.SceneConfigs.FloatFromRight;
     }
 
     render() {
+        let initialRoute = this.route.initialRoute;
         return (
             <Navigator
             initialRoute={initialRoute}

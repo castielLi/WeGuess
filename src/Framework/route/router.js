@@ -5,10 +5,8 @@
 
 import React from 'react';
 import { Navigator } from 'react-native';
-// import routerMap from '../../modules/routerMap'
+import * as commons from '../Common'
 
-var routerMap = {};
-var mainPage = {};
 
 class Route {
 
@@ -19,16 +17,22 @@ class Route {
      * @param {any} params Component 用到的参数
      */
 
-    static initRouteMap(map,main){
-        routerMap = Object.assign(routerMap,map);
-        mainPage =  main;
+    static routerMap = {};
+    static mainPage = {};
+    static initialRoute = {};
+
+    static initRouteMap(router){
+        let {RouteMap,MainPage,InitialRoute} = router;
+        this.routerMap = Object.assign(this.routerMap,RouteMap);
+        this.mainPage =  MainPage;
+        this.initialRoute = InitialRoute;
     }
 
 
     static getRoutePage (route, navigator) {
         let id = route.key,
             params = route.params || {},
-            routeObj = routerMap[id],
+            routeObj = this.routerMap[id],
             Component;
         if (routeObj) {
             let ComponentInfo = routeObj[route.routeId]
@@ -45,7 +49,7 @@ class Route {
 
     static getComponentByRouteId(key,routeId){
         let id = key,
-            routeObj = routerMap[id],
+            routeObj = this.routerMap[id],
             Component;
         if (routeObj) {
             let ComponentInfo = routeObj[routeId];
@@ -58,17 +62,35 @@ class Route {
     }
 
 
-    static push(props, route,navigator) {
-        navigator.push(route)
+    static push(props, route) {
+        props.navigator.push(route)
     }
 
 
-    static toMain(navigator){
-        navigator.push(mainPage);
+    static toMain(props){
+        let routes = props.navigator.getCurrentRoutes();
+        let contain = false;
+        for(let i = 0;i<routes.length;i++){
+           if(routes[0][0] == this.mainPage["key"]){
+               contain = true;
+               break;
+           }
+        }
+        if(!contain) {
+            if(commons.containsObject(this.initialRoute,routes)){
+                props.navigator.push(this.mainPage);
+                return;
+            }
+        }
+        props.navigator.popToTop();
     }
 
-    static pop(navigator) {
-        navigator.pop()
+    static pop(props) {
+        props.navigator.pop()
+    }
+
+    static toLogin(){
+
     }
 }
 

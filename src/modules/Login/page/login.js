@@ -41,19 +41,16 @@ class Login extends ContainerComponent {
     }
 
     toMain(){
-        this.route.toMain(this.props.navigator);
+        this.route.toMain(this.props);
     }
 
     onButtonPress(){
 
-        // this.confirm();
-
-        this.showLoading();
-
         //这里跳转有bug，需要利用redux 来实现page的替换
-        // WeGuessSDK.clientManager().autoLogin("grower1","111111",function(store){
-        //     store.dispatch(LoginMethods.signIn())
-        // },this.props);
+        // WeGuessSDK.clientManager().autoLogin("grower1","111111",function(component){
+        //     component.props.dispatch(LoginMethods.signIn())
+        // },this);
+        this.confirm("Warnning","hello world","OK",null,"Cancel",null)
     }
 
 

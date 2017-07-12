@@ -26,6 +26,11 @@ export const MainPage = {
 }
 
 
+export const InitialRoute = {
+    key:'Login',
+    routeId:'Login'
+}
+
 export const RouteMap = {
     'Root': {
         'Root':{component:MainTabbar,params:{}}

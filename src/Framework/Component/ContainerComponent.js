@@ -30,27 +30,29 @@ export default class ContainerComponent extends BaseComponent {
         this.loading.hide();
     }
 
-    confirm() {
+    confirm(title,content,okButtonTitle="OK",oKCallback=undefined,cancelButtonTitle="Cancel",cancelCallback=undefined,) {
         this.popup.confirm({
-            title: 'hello confirm',
-            content: ['this is a hello confirm', 'this is a hello confirm'],
+            title: title,
+            content: ['content'],
             ok: {
-                text: 'yes',
+                text: okButtonTitle,
                 style: {
-                    color: 'green',
+                    // color: 'green',
                     fontWeight: 'bold'
                 },
                 callback: () => {
-                    this.popup.alert('thank u 😬');
+
+                    oKCallback != undefined || oKCallback();
                 }
             },
             cancel: {
-                text: 'no',
+                text: cancelButtonTitle,
                 style: {
-                    color: 'red'
+                    // color: 'red'
+                    fontWeight: 'bold'
                 },
                 callback: () => {
-                    this.popup.alert('bad man 👿');
+                    cancelCallback != undefined || cancelCallback();
                 }
             }
         });
