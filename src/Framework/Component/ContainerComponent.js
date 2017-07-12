@@ -38,21 +38,21 @@ export default class ContainerComponent extends BaseComponent {
                 text: okButtonTitle,
                 style: {
                     // color: 'green',
-                    fontWeight: 'bold'
+                    // fontWeight: 'bold'
                 },
                 callback: () => {
 
-                    oKCallback != undefined || oKCallback();
+                    oKCallback != undefined && oKCallback();
                 }
             },
             cancel: {
                 text: cancelButtonTitle,
                 style: {
                     // color: 'red'
-                    fontWeight: 'bold'
+                    // fontWeight: 'bold'
                 },
                 callback: () => {
-                    cancelCallback != undefined || cancelCallback();
+                    cancelCallback != undefined && cancelCallback();
                 }
             }
         });
