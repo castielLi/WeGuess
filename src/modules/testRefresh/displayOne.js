@@ -21,6 +21,10 @@ export default class DisplayOne extends BaseComponent {
         currentStyle = super.componentWillMount(currentStyle)
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return true;
+    }
+
     render() {
 
         return (

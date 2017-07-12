@@ -20,6 +20,7 @@ export default class TestRefresh extends BaseComponent {
     constructor(props){
         super(props);
         this.onButtonPress = this.onButtonPress.bind(this);
+        this.state = this.viewModel;
     }
 
     componentWillMount(){
@@ -29,7 +30,10 @@ export default class TestRefresh extends BaseComponent {
     }
 
     onButtonPress(){
+        // console.log(this.viewModel);
         this.viewModel = {"Username":"旋转的周胖子","PostCode":"400015"}
+        this.setState(this.viewModel);
+        // console.log(this.viewModel);
     }
 
     render() {

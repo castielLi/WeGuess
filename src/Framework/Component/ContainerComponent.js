@@ -18,8 +18,8 @@ export default class ContainerComponent extends BaseComponent {
     }
 
 
-    alert() {
-        this.popup.alert('hello alert');
+    alert(content) {
+        this.popup.alert(content);
     }
 
     showLoading(){
@@ -42,7 +42,7 @@ export default class ContainerComponent extends BaseComponent {
                 },
                 callback: () => {
 
-                    oKCallback != undefined && oKCallback();
+                    oKCallback != undefined && oKCallback(this.popup);
                 }
             },
             cancel: {
@@ -52,7 +52,7 @@ export default class ContainerComponent extends BaseComponent {
                     // fontWeight: 'bold'
                 },
                 callback: () => {
-                    cancelCallback != undefined && cancelCallback();
+                    cancelCallback != undefined && cancelCallback(this.popup);
                 }
             }
         });
