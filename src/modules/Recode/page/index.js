@@ -22,6 +22,10 @@ import * as actions from '../action'
 
 class AudioExample extends Component {
 
+    constructor(props){
+        super(props);
+    }
+
     state = {
         currentTime: 0.0,
         recording: false,

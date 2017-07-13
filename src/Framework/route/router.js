@@ -16,7 +16,7 @@ class Route {
      *              有严格的映射关系，会根据传入 ID 同名的文件夹去取路由对应的页面
      * @param {any} params Component 用到的参数
      */
-
+    // static navigator = undefined;
     static routerMap = {};
     static mainPage = {};
     static initialRoute = {};
@@ -43,6 +43,8 @@ class Route {
             // Component = Error;
             // params = {message: '当前页面没有找到：' + id};
         }
+
+
         return <Component navigator={navigator} {...params} />;
     }
 

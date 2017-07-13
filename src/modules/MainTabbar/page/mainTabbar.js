@@ -11,10 +11,23 @@ import TabTwo from './TabTwo'
 
 
 const MainTabbar = TabNavigator({
-    tabone : { screen : TabOne},
+    tabone : { screen : TabOne ,
+        navigationOptions:({navigation}) => ({
+            // tabBarLabel:'首页',
+            // tabBarIcon:({focused,tintColor}) => (
+            //     <TabBarItem
+            //         tintColor={tintColor}
+            //         focused={focused}
+            //         normalImage={require('./imgs/nav_fav@2x.png')}
+            //         selectedImage={require('./imgs/nav_fav_actived@3x.png')}
+            //     />
+            // )
+
+            //隐藏tabbar
+            tabBarVisible:false
+        })},
     tabtwo : { screen : TabTwo }
-},{navigationOptions: {
-    tabBarVisible: true
-}});
+});
 
 export default MainTabbar;
+

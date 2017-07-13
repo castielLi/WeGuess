@@ -46,7 +46,6 @@ class Login extends ContainerComponent {
 
     onButtonPress(){
 
-        //这里跳转有bug，需要利用redux 来实现page的替换
         WeGuessSDK.clientManager().autoLogin("grower1","111111",function(component){
             component.props.dispatch(LoginMethods.signIn())
         },this);
