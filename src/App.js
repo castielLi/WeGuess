@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import Root from './modules/Root/root'
 import configureStore from './store'
 import configureNetwork from './Framework/Networking/configureNetwork'
-import FMDB from './Common/DatabaseHelper'
+import FMDB from './Framework/Common/DatabaseHelper'
 import BaseComponent from './Framework/Component'
 import Route from './Framework/route/router'
 import * as router from './modules/routerMap'
@@ -53,4 +53,9 @@ export default function App(){
     return InitApp;
 }
 
+
+同步移步
+长按响应
+通信录读取
+多线程
 

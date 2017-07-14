@@ -4,8 +4,8 @@
 
 import React, { Component } from 'react';
 import ReactNative from 'react-native';
-import StyleSheetHelper from '../../Common/StyleSheet/index'
-import Style from '../../Common/StyleSheet/style'
+import StyleSheetHelper from '../StyleSheet/index'
+import Style from '../StyleSheet/style'
 import Route from '.././route/router'
 
 

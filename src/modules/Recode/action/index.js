@@ -2,7 +2,7 @@
  * Created by apple on 2017/6/15.
  */
 
-import FMDB from '../../../Common/DatabaseHelper'
+import FMDB from '../../../Framework/Common/DatabaseHelper'
 
 export function storeVoiceData(path,params){
     let sql = 'insert into ChatVoice values (@a,@b,@c)';

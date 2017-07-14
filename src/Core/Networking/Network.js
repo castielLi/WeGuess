@@ -4,7 +4,7 @@
 'use strict';
 // import  * as methodsAxios from './NetworkAxios'
 import  * as methodsFetch from './NetworkFetch'
-import  * as commons from '../Common'
+import  * as commons from '../index'
 
 let __instance = (function () {
   let instance;

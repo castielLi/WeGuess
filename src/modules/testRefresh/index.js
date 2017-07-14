@@ -13,9 +13,9 @@ import {
 import BaseComponent from '../../Framework/Component'
 import DisplayOne from './displayOne'
 import DisplayTwo from './displayTwo'
-import WeGuessSDK from '../../Framework/WeguessSDK'
+import WeGuessSDK from '../../Models'
 
-export default class TestRefresh extends BaseComponent {
+export default class TestRefresh extends ContainerComponent {
 
     constructor(props){
         super(props);

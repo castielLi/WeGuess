@@ -2,10 +2,10 @@
  * Created by apple on 2017/7/4.
  */
 
-import netWorking from '../../Networking/Network'
+import netWorking from '../../Framework/Networking/Network'
 import * as URLs from './clientApiSetting'
-import FMDB from '../../../Common/DatabaseHelper'
-import * as methods from '../Common'
+import FMDB from '../../Framework/Common/DatabaseHelper/index'
+import * as methods from '../Common/index'
 import BaseManager from '../baseManager'
 
 const netWork = new netWorking()

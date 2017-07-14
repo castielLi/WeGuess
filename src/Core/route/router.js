@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Navigator } from 'react-native';
-import * as commons from '../Common'
+import * as commons from '../index'
 
 
 class Route {
