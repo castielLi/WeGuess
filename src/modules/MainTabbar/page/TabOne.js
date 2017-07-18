@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import Route from '../../../Framework/route/router.js'
+import Route from '../../../Core/route/router.js'
 
 export default class TabOne extends Component{
 

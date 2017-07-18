@@ -3,6 +3,9 @@ package com.weguess;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.rnfs.RNFSPackage;
 import com.reactlibrary.RNUUIDGeneratorPackage;
 import com.benwixen.rnfilesystem.RNFileSystemPackage;
@@ -28,6 +31,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new ReactNativeLocalizationPackage(),
+            new ReactNativeContacts(),
             new RNFSPackage(),
             new RNUUIDGeneratorPackage(),
             new RNFileSystemPackage(),

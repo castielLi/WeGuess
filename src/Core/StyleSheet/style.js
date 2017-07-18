@@ -8,6 +8,10 @@ import {
 } from 'react-native';
 
 const style = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    //signout只是测试例子
     signout:{
         height:40,
         width:310,

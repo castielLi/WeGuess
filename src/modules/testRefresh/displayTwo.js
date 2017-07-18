@@ -9,7 +9,7 @@ import {
     View
 } from 'react-native';
 
-import BaseComponent from '../../Framework/Component'
+import BaseComponent from '../../Core/Component'
 export default class DisplayTwo extends BaseComponent {
 
     constructor(props) {
@@ -24,11 +24,10 @@ export default class DisplayTwo extends BaseComponent {
     render() {
         return (
 
-            <View style={[currentStyle.main, currentStyle.wrapper]}>
-                <View style={currentStyle.container}>
+                <View>
                     <Text style={currentStyle.signout}>{this.props.viewModel}</Text>
                 </View>
-            </View>
+
         )
 
     }

@@ -21,8 +21,8 @@ import Socket from './socket'
 
 
 export const MainPage = {
-    key:'Root',
-    routeId:'Root'
+    key:'TestRefresh',
+    routeId:'TestRefresh'
 }
 
 

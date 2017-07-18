@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import { Navigator } from 'react-native-deprecated-custom-components';
 import { connect } from 'react-redux';
-import BaseComponent from '../../Framework/Component'
+import BaseComponent from '../../Core/Component'
 import * as router from '../routerMap'
 
 

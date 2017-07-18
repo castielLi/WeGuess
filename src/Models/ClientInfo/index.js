@@ -2,9 +2,9 @@
  * Created by apple on 2017/7/4.
  */
 
-import netWorking from '../../Framework/Networking/Network'
+import netWorking from '../../Core/Networking/Network'
 import * as URLs from './clientApiSetting'
-import FMDB from '../../Framework/Common/DatabaseHelper/index'
+import FMDB from '../../Core/DatabaseHelper/index'
 import * as methods from '../Common/index'
 import BaseManager from '../baseManager'
 

@@ -9,7 +9,7 @@ import {
     View
 } from 'react-native';
 
-import BaseComponent from '../../Framework/Component'
+import BaseComponent from '../../Core/Component'
 export default class DisplayThree extends BaseComponent {
 
     componentWillMount(){

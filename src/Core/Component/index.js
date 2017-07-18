@@ -9,7 +9,7 @@ import Style from '../StyleSheet/style'
 import Route from '.././route/router'
 
 
-export default class BaseComponent extends Component {
+export default class DisplayComponent extends Component {
 
     constructor(props){
         super(props);

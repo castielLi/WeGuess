@@ -2,7 +2,7 @@
  * Created by apple on 2017/6/8.
  */
 import  * as config from './NetworkConfig'
-import  * as commons from '../index'
+import  * as commons from '../Helper/index'
 import 'whatwg-fetch'
 
 function initRequestObject(headers,Method,params){

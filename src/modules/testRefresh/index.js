@@ -10,7 +10,7 @@ import {
     TouchableHighlight
 } from 'react-native';
 
-import BaseComponent from '../../Framework/Component'
+import ContainerComponent from '../../Core/Component/ContainerComponent'
 import DisplayOne from './displayOne'
 import DisplayTwo from './displayTwo'
 import WeGuessSDK from '../../Models'
@@ -24,8 +24,6 @@ export default class TestRefresh extends ContainerComponent {
     }
 
     componentWillMount(){
-        currentStyle = super.componentWillMount(currentStyle)
-
         this.viewModel = WeGuessSDK.clientManager().getClientInfo(["Username","PostCode","hello"]);
     }
 
@@ -40,35 +38,12 @@ export default class TestRefresh extends ContainerComponent {
         let name = this.viewModel["Username"];
         let code = this.viewModel["PostCode"];
             return (
-
-
-            <View style={[currentStyle.main, currentStyle.wrapper]}>
-                <View style={currentStyle.container}>
-                    <Text style={currentStyle.signout}>List of all contacts</Text>
+                <View style={this.style.container}>
                     <DisplayOne viewModel = {name}/>
                     <DisplayTwo viewModel = {code}/>
                 </View>
-                <TouchableHighlight
-                    onPress={this.onButtonPress}>
-                    <View >
-                        <Text >
-                            Sign In
-                        </Text>
-                    </View>
-                </TouchableHighlight>
-            </View>
         )
 
     }
 
 }
-
-
-let currentStyle = StyleSheet.create({
-    signin:{
-        height:40,
-        width:310,
-        backgroundColor:'#cbcd00',
-        borderRadius:8,
-    }
-});

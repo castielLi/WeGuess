@@ -8,14 +8,23 @@ import netWorking from '../Networking/Network'
 import BaseComponent from './index'
 import Popup from 'react-native-popup';
 import Loading from './Popup/loading'
+import Route from '../route/router'
+import style from '../StyleSheet/style'
+import {
+    View
+} from 'react-native';
 
-export default class ContainerComponent extends BaseComponent {
+export default class ContainerComponent extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.PopContent = Popup;
         this.Loading = Loading;
+        this.route = Route;
+        this.viewModel = {};
+        this.style = style;
     }
+
 
 
     alert(content) {

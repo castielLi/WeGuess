@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import { Navigator } from 'react-native-deprecated-custom-components';
-import Route from '../../../Framework/route/router'
+import Route from '../../../Core/route/router'
 
 
 let initialRoute = {

@@ -9,10 +9,9 @@ import {
     View
 } from 'react-native';
 
-import Route from '../../../Framework/route/router'
-import BaseComponent from '../../../Framework/Component'
+import DisplayComponent from '../../../Core/Component'
 import NavigatorBar from 'react-native-navbar';
-export default class XmppMain extends BaseComponent {
+export default class XmppMain extends DisplayComponent {
 
     componentWillMount(){
         currentStyle = super.componentWillMount(currentStyle)
@@ -26,7 +25,7 @@ export default class XmppMain extends BaseComponent {
                     key : "Xmpp",
                     routeId: "TestRefresh"
                 };
-                Route.toMain(this.props);
+                this.route.toMain(this.props);
             }
         };
 

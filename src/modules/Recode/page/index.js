@@ -16,8 +16,8 @@ import {
 import Sound from 'react-native-sound';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import UUIDGenerator from 'react-native-uuid-generator';
-import FileHelper from '../../../Framework/Common/Filesystem'
-import TimeHelper from '../../../Framework/Common/TimeHelper'
+import FileHelper from '../../../Core/Filesystem'
+import TimeHelper from '../../../Core/TimeHelper'
 import * as actions from '../action'
 
 class AudioExample extends Component {

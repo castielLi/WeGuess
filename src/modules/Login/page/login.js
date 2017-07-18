@@ -17,7 +17,7 @@ import {
 import { connect } from 'react-redux';
 var Dimensions = require('Dimensions');
 import WeGuessSDK from '../../../Models'
-import ContainerComponent from '../../.././Framework/Component/ContainerComponent'
+import ContainerComponent from '../../.././Core/Component/ContainerComponent'
 import * as LoginMethods from '../reducer/action'
 
 class Login extends ContainerComponent {
