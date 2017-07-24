@@ -30,7 +30,7 @@ export default class DisplayOne extends BaseComponent {
         return (
             <View>
 
-                    <Text style={currentStyle.signout}>{this.props.viewModel}</Text>
+                <Text style={currentStyle.signout}>{this.props.viewModel}</Text>
 
             </View>
         )

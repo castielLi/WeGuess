@@ -3,6 +3,7 @@ package com.weguess;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.fabricio.vergal.RNWorkers.RNWorkersPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNWorkersPackage(),
             new VectorIconsPackage(),
             new ReactNativeLocalizationPackage(),
             new ReactNativeContacts(),

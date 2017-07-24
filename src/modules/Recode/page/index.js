@@ -1,7 +1,7 @@
 /**
  * Created by apple on 2017/6/14.
  */
-import React, {Component} from 'react';
+import React, {Component , PureComponent} from 'react';
 
 import {
     AppRegistry,
@@ -12,6 +12,7 @@ import {
     Platform,
     PermissionsAndroid,
 } from 'react-native';
+import { Worker } from 'rn-workers'
 
 import Sound from 'react-native-sound';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
