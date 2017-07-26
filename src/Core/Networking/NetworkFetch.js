@@ -23,8 +23,10 @@ function editHttpHeaders(requestObject,headers){
 
 function promiseRequest(requestURL,requestObject,callback){
     let promise = Promise.race([
+    	//发送请求
         fetch( config.baseURL + requestURL, requestObject )
             ,
+        //请求超时
         new Promise(function (resolve, reject) {
             setTimeout(() => reject(new Error('request timeout')), config.timeOut)
         })

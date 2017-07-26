@@ -4,7 +4,11 @@
 'use strict';
 
 import React from 'react';
-import { Navigator } from 'react-native';
+import {
+    Navigator,
+    View
+} from 'react-native';
+import NavigationBar from 'react-native-navbar';
 import * as commons from '../Helper/index'
 
 
@@ -21,15 +25,19 @@ class Route {
     static mainPage = {};
     static initialRoute = {};
 
-    static initRouteMap(router){
-        let {RouteMap,MainPage,InitialRoute} = router;
-        this.routerMap = Object.assign(this.routerMap,RouteMap);
-        this.mainPage =  MainPage;
+    static initRouteMap(router) {
+        let {
+            RouteMap,
+            MainPage,
+            InitialRoute
+        } = router;
+        this.routerMap = Object.assign(this.routerMap, RouteMap);
+        this.mainPage = MainPage;
         this.initialRoute = InitialRoute;
     }
 
 
-    static getRoutePage (route, navigator) {
+    static getRoutePage(route, navigator) { //这里route参数是一个对象{id:xx,routeId:xx,params:{xxx}}
         let id = route.key,
             params = route.params || {},
             routeObj = this.routerMap[id],
@@ -43,13 +51,28 @@ class Route {
             // Component = Error;
             // params = {message: '当前页面没有找到：' + id};
         }
-
-
-        return <Component navigator={navigator} {...params} />;
+        //NavigationBar属性参数
+        const leftButtonConfig = {
+            title: 'Back',
+            handler: () => navigator.pop(),
+        };
+        const titleConfig = {
+            title: route.routeId
+        }
+        return (
+            <View style={{flex:1}}>
+                <View style={{backgroundColor: '#fff', height:40}}>
+                <NavigationBar
+                      title={titleConfig}
+                      leftButton={leftButtonConfig} />
+                </View>
+                <Component navigator={navigator} {...params} />
+            </View>
+        );
     }
 
 
-    static getComponentByRouteId(key,routeId){
+    static getComponentByRouteId(key, routeId) {
         let id = key,
             routeObj = this.routerMap[id],
             Component;
@@ -69,17 +92,17 @@ class Route {
     }
 
 
-    static toMain(props){
+    static toMain(props) {
         let routes = props.navigator.getCurrentRoutes();
         let contain = false;
-        for(let i = 0;i<routes.length;i++){
-           if(routes[0][0] == this.mainPage["key"]){
-               contain = true;
-               break;
-           }
+        for (let i = 0; i < routes.length; i++) {
+            if (routes[0][0] == this.mainPage["key"]) {
+                contain = true;
+                break;
+            }
         }
-        if(!contain) {
-            if(commons.containsObject(this.initialRoute,routes)){
+        if (!contain) {
+            if (commons.containsObject(this.initialRoute, routes)) {
                 props.navigator.push(this.mainPage);
                 return;
             }
@@ -91,7 +114,7 @@ class Route {
         props.navigator.pop()
     }
 
-    static toLogin(){
+    static toLogin() {
 
     }
 }

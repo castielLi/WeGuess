@@ -26,7 +26,7 @@ export default class ClientInfo extends BaseManager{
         __instance(this);
         this.network = netWork;
     }
-
+	//登录成功后缓存用户信息
     autoLogin(account,password,callback,component){
         //构造请求参数
          let params = {"username":account,"password":"111111","devicetoken":"","devicetype":"1"};
@@ -39,7 +39,7 @@ export default class ClientInfo extends BaseManager{
 
          this.network.methodPOST(URLs.client_login,params,requestFinished,false);
     }
-
+	//获取缓存的用户信息方法
     getClientInfo(mirror){
         return methods.GetMirror(mirror,clientModel);
     }

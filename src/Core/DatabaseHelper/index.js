@@ -5,41 +5,47 @@
 let SQLite = require('react-native-sqlite-storage')
 import * as excuteSqls from './excuteSqls'
 
-export default class FMDB{
+export default class FMDB {
 
-    static initDatabase(){
-       var db = SQLite.openDatabase({name: 'test.db', createFromLocation : "1"}, () => {
-           db.transaction((tx) => {
-               for( key in excuteSqls.initTables){
-                   let sql = excuteSqls.initTables[key];
-                   tx.executeSql(sql, [], (tx, results) => {
-                       console.log('create success');
-                   },errorDB);
-               }
-           });
-       }, errorDB);
+  static initDatabase() {
+    var db = SQLite.openDatabase({
+      name: 'weguess.db',
+      createFromLocation: "1"
+    }, () => {
+      db.transaction((tx) => {
+        for (key in excuteSqls.initTables) {
+          let sql = excuteSqls.initTables[key];
+          tx.executeSql(sql, [], (tx, results) => {
+            console.log('create success');
+          }, errorDB);
+        }
+      });
+    }, errorDB);
 
-    }
+  }
 
-    static queryDatabase(sql,params=[]){
+  static queryDatabase(sql, params = []) {
 
-        var db = SQLite.openDatabase({name: 'test.db', createFromLocation : "1"}, () => {
-            db.transaction((tx) => {
+    var db = SQLite.openDatabase({
+      name: 'weguess.db',
+      createFromLocation: "1"
+    }, () => {
+      db.transaction((tx) => {
 
-                    tx.executeSql(sql, params, (tx, results) => {
-                        console.log('query success');
-                    },errorDB);
-
-            });
+        tx.executeSql(sql, params, (tx, results) => {
+          console.log('query success');
         }, errorDB);
-    }
+
+      });
+    }, errorDB);
+  }
 
 }
 
 function errorDB(err) {
-    console.log("SQL Error: " + err);
+  console.log("SQL Error: " + err);
 }
 
 function successDB() {
-    console.log("open database");
+  console.log("open database");
 }

@@ -3,8 +3,12 @@
  */
 'use strict';
 
-import React, {Component} from 'react';
-import { Provider } from 'react-redux';
+import React, {
+    Component
+} from 'react';
+import {
+    Provider
+} from 'react-redux';
 import Root from './modules/Root/root'
 import configureStore from './store'
 import configureNetwork from './Core/Networking/configureNetwork'
@@ -15,13 +19,15 @@ import * as router from './modules/routerMap'
 
 
 
-export default function App(){
+export default function App() {
 
 
     let store = configureStore();
 
     //初始化app的http组件
-    configureNetwork({"Content-Type":"application/json"},'fetch',false)
+    configureNetwork({
+        "Content-Type": "application/json"
+    }, 'fetch', false)
 
     //初始化app的database
     FMDB.initDatabase()
@@ -36,7 +42,11 @@ export default function App(){
 
             this.state = {
                 isLoading: true,
-                store: configureStore(()=>{this.setState({isLoading: false})})
+                store: configureStore(() => {
+                    this.setState({
+                        isLoading: false
+                    })
+                })
             }
         }
 
@@ -52,6 +62,3 @@ export default function App(){
     }
     return InitApp;
 }
-
-
-

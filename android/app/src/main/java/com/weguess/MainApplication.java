@@ -3,19 +3,20 @@ package com.weguess;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
+import com.rnim.rn.audio.ReactNativeAudioPackage;
+import com.zmxv.RNSound.RNSoundPackage;
 import com.fabricio.vergal.RNWorkers.RNWorkersPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
-import com.rnfs.RNFSPackage;
 import com.reactlibrary.RNUUIDGeneratorPackage;
 import com.benwixen.rnfilesystem.RNFileSystemPackage;
-import com.zmxv.RNSound.RNSoundPackage;
-import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import org.pgsqlite.SQLitePluginPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,15 +33,16 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
+            new ReactNativeAudioPackage(),
+            new RNSoundPackage(),
             new RNWorkersPackage(),
             new VectorIconsPackage(),
             new ReactNativeLocalizationPackage(),
             new ReactNativeContacts(),
-            new RNFSPackage(),
             new RNUUIDGeneratorPackage(),
             new RNFileSystemPackage(),
-            new RNSoundPackage(),
-            new ReactNativeAudioPackage()
+            new SQLitePluginPackage()
       );
     }
   };

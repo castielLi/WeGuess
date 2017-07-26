@@ -1,7 +1,10 @@
 /**
  * Created by apple on 2017/6/14.
  */
-import React, {Component , PureComponent} from 'react';
+import React, {
+    Component,
+    PureComponent
+} from 'react';
 
 import {
     AppRegistry,
@@ -12,10 +15,15 @@ import {
     Platform,
     PermissionsAndroid,
 } from 'react-native';
-import { Worker } from 'rn-workers'
+import {
+    Worker
+} from 'rn-workers'
 
 import Sound from 'react-native-sound';
-import {AudioRecorder, AudioUtils} from 'react-native-audio';
+import {
+    AudioRecorder,
+    AudioUtils
+} from 'react-native-audio';
 import UUIDGenerator from 'react-native-uuid-generator';
 import FileHelper from '../../../Core/Filesystem'
 import TimeHelper from '../../../Core/TimeHelper'
@@ -23,7 +31,7 @@ import * as actions from '../action'
 
 class AudioExample extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
@@ -37,7 +45,7 @@ class AudioExample extends Component {
         recodeFileName: undefined
     };
 
-    prepareRecordingPath(audioPath){
+    prepareRecordingPath(audioPath) {
         AudioRecorder.prepareRecordingAtPath(audioPath, {
             SampleRate: 22050,
             Channels: 1,
@@ -49,7 +57,9 @@ class AudioExample extends Component {
 
     componentDidMount() {
         this._checkPermission().then((hasPermission) => {
-            this.setState({ hasPermission });
+            this.setState({
+                hasPermission
+            });
 
             if (!hasPermission) return;
 
@@ -57,14 +67,18 @@ class AudioExample extends Component {
 
             UUIDGenerator.getRandomUUID().then((uuid) => {
                 let path = this.state.audioPath + "/" + uuid + ".aac";
-                this.setState({recodeFileName: uuid+".aac" });
+                this.setState({
+                    recodeFileName: uuid + ".aac"
+                });
                 this.prepareRecordingPath(path);
             });
 
             // this.prepareRecordingPath(this.state.audioPath);
 
             AudioRecorder.onProgress = (data) => {
-                this.setState({currentTime: Math.floor(data.currentTime)});
+                this.setState({
+                    currentTime: Math.floor(data.currentTime)
+                });
             };
 
             AudioRecorder.onFinished = (data) => {
@@ -111,7 +125,10 @@ class AudioExample extends Component {
             return;
         }
 
-        this.setState({stoppedRecording: true, recording: false});
+        this.setState({
+            stoppedRecording: true,
+            recording: false
+        });
 
         try {
             const filePath = await AudioRecorder.pauseRecording();
@@ -131,10 +148,15 @@ class AudioExample extends Component {
             return;
         }
 
-        this.setState({stoppedRecording: true, recording: false});
-
-        actions.storeVoiceData(this.state.audioPath,[this.state.recodeFileName,'1','2'])
-        this.setState({recodeFileName: undefined});
+        this.setState({
+            stoppedRecording: true,
+            recording: false
+        });
+        //将路径存入数据库
+        actions.storeVoiceData(this.state.audioPath, [this.state.recodeFileName, '1', '2'])
+        this.setState({
+            recodeFileName: undefined
+        });
 
 
 
@@ -158,7 +180,7 @@ class AudioExample extends Component {
         // These timeouts are a hacky workaround for some issues with react-native-sound.
         // See https://github.com/zmxv/react-native-sound/issues/89.
         setTimeout(() => {
-            var sound = new Sound(this.state.audioPath, '', (error) => {
+            var sound = new Sound(this.state.audioPath, '', (error) => { //这里audioPath是文件夹的路径，所以放不出声音
                 if (error) {
                     console.log('failed to load the sound', error);
                 }
@@ -187,14 +209,16 @@ class AudioExample extends Component {
             return;
         }
 
-        if(this.state.stoppedRecording){
+        if (this.state.stoppedRecording) {
             UUIDGenerator.getRandomUUID().then((uuid) => {
                 let path = this.state.audioPath + "／" + uuid;
                 this.prepareRecordingPath(path);
             });
         }
 
-        this.setState({recording: true});
+        this.setState({
+            recording: true
+        });
 
         try {
             const filePath = await AudioRecorder.startRecording();
@@ -204,7 +228,9 @@ class AudioExample extends Component {
     }
 
     _finishRecording(didSucceed, filePath) {
-        this.setState({ finished: didSucceed });
+        this.setState({
+            finished: didSucceed
+        });
         console.log(`Finished recording of duration ${this.state.currentTime} seconds at path: ${filePath}`);
     }
 

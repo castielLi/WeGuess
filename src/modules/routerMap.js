@@ -18,42 +18,88 @@ import Xmpp from './Xmpp/page/index'
 import XmppMain from './Xmpp/page/xmpp'
 import TestRefresh from './testRefresh'
 import Socket from './socket'
-
+import XX from './XX/index.js'
+import XXX from './XXX/index.js'
+import Main from './Main/page/main.js'
 
 export const MainPage = {
-    key:'TestRefresh',
-    routeId:'TestRefresh'
+    key: 'TestRefresh',
+    routeId: 'TestRefresh'
 }
 
 
 export const InitialRoute = {
-    key:'Login',
-    routeId:'Login'
+    key: 'Main',
+    routeId: 'Main'
 }
 
 export const RouteMap = {
     'Root': {
-        'Root':{component:MainTabbar,params:{}}
+        'Root': {
+            component: MainTabbar,
+            params: {}
+        }
     },
-    'MainTabbar':{
-        'TabOne':{component: AudioExample, params: {}},
-        'TabTwo':{component: Xmpp, params: {}}
+    'MainTabbar': {
+        'TabOne': {
+            component: AudioExample,
+            params: {}
+        },
+        'TabTwo': {
+            component: Xmpp,
+            params: {}
+        }
     },
-    'Xmpp':{
-       'Xmpp':{component:XmppMain,params:{}},
-       'Login':{component: Login, params: {}},
-        'TestRefresh':{component: TestRefresh, params: {}}
+    'Xmpp': {
+        'Xmpp': {
+            component: XmppMain,
+            params: {}
+        },
+        'Login': {
+            component: Login,
+            params: {}
+        },
+        'TestRefresh': {
+            component: TestRefresh,
+            params: {}
+        }
     },
-    'Socket':{
-        'Socket':{component: Socket, params: {}}
+    'Socket': {
+        'Socket': {
+            component: Socket,
+            params: {}
+        }
     },
-    'Login':{
-        'Login':{component: Login, params: {}}
+    'Login': {
+        'Login': {
+            component: Login,
+            params: {}
+        }
     },
-    'TestRefresh':{
-        'TestRefresh':{component: TestRefresh, params: {}}
-    }
-
+    'TestRefresh': {
+        'TestRefresh': {
+            component: TestRefresh,
+            params: {}
+        }
+    },
+    'XX': {
+        'XX': {
+            component: XX,
+            params: {}
+        }
+    },
+    'XXX': {
+        'XXX': {
+            component: XXX,
+            params: {}
+        }
+    },
+    'Main': {
+        'Main': {
+            component: Main,
+            params: {}
+        }
+    },
 
 };
 
