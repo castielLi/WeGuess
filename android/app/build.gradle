@@ -133,6 +133,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-camera')
     compile project(':rn-workers')
     compile project(':react-native-vector-icons')
     compile project(':react-native-localization')

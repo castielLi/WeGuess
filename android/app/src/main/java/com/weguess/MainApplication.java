@@ -3,9 +3,13 @@ package com.weguess;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+<<<<<<< Updated upstream
 import com.rnfs.RNFSPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.zmxv.RNSound.RNSoundPackage;
+=======
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
+>>>>>>> Stashed changes
 import com.fabricio.vergal.RNWorkers.RNWorkersPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
@@ -33,9 +37,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+<<<<<<< Updated upstream
             new RNFSPackage(),
             new ReactNativeAudioPackage(),
             new RNSoundPackage(),
+=======
+            new RCTCameraPackage(),
+>>>>>>> Stashed changes
             new RNWorkersPackage(),
             new VectorIconsPackage(),
             new ReactNativeLocalizationPackage(),

@@ -1,10 +1,15 @@
 rootProject.name = 'WeGuess'
+<<<<<<< Updated upstream
 include ':react-native-fs'
 project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
 include ':react-native-audio'
 project(':react-native-audio').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-audio/android')
 include ':react-native-sound'
 project(':react-native-sound').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sound/android')
+=======
+include ':react-native-camera'
+project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
+>>>>>>> Stashed changes
 include ':rn-workers'
 project(':rn-workers').projectDir = new File(rootProject.projectDir, '../node_modules/rn-workers/android')
 include ':react-native-vector-icons'
