@@ -30,6 +30,7 @@ export default class ClientInfo extends BaseManager{
     autoLogin(account,password,callback,component){
         //构造请求参数
          let params = {"username":account,"password":"111111","devicetoken":"","devicetype":"1"};
+         console.log(this)
          this.showLoading(component)
          const requestFinished = (result)=>{
              didLoginFinished(result)

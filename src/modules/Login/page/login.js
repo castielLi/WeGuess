@@ -64,6 +64,7 @@ class Login extends ContainerComponent {
     }
 
     render() {
+    	let {login} = this.Localization.strings
         let Popup = this.PopContent;
         let Loading = this.Loading;
         return (
@@ -72,17 +73,17 @@ class Login extends ContainerComponent {
                     <Image source={require('../resources/logo.jpg')} style={styles.logo}/>
                     <TextInput
                         style={styles.textbox}
-                        placeholder="Username!"
+                        placeholder={login.username+"!"}
                         onChangeText={(text) => this.setState({text})}
                     />
                     <TextInput
                         style={styles.textbox}
-                        placeholder="Password!"
+                        placeholder={login.password+"!"}
                         onChangeText={(text) => this.setState({password})}
                     />
                 </View>
 
-                <Text style={styles.forgotPassword}>Forgotten password?</Text>
+                <Text style={styles.forgotPassword}>{login.forgotten}</Text>
                 <View style={styles.buttons}>
                     <View style={styles.touchView}>
                     <TouchableHighlight
@@ -90,7 +91,7 @@ class Login extends ContainerComponent {
                         onPress={this.onButtonPress}>
                         <View style={styles.touchButton}>
                             <Text style={styles.signInText}>
-                                Sign In
+                                {login.signin}
                             </Text>
                         </View>
                     </TouchableHighlight>
@@ -103,7 +104,7 @@ class Login extends ContainerComponent {
                             <View style={styles.thirdPartButton}>
                                 <Image style={styles.touchButtonImage} source={require('../resources/facebook.png')}>
                                     <Text style={styles.facebook}>
-                                        Login with facebook!
+                                        {login.facebook}
                                     </Text>
                                 </Image>
                             </View>
@@ -113,7 +114,7 @@ class Login extends ContainerComponent {
                             onPress={this.onButtonPress}>
                             <View style={styles.thirdPartButton}>
                                 <Image style={styles.touchButtonImage} source={require('../resources/google.png')}>
-                                    <Text style={styles.google}>Login with google+!</Text>
+                                    <Text style={styles.google}>{login.google}</Text>
                                 </Image>
                             </View>
                         </TouchableHighlight>

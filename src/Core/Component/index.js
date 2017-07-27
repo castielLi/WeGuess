@@ -7,7 +7,7 @@ import ReactNative from 'react-native';
 import StyleSheetHelper from '../StyleSheet/index'
 import Style from '../StyleSheet/style'
 import Route from '.././route/router'
-
+import Localization from '../Localization';
 
 export default class DisplayComponent extends Component {
 
@@ -16,6 +16,7 @@ export default class DisplayComponent extends Component {
         this.viewModel = {};
         //关联路由组件
         this.route = Route;
+        this.Localization = Localization;
     }
 
     componentDidMount(){

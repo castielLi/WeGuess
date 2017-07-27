@@ -3,12 +3,12 @@ package com.weguess;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.rnfs.RNFSPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.fabricio.vergal.RNWorkers.RNWorkersPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.reactlibrary.RNUUIDGeneratorPackage;
 import com.benwixen.rnfilesystem.RNFileSystemPackage;

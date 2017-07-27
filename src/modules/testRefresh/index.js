@@ -2,7 +2,9 @@
  * Created by apple on 2017/7/6.
  */
 
-import React, { Component } from 'react';
+import React, {
+    Component
+} from 'react';
 import {
     Text,
     StyleSheet,
@@ -17,19 +19,22 @@ import WeGuessSDK from '../../Models'
 
 export default class TestRefresh extends ContainerComponent {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.onButtonPress = this.onButtonPress.bind(this);
         this.state = this.viewModel;
     }
 
-    componentWillMount(){
-        this.viewModel = WeGuessSDK.clientManager().getClientInfo(["Username","PostCode","hello"]);
+    componentWillMount() {
+        this.viewModel = WeGuessSDK.clientManager().getClientInfo(["Username", "PostCode", "hello"]);
     }
 
-    onButtonPress(){
+    onButtonPress() {
         // console.log(this.viewModel);
-        this.viewModel = {"Username":"旋转的周胖子","PostCode":"400015"}
+        this.viewModel = {
+            "Username": "旋转的周胖子",
+            "PostCode": "400015"
+        }
         this.setState(this.viewModel);
         // console.log(this.viewModel);
     }
@@ -37,11 +42,11 @@ export default class TestRefresh extends ContainerComponent {
     render() {
         let name = this.viewModel["Username"];
         let code = this.viewModel["PostCode"];
-            return (
-                <View style={this.style.container}>
-                    <DisplayOne viewModel = {name}/>
-                    <DisplayTwo viewModel = {code}/>
-                </View>
+        return (
+            <View style={this.style.container} style={{flex:1,backgroundColor:'#fff'}}>
+                <DisplayOne viewModel = {name}/>
+                <DisplayTwo viewModel = {code}/>
+            </View>
         )
 
     }

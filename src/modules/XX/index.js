@@ -3,13 +3,16 @@ import React, {
 } from 'react';
 import {
 	AppRegistry,
-	Text
+	Text,
+	View
 } from 'react-native';
 
 export default class XX extends Component {
 	render() {
 		return (
-			<Text>XX</Text>
+			<View style={{flex:1,backgroundColor:'#fff'}}>
+				<Text>XX</Text>
+			</View>
 		);
 	}
 }

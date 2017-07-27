@@ -28,8 +28,9 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import FileHelper from '../../../Core/Filesystem'
 import TimeHelper from '../../../Core/TimeHelper'
 import * as actions from '../action'
+import BaseComponent from '../../../Core/Component';
 
-class AudioExample extends Component {
+class AudioExample extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -38,7 +39,6 @@ class AudioExample extends Component {
     state = {
         currentTime: 0.0,
         recording: false,
-        stoppedRecording: false,
         finished: false,
         audioPath: AudioUtils.CachesDirectoryPath + "/" + TimeHelper.format('yyyy-MM-dd'),
         hasPermission: undefined,
@@ -65,14 +65,6 @@ class AudioExample extends Component {
 
             FileHelper.createFileIfNotExist(this.state.audioPath)
 
-            UUIDGenerator.getRandomUUID().then((uuid) => {
-                let path = this.state.audioPath + "/" + uuid + ".aac";
-                this.setState({
-                    recodeFileName: uuid + ".aac"
-                });
-                this.prepareRecordingPath(path);
-            });
-
             // this.prepareRecordingPath(this.state.audioPath);
 
             AudioRecorder.onProgress = (data) => {
@@ -89,7 +81,7 @@ class AudioExample extends Component {
             };
         });
     }
-
+	
     _checkPermission() {
         if (Platform.OS !== 'android') {
             return Promise.resolve(true);
@@ -126,7 +118,6 @@ class AudioExample extends Component {
         }
 
         this.setState({
-            stoppedRecording: true,
             recording: false
         });
 
@@ -149,14 +140,10 @@ class AudioExample extends Component {
         }
 
         this.setState({
-            stoppedRecording: true,
             recording: false
         });
         //将路径存入数据库
         actions.storeVoiceData(this.state.audioPath, [this.state.recodeFileName, '1', '2'])
-        this.setState({
-            recodeFileName: undefined
-        });
 
 
 
@@ -180,7 +167,7 @@ class AudioExample extends Component {
         // These timeouts are a hacky workaround for some issues with react-native-sound.
         // See https://github.com/zmxv/react-native-sound/issues/89.
         setTimeout(() => {
-            var sound = new Sound(this.state.audioPath, '', (error) => { //这里audioPath是文件夹的路径，所以放不出声音
+            var sound = new Sound(this.state.audioPath+'/'+this.state.recodeFileName, '', (error) => { //这里audioPath是文件夹的路径，所以放不出声音
                 if (error) {
                     console.log('failed to load the sound', error);
                 }
@@ -198,7 +185,7 @@ class AudioExample extends Component {
         }, 100);
     }
 
-    async _record() {
+     _record() {
         if (this.state.recording) {
             console.warn('Already recording!');
             return;
@@ -209,22 +196,23 @@ class AudioExample extends Component {
             return;
         }
 
-        if (this.state.stoppedRecording) {
-            UUIDGenerator.getRandomUUID().then((uuid) => {
-                let path = this.state.audioPath + "／" + uuid;
-                this.prepareRecordingPath(path);
+        
+       UUIDGenerator.getRandomUUID().then((uuid) => {
+            let path = this.state.audioPath + "/" + uuid + ".aac";
+            this.setState({
+                recodeFileName: uuid + ".aac"
             });
-        }
+            this.prepareRecordingPath(path);
+            AudioRecorder.startRecording();
+        });
+        
+		
 
         this.setState({
             recording: true
         });
 
-        try {
-            const filePath = await AudioRecorder.startRecording();
-        } catch (error) {
-            console.error(error);
-        }
+
     }
 
     _finishRecording(didSucceed, filePath) {
@@ -235,14 +223,14 @@ class AudioExample extends Component {
     }
 
     render() {
-
+		let {recode} = this.Localization.strings
         return (
             <View style={styles.container}>
                 <View style={styles.controls}>
-                    {this._renderButton("RECORD", () => {this._record()}, this.state.recording )}
-                    {this._renderButton("PLAY", () => {this._play()} )}
-                    {this._renderButton("STOP", () => {this._stop()} )}
-                    {this._renderButton("PAUSE", () => {this._pause()} )}
+                    {this._renderButton(recode.recode, () => {this._record()}, this.state.recording )}
+                    {this._renderButton(recode.play, () => {this._play()} )}
+                    {this._renderButton(recode.stop, () => {this._stop()} )}
+                    {this._renderButton(recode.pause, () => {this._pause()} )}
                     <Text style={styles.progressText}>{this.state.currentTime}s</Text>
                 </View>
             </View>

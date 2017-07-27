@@ -32,10 +32,8 @@ class Main extends BaseComponent {
             rowHasChanged: (r1, r2) => r1 !== r2
         });
         this.state = {
-            dataSource: ds.cloneWithRows(
-
-
-                [{
+        	ds:ds,
+        	data:[{
                     key: 'Login',
                     id: 'Login'
                 }, {
@@ -50,12 +48,16 @@ class Main extends BaseComponent {
                 }, {
                     key: 'XXX',
                     id: 'XXX'
-                }]
-
-            ),
-            refresh: false
+                },{
+                	key:'Contact',
+                	id:'Contact'
+                }],
+            refresh: false,
+            isZH:true,
+            strings:this.Localization.strings.main
         }
-        this._renderRow = this._renderRow.bind(this)
+        this._renderRow = this._renderRow.bind(this);
+        this.changeLanguage = this.changeLanguage.bind(this);
     }
     onButtonPress(key, id) {
         this.route.push(this.props, {
@@ -76,7 +78,7 @@ class Main extends BaseComponent {
                         onPress={this.onButtonPress.bind(this,rowData.key,rowData.id)}>
                         <View style={styles.touchButton}>
                             <Text style={styles.signInText}>
-                                {rowData.key}
+                                {this.state.strings[rowData.key]}
                             </Text>
                         </View>
                     </TouchableHighlight>
@@ -84,16 +86,27 @@ class Main extends BaseComponent {
             </View>
         )
     }
+    changeLanguage(){
+    	this.Localization.changeLanguage(!this.state.isZH?"zh-CN":"en-US");
+    	this.setState({
+    		isZH:!this.state.isZH,
+    		data:this.state.data.concat([]),
+    		strings:this.Localization.strings.main
+    	})
+    }
     render() {
         return (
             <View style={styles.container}>
-               <ListView dataSource = {
-                    this.state.dataSource
-                  }
-                  renderRow = {
-                    this._renderRow
-                  }
-                />
+               <View style={{height:600}}>
+	               	<ListView dataSource = {
+	                    this.state.ds.cloneWithRows(this.state.data)
+	                  }
+	                  renderRow = {
+	                    this._renderRow
+	                  }
+	                />
+               </View>
+               <Text style={{textAlign:'center'}} onPress={this.changeLanguage}>{this.state.strings.ChangeLanguage}</Text>
            </View>
         )
     }

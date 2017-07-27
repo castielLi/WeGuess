@@ -32,6 +32,12 @@ class Root extends BaseComponent {
     renderScene(Route, navigator) {
         // this.route = route;
         this.navigator = navigator;
+        console.log('renderScene启动')
+        //如果已登录，再点击登录页面或者再返回登录页面，将跳转到TestRefresh
+        if(Route.key === 'Login' && this.props.isLoggedIn === true){
+        	Route.routeId = 'TestRefresh';
+        	Route.key = 'TestRefresh';
+        }
         return this.route.getRoutePage(Route, navigator);
     }
 

@@ -13,6 +13,7 @@ import style from '../StyleSheet/style'
 import {
     View
 } from 'react-native';
+import Localization from '../Localization';
 
 export default class ContainerComponent extends Component {
 
@@ -23,6 +24,7 @@ export default class ContainerComponent extends Component {
         this.route = Route;
         this.viewModel = {};
         this.style = style;
+        this.Localization = Localization;
     }
 
 

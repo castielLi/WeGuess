@@ -6,7 +6,8 @@
 import React from 'react';
 import {
     Navigator,
-    View
+    View,
+    InteractionManager
 } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import * as commons from '../Helper/index'
@@ -51,6 +52,7 @@ class Route {
             // Component = Error;
             // params = {message: '当前页面没有找到：' + id};
         }
+        console.log(navigator.getCurrentRoutes())
         //NavigationBar属性参数
         const leftButtonConfig = {
             title: 'Back',
@@ -88,7 +90,9 @@ class Route {
 
 
     static push(props, route) {
-        props.navigator.push(route)
+        InteractionManager.runAfterInteractions(() => {
+            props.navigator.push(route)
+        })
     }
 
 
@@ -107,11 +111,15 @@ class Route {
                 return;
             }
         }
-        props.navigator.popToTop();
+        InteractionManager.runAfterInteractions(() => {
+            props.navigator.popToTop();
+        })
     }
 
     static pop(props) {
-        props.navigator.pop()
+        InteractionManager.runAfterInteractions(() => {
+            props.navigator.pop();
+        })
     }
 
     static toLogin() {
