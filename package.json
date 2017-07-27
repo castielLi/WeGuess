@@ -7,6 +7,8 @@
 		"test": "jest"
 	},
 	"dependencies": {
+		"@remobile/react-native-file": "^1.0.3",
+		"base-64": "^0.1.0",
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.45.1",
 		"react-native-audio": "^3.2.2",
@@ -21,6 +23,7 @@
 		"react-native-navbar": "^1.7.1",
 		"react-native-navigation": "^1.1.99",
 		"react-native-popup": "^0.6.1",
+		"react-native-qiniu": "^0.3.0",
 		"react-native-sound": "^0.10.1",
 		"react-native-sqlite-storage": "^3.3.2",
 		"react-native-storage": "^0.2.2",
