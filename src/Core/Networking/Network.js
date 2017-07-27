@@ -43,7 +43,6 @@ export default class netWorking {
   methodGET(requestURL,callback,encryption){
 
     setAuthToken()
-
     if(!encryption){
       let promise = new Promise(function(res,rej){
           gettingFrameworkMethod().httpRequestGET(requestURL,netWorkingConfig,function(result,error){
@@ -68,15 +67,16 @@ export default class netWorking {
       )
     }
   }
-  //目前有错，需要服务器端设置response的header https://segmentfault.com/q/1010000008292792
-  methodPOST(requestURL,params,callback,encryption){
+
+  methodPOST(requestURL,params,callback,encryption,header={}){
 
      setAuthToken()
 
-     if(!encryption){
+      let networkConfig = commons.isObjectEmpty(header) ? netWorkingConfig : header;
+      if(!encryption){
 
        let promise = new Promise(function(res,rej){
-           gettingFrameworkMethod().httpRequestPOST(requestURL,params,netWorkingConfig,function(result,error){
+           gettingFrameworkMethod().httpRequestPOST(requestURL,params,networkConfig,function(result,error){
 
             if(result!= null && result.status == 200){
              if(NeedAuth){
