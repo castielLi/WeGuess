@@ -1,7 +1,4 @@
-function httpRequestPOST(requestURL,params,headers={},callback){
-    let requestObject= initRequestObject(headers,"POST",params,callback)
-    promiseRequest(requestURL,requestObject,callback);
-}
+
 import config from "./NetworkConfig"
 
 export function uploadFile(uri, token, formInput, onprogress) {
