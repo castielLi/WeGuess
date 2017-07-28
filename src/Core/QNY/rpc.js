@@ -1,7 +1,7 @@
 
-import config from "./NetworkConfig"
+import config from "./config"
 
-export function uploadFile(uri, token, formInput, onprogress) {
+function uploadFile(uri, token, formInput, onprogress) {
     return new Promise((resolve, reject)=> {
         if (typeof uri != 'string' || uri == '' || typeof formInput.key == 'undefined') {
             reject && reject(null);
@@ -11,7 +11,7 @@ export function uploadFile(uri, token, formInput, onprogress) {
             uri = "file://" + uri;
         }
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', SOUTH_CHINA_HTTP_UPLOAD_CLIENT);
+        xhr.open('POST', config.SOUTH_CHINA_HTTP_UPLOAD_CLIENT);
         xhr.onload = () => {
             if (xhr.status !== 200) {
                 reject && reject(xhr);
@@ -41,46 +41,32 @@ export function uploadFile(uri, token, formInput, onprogress) {
     });
 }
 
-export class ImageView {
-    constructor(mode, width, height, quality, format) {
-        this.mode = mode || 1;
-        this.width = width || 0;
-        this.height = height || 0;
-        this.quality = quality || 0;
-        this.format = format || null;
+
+//发送管理和fop命令,总之就是不上传文件
+function post(uri, adminToken, content) {
+    var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
+    let payload = {
+        headers: headers,
+        method: 'POST',
+        dataType: 'json',
+        timeout: config.RPC_TIMEOUT,
+    };
+    if (typeof content === 'undefined') {
+        payload.headers['Content-Length'] = 0;
+    } else {
+        //carry data
+        payload.body = content;
     }
 
-    makeRequest(url) {
-        url += '?imageView2/' + this.mode;
-
-        if (this.width > 0) {
-            url += '/w/' + this.width;
-        }
-
-        if (this.height > 0) {
-            url += '/h/' + this.height;
-        }
-
-        if (this.quality > 0) {
-            url += '/q/' + this.quality;
-        }
-
-        if (this.format) {
-            url += '/format/' + this.format;
-        }
-
-        return url;
+    if (adminToken) {
+        headers['Authorization'] = adminToken;
     }
+
+    return fetch(uri, payload);
 }
 
-export class ImageInfo {
-    static makeRequest(url) {
-        return url + '?imageInfo'
-    }
-}
 
-export class Exif {
-   static makeRequest(url) {
-        return url + '?exif'
-    }
-}
+
+export default {uploadFile, post}
