@@ -29,11 +29,13 @@ import FileHelper from '../../../Core/Filesystem'
 import TimeHelper from '../../../Core/TimeHelper'
 import * as actions from '../action'
 import BaseComponent from '../../../Core/Component';
-
+import NavigationTopBar from '../../.././Core/Component/NavigationBar'
 class AudioExample extends BaseComponent {
 
     constructor(props) {
         super(props);
+        this._leftButton = this._leftButton.bind(this);
+        this._title = this._title.bind(this);
     }
 
     state = {
@@ -221,11 +223,24 @@ class AudioExample extends BaseComponent {
         });
         console.log(`Finished recording of duration ${this.state.currentTime} seconds at path: ${filePath}`);
     }
-
+    //定义上导航的左按钮
+    _leftButton(){
+        return {
+            title: 'back',
+            handler: () => this.route.pop(this.props),
+        }
+    }
+    //定义上导航的标题
+    _title(){
+        return{
+            title:"Record"
+        }
+    }
     render() {
 		let {recode} = this.Localization.strings
         return (
             <View style={styles.container}>
+                <NavigationTopBar leftButton={this._leftButton} title={this._title} />
                 <View style={styles.controls}>
                     {this._renderButton(recode.recode, () => {this._record()}, this.state.recording )}
                     {this._renderButton(recode.play, () => {this._play()} )}

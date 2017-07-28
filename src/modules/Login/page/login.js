@@ -23,6 +23,7 @@ var Dimensions = require('Dimensions');
 import WeGuessSDK from '../../../Models'
 import ContainerComponent from '../../.././Core/Component/ContainerComponent'
 import * as LoginMethods from '../reducer/action'
+import NavigationTopBar from '../../.././Core/Component/NavigationBar'
 
 class Login extends ContainerComponent {
 
@@ -35,6 +36,8 @@ class Login extends ContainerComponent {
         this.onButtonPress = this.onButtonPress.bind(this);
         this.toMain = this.toMain.bind(this);
         this.render = this.render.bind(this);
+        this._leftButton = this._leftButton.bind(this);
+        this._title = this._title.bind(this);
     }
 	//登录成功后，页面将直接跳转至testRefresh页面
     shouldComponentUpdate(nextProps, nextState) {
@@ -62,13 +65,26 @@ class Login extends ContainerComponent {
     okcallback(popup) {
         popup.alert("hello");
     }
-
+    //定义上导航的左按钮
+    _leftButton(){
+        return {
+            title: 'back',
+            handler: () => this.route.pop(this.props),
+        }
+    }
+    //定义上导航的标题
+    _title(){
+        return{
+            title:"Login"
+        }
+    }
     render() {
     	let {login} = this.Localization.strings
         let Popup = this.PopContent;
         let Loading = this.Loading;
         return (
             <View style={styles.container}>
+                <NavigationTopBar leftButton={this._leftButton} title={this._title} />
                 <View style={styles.enter}>
                     <Image source={require('../resources/logo.jpg')} style={styles.logo}/>
                     <TextInput

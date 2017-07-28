@@ -21,6 +21,7 @@ import {
     connect
 } from 'react-redux';
 import BaseComponent from '../../../Core/Component';
+import NavigationTopBar from '../../../Core/Component/NavigationBar';
 import XX from '../../XX/index.js'
 var Dimensions = require('Dimensions');
 
@@ -58,6 +59,7 @@ class Main extends BaseComponent {
         }
         this._renderRow = this._renderRow.bind(this);
         this.changeLanguage = this.changeLanguage.bind(this);
+        this._title = this._title.bind(this);
     }
     onButtonPress(key, id) {
         this.route.push(this.props, {
@@ -94,10 +96,17 @@ class Main extends BaseComponent {
     		strings:this.Localization.strings.main
     	})
     }
+    //定义上导航的标题
+    _title(){
+        return{
+            title:"Main"
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
-               <View style={{height:600}}>
+                <NavigationTopBar leftButton={this._leftButton} title={this._title} />
+               <View>
 	               	<ListView dataSource = {
 	                    this.state.ds.cloneWithRows(this.state.data)
 	                  }

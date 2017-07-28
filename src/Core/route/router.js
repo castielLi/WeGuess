@@ -52,22 +52,10 @@ class Route {
             // Component = Error;
             // params = {message: '当前页面没有找到：' + id};
         }
-        console.log(navigator.getCurrentRoutes())
-        //NavigationBar属性参数
-        const leftButtonConfig = {
-            title: 'Back',
-            handler: () => navigator.pop(),
-        };
-        const titleConfig = {
-            title: route.routeId
-        }
+
         return (
             <View style={{flex:1}}>
-                <View style={{backgroundColor: '#fff', height:40}}>
-                <NavigationBar
-                      title={titleConfig}
-                      leftButton={leftButtonConfig} />
-                </View>
+
                 <Component navigator={navigator} {...params} />
             </View>
         );
@@ -117,9 +105,11 @@ class Route {
     }
 
     static pop(props) {
-        InteractionManager.runAfterInteractions(() => {
-            props.navigator.pop();
-        })
+        //解决切场动画不流畅，但是会造成反应延迟
+        // InteractionManager.runAfterInteractions(() => {
+        //     props.navigator.pop();
+        // })
+        props.navigator.pop();
     }
 
     static toLogin() {

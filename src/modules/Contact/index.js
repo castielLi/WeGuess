@@ -7,6 +7,7 @@ import {
     ListView
 } from 'react-native';
 import BaseComponent from '../../Core/Component'
+import NavigationTopBar from '../../Core/Component/NavigationBar';
 import Contacts from 'react-native-contacts';
 
 var datas = [];
@@ -28,7 +29,9 @@ export default class Contact extends BaseComponent {
 			ds:ds,
 			data:datas
 		}
-		this._renderRow = this._renderRow.bind(this)
+		this._renderRow = this._renderRow.bind(this);
+        this._leftButton = this._leftButton.bind(this);
+        this._title = this._title.bind(this);
 	}
 	_renderRow(rowData){
 		return(
@@ -38,16 +41,30 @@ export default class Contact extends BaseComponent {
 			</View>
 		)
 	}
+    //定义上导航的左按钮
+    _leftButton(){
+        return {
+            title: 'back',
+            handler: () => this.route.pop(this.props),
+        }
+    }
+    //定义上导航的标题
+    _title(){
+        return{
+            title:"Contact"
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
-	               	<ListView dataSource = {
-	                    this.state.ds.cloneWithRows(this.state.data)
-	                  }
-	                  renderRow = {
-	                    this._renderRow
-	                  }
-	                />
+				<NavigationTopBar leftButton={this._leftButton} title={this._title} />
+				<ListView dataSource = {
+					this.state.ds.cloneWithRows(this.state.data)
+				  }
+				  renderRow = {
+					this._renderRow
+				  }
+				/>
            </View>
         )
 
