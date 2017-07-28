@@ -20,7 +20,6 @@ let __instance = (function() {
 let _network = new netWorking();
 
 export default class QNY {
-<<<<<<< HEAD
     constructor() {
         if (__instance()) return __instance();
 
@@ -50,18 +49,7 @@ export default class QNY {
     // imageSyncOperation(){
     //
     // }
-}
-=======
-	constructor() {
-		if(__instance()) return __instance();
 
-		__instance(this);
-		this.network = _network;
-	}
-
-	getAccessKeyAndSecretKey() {
-
-	}
 
 	uploadFile(fileUri, onprogress) {
 		return new Promise((resolve, reject) => {
@@ -112,4 +100,3 @@ export default class QNY {
 	//
 	// }
 }
->>>>>>> origin/master
