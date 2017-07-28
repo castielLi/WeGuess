@@ -43,7 +43,6 @@ export default class Contact extends BaseComponent {
 		)
 	}
     render() {
-    	console.log(this.state)
         return (
             <View style={styles.container}>
 	               	<ListView dataSource = {
@@ -60,10 +59,13 @@ export default class Contact extends BaseComponent {
 }
 const styles = StyleSheet.create({
 	container:{
-		flex:1
+		flex:1,
+		backgroundColor:'#fff',
 	},
 	row:{
 		height:40,
+		paddingLeft:20,
+		paddingRight:20,
 		borderBottomWidth:1,
 		borderBottomColor:'#ccc',
 		flexDirection:'row',
