@@ -1,6 +1,3 @@
-/**
- * Created by apple on 2017/7/17.
- */
 
 import React, { Component } from 'react';
 import {
@@ -10,7 +7,6 @@ import {
     ListView
 } from 'react-native';
 import BaseComponent from '../../Core/Component'
-
 import Contacts from 'react-native-contacts';
 
 var datas = [];
@@ -60,7 +56,7 @@ export default class Contact extends BaseComponent {
 const styles = StyleSheet.create({
 	container:{
 		flex:1,
-		backgroundColor:'#a3bee4',
+		backgroundColor:'#fff'
 	},
 	row:{
 		height:40,
