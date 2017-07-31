@@ -52,7 +52,11 @@ class Main extends BaseComponent {
                 },{
                 	key:'Contact',
                 	id:'Contact'
-                }],
+                },{
+        	        key:'Camera',
+                    id:'Camera'
+                }
+                ],
             refresh: false,
             isZH:true,
             strings:this.Localization.strings.main
@@ -105,7 +109,7 @@ class Main extends BaseComponent {
     render() {
         return (
             <View style={styles.container}>
-                <NavigationTopBar leftButton={this._leftButton} title={this._title} />
+                <NavigationTopBar title={this._title} />
                <View>
 	               	<ListView dataSource = {
 	                    this.state.ds.cloneWithRows(this.state.data)

@@ -22,6 +22,7 @@ import XX from './XX/index.js'
 import XXX from './XXX/index.js'
 import Main from './Main/page/main.js'
 import Contact from './Contact'
+import Camera from './Camera'
 
 export const MainPage = {
     key: 'TestRefresh',
@@ -107,6 +108,12 @@ export const RouteMap = {
             params: {}
         }
     },
+    'Camera':{
+        'Camera':{
+            component:Camera,
+            parames:{}
+        }
+    }
 };
 
 

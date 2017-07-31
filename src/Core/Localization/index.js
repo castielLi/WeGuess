@@ -13,7 +13,8 @@ export default class Localization{
 	  		XX:"XX",
 	  		XXX:"XXX",
 	  		Contact:"Contact",
-	  		ChangeLanguage:"ChangeLanguage"
+	  		ChangeLanguage:"ChangeLanguage",
+			Camera:"Camera"
 	  	},
 	  	recode:{
 	  		recode:"RECODE",
@@ -28,7 +29,7 @@ export default class Localization{
 	  		signin:"Sign In",
 	  		facebook:"Login with facebook!",
 	  		google:"Login with google+!"
-	  	}
+	  	},
 	  },
 	  "zh-CN": {
 	    main:{
@@ -38,7 +39,8 @@ export default class Localization{
 	  		XX:"XX",
 	  		XXX:"XXX",
 	  		Contact:"通讯录",
-	  		ChangeLanguage:"切换语言"
+	  		ChangeLanguage:"切换语言",
+            Camera:"照相机"
 	  	},
 	  	recode:{
 	  		recode:"录音",

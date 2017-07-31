@@ -17,6 +17,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +43,8 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactNativeContacts(),
             new RNUUIDGeneratorPackage(),
             new RNFileSystemPackage(),
-            new SQLitePluginPackage()
+            new SQLitePluginPackage(),
+            new RCTCameraPackage()
       );
     }
   };
