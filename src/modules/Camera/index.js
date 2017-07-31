@@ -12,11 +12,30 @@ import {
     View
 } from 'react-native';
 import Camera from 'react-native-camera';
+import BaseComponent from '../../Core/Component'
+import NavigationTopBar from '../../Core/Component/NavigationBar';
 
-export default class BadInstagramCloneApp extends Component {
+export default class BadInstagramCloneApp extends BaseComponent {
+    constructor(props){
+        super(props);
+        this._leftButton = this._leftButton.bind(this);
+        this._title = this._title.bind(this);
+    }
+    _leftButton(){
+        return {
+            title: 'back',
+            handler: () => this.route.pop(this.props),
+        }
+    }
+    _title(){
+        return{
+            title:"Contact"
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
+                <NavigationTopBar leftButton={this._leftButton} title={this._title} />
                 <Camera
                     ref={(cam) => {
                         this.camera = cam;
@@ -41,10 +60,10 @@ export default class BadInstagramCloneApp extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'row',
+        backgroundColor:"#fff"
     },
     preview: {
-        flex: 1,
+        flex:1,
         justifyContent: 'flex-end',
         alignItems: 'center'
     },
