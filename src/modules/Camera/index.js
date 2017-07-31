@@ -58,7 +58,7 @@ export default class BadInstagramCloneApp extends BaseComponent {
         const options = {};
         //options.location = ...
         this.camera.capture({metadata: options})
-            .then((data) => console.log(data))
+            .then((data) => alert("拍照成功！图片保存地址：\n"+data.path))
             .catch(err => console.error(err));
     }
     changeCameraType(){
