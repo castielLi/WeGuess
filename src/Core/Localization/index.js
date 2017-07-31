@@ -10,8 +10,6 @@ export default class Localization{
 	  		Login:"Login",
 	  		MainTabbar:"Record",
 	  		TestRefresh:"TestRefresh",
-	  		XX:"XX",
-	  		XXX:"XXX",
 	  		Contact:"Contact",
 	  		ChangeLanguage:"ChangeLanguage"
 	  	},

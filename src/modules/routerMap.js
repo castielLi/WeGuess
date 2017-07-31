@@ -17,9 +17,6 @@ import AudioExample from './Recode/page/index'
 import Xmpp from './Xmpp/page/index'
 import XmppMain from './Xmpp/page/xmpp'
 import TestRefresh from './testRefresh'
-import Socket from './socket'
-import XX from './XX/index.js'
-import XXX from './XXX/index.js'
 import Main from './Main/page/main.js'
 import Contact from './Contact'
 
@@ -65,12 +62,6 @@ export const RouteMap = {
             params: {}
         }
     },
-    'Socket': {
-        'Socket': {
-            component: Socket,
-            params: {}
-        }
-    },
     'Login': {
         'Login': {
             component: Login,
@@ -80,18 +71,6 @@ export const RouteMap = {
     'TestRefresh': {
         'TestRefresh': {
             component: TestRefresh,
-            params: {}
-        }
-    },
-    'XX': {
-        'XX': {
-            component: XX,
-            params: {}
-        }
-    },
-    'XXX': {
-        'XXX': {
-            component: XXX,
             params: {}
         }
     },

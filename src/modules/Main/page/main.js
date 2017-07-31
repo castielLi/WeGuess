@@ -22,7 +22,6 @@ import {
 } from 'react-redux';
 import BaseComponent from '../../../Core/Component';
 import NavigationTopBar from '../../../Core/Component/NavigationBar';
-import XX from '../../XX/index.js'
 var Dimensions = require('Dimensions');
 
 class Main extends BaseComponent {
@@ -43,12 +42,6 @@ class Main extends BaseComponent {
                 }, {
                     key: 'TestRefresh',
                     id: 'TestRefresh'
-                }, {
-                    key: 'XX',
-                    id: 'XX'
-                }, {
-                    key: 'XXX',
-                    id: 'XXX'
                 },{
                 	key:'Contact',
                 	id:'Contact'
