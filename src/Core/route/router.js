@@ -53,12 +53,8 @@ class Route {
             // params = {message: '当前页面没有找到：' + id};
         }
 
-        return (
-            <View style={{flex:1}}>
+        return <Component navigator={navigator} {...params} />
 
-                <Component navigator={navigator} {...params} />
-            </View>
-        );
     }
 
 
