@@ -92,9 +92,9 @@ export default function App() {
             connectionInfo:connectionInfo
                       });
 
-            if(connectionInfo == "NONE" || connectionInfo == "none"){
-                im.handleNetEnvironment();
-            }
+            // if(connectionInfo == "NONE" || connectionInfo == "none"){
+                im.handleNetEnvironment(connectionInfo);
+            // }
 
         }
 

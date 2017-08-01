@@ -11,6 +11,10 @@ let handleSqliteQueue = [];
 let heartBeatInterval;
 let loopInterval;
 let checkQueueInterval;
+let checkNetEnvironmentInterval;
+let loopState;
+let netState;
+
 
 
 let __instance = (function () {
@@ -34,23 +38,52 @@ export default class IM {
 
 
     startIM(){
+       loopState = loopStateType.wait;
        this.beginHeartBeat();
        this.beginRunLoop();
     }
 
     stopIM(){
-
-        checkQueueInterval = setInterval(function () {
-            if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
-                clearInterval(heartBeatInterval)
-                clearInterval(loopInterval)
-                clearInterval(checkQueueInterval)
-            }
-        }, 1000);
+        checkQueue(this.stopIMRunCycle,null);
     }
 
-    handleNetEnvironment(){
+    stopIMRunCycle(){
+        clearInterval(heartBeatInterval)
+        clearInterval(loopInterval)
+        clearInterval(checkQueueInterval)
+    }
 
+    handleNetEnvironment(connectionInfo){
+       netState = connectionInfo;
+
+        if(netState == "NONE" || netState == "none"){
+            clearInterval(loopInterval)
+            loopState = loopStateType.noNet;
+            checkNetEnvironmentInterval = setInterval(function () {
+
+                if(netState != 'NONE' && netState != 'none'){
+                    clearInterval(checkNetEnvironmentInterval);
+                    if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
+
+                        loopState = loopStateType.wait;
+                    }else
+                        loopState = loopStateType.normal;
+                }
+            },200);
+        }
+
+
+    }
+
+    checkQueue(emptyCallBack,inEmptyCallBack){
+        checkQueueInterval = setInterval(function () {
+            if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
+
+                emptyCallBack || emptyCallBack();
+            }else{
+                inEmptyCallBack || inEmptyCallBack();
+            }
+        }, 1000);
     }
 
     handleSendMessageQueue(){
@@ -69,10 +102,19 @@ export default class IM {
     }
 
     beginRunLoop(){
+        let handleSend = this.handleSendMessageQueue;
+        let handleRec = this.handleRecieveMessageQueue;
         loopInterval = setInterval(function () {
-
               console.log("runloop is running")
+              handleSend();
+              handleRec();
         }, 200);
     }
 }
 
+
+let loopStateType = {
+    normal : "normal",
+    noNet : "noNet",
+    wait : "wait"
+};
