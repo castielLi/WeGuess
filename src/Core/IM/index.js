@@ -7,6 +7,11 @@ import Connect from './socket'
 let _connect = new Connect();
 let sendMessageQueue = [];
 let recieveMessageQueue = [];
+let handleSqliteQueue = [];
+let heartBeatInterval;
+let loopInterval;
+let checkQueueInterval;
+
 
 let __instance = (function () {
     let instance;
@@ -17,47 +22,57 @@ let __instance = (function () {
 }());
 
 export default class IM {
-    private constructor() {
+    constructor(){
         if (__instance()) return __instance();
 
         __instance(this);
 
         this.connect = _connect;
         this.startIM();
-        this.heartBeatInterval = 0 ;
-        this.loopInterval = 0 ;
-    }
 
-    static getInstance(){
-        return this.constructor();
     }
 
 
-    private startIM(){
+    startIM(){
        this.beginHeartBeat();
        this.beginRunLoop();
     }
 
-    private beginRunLoop(){
-        this.loopInterval = setInterval(function () {
+    stopIM(){
 
-
-        }, 200)
+        checkQueueInterval = setInterval(function () {
+            if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
+                clearInterval(heartBeatInterval)
+                clearInterval(loopInterval)
+                clearInterval(checkQueueInterval)
+            }
+        }, 1000);
     }
 
-    private handleSendMessageQueue(){
+    handleNetEnvironment(){
 
     }
 
-    private handleRecieveMessageQueue(){
+    handleSendMessageQueue(){
 
     }
 
-    private beginHeartBeat(){
-       this.heartBeatInterval = setInterval(function () {
+    handleRecieveMessageQueue(){
 
+    }
 
-        }, 10000)
+    beginHeartBeat(){
+       heartBeatInterval = setInterval(function () {
+           console.log("heartbeat is running")
+
+        }, 10000);
+    }
+
+    beginRunLoop(){
+        loopInterval = setInterval(function () {
+
+              console.log("runloop is running")
+        }, 200);
     }
 }
 

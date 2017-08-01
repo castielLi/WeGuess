@@ -22,7 +22,6 @@ const MainTabbar = TabNavigator({
             //         selectedImage={require('./imgs/nav_fav_actived@3x.png')}
             //     />
             // )
-
             //隐藏tabbar
             tabBarVisible:false
         })},
