@@ -6,6 +6,8 @@ import Connect from './socket'
 
 let _connect = new Connect();
 let sendMessageQueue = [];
+let sendMessageQueueState;
+let waitSendMessageQueue = [];
 let recieveMessageQueue = [];
 let handleSqliteQueue = [];
 let heartBeatInterval;
@@ -39,6 +41,7 @@ export default class IM {
 
     startIM(){
        loopState = loopStateType.wait;
+       sendMessageQueueState = sendMessageQueueType.empty;
        this.beginHeartBeat();
        this.beginRunLoop();
     }
@@ -86,28 +89,67 @@ export default class IM {
         }, 1000);
     }
 
-    handleSendMessageQueue(){
+    addMessage(message){
+        if(sendMessageQueueState == sendMessageQueueType.excuting){
+            waitSendMessageQueue.push(message);
+            console.log("message 加入等待队列")
+        }else{
+            sendMessageQueue.push(message);
+            console.log("message 加入发送队列")
+        }
+    }
 
+    handleSendMessageQueue(obj){
+        if(sendMessageQueue.length > 0){
+            loopState = loopStateType.normal;
+
+            sendMessageQueueState = sendMessageQueueType.excuting;
+            console.log(sendMessageQueueState);
+            for(let item in sendMessageQueue){
+                obj.sendMessage(item);
+            }
+            sendMessageQueue = [];
+
+            if(waitSendMessageQueue.length > 0){
+               console.log("拷贝等待队列到发送队列")
+               sendMessageQueue = waitSendMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+               waitSendMessageQueue = [];
+            }
+            sendMessageQueueState = sendMessageQueueType.empty;
+            console.log(sendMessageQueueState);
+        }
+        loopState = loopStateType.wait;
+    }
+
+    sendMessage(message){
+        //发送websocket
+        console.log("开始发送消息了")
     }
 
     handleRecieveMessageQueue(){
 
     }
 
+    //心跳包
     beginHeartBeat(){
        heartBeatInterval = setInterval(function () {
-           console.log("heartbeat is running")
+
 
         }, 10000);
     }
 
+    //runloop循环
     beginRunLoop(){
         let handleSend = this.handleSendMessageQueue;
         let handleRec = this.handleRecieveMessageQueue;
+        let obj = this;
         loopInterval = setInterval(function () {
-              console.log("runloop is running")
-              handleSend();
-              handleRec();
+
+              if(loopState == loopStateType.wait) {
+                  loopState = loopStateType.normal;
+                  handleSend(obj);
+                  handleRec(obj);
+              }
         }, 200);
     }
 }
@@ -118,3 +160,9 @@ let loopStateType = {
     noNet : "noNet",
     wait : "wait"
 };
+
+let sendMessageQueueType = {
+    excuting : "excuting",
+    empty : "empty"
+}
+

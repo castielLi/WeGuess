@@ -22,14 +22,14 @@ import Contact from './Contact'
 import Camera from './Camera'
 
 export const MainPage = {
-    key: 'TestRefresh',
-    routeId: 'TestRefresh'
+    key: 'MainTabbar',
+    routeId: 'MainTabbar'
 }
 
 
 export const InitialRoute = {
-    key: 'Main',
-    routeId: 'Main'
+    key: 'Root',
+    routeId: 'Root'
 }
 
 export const RouteMap = {

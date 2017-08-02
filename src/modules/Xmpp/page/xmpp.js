@@ -25,7 +25,7 @@ export default class XmppMain extends DisplayComponent {
                     key : "Xmpp",
                     routeId: "TestRefresh"
                 };
-                this.route.toMain(this.props);
+                this.route.push(this.props,page);
             }
         };
 

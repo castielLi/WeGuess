@@ -23,7 +23,7 @@ const MainTabbar = TabNavigator({
             //     />
             // )
             //隐藏tabbar
-            tabBarVisible:false
+            // tabBarVisible:false
         })},
     tabtwo : { screen : TabTwo }
 });

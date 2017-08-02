@@ -32,6 +32,7 @@ import BaseComponent from '../../../Core/Component';
 import NavigationTopBar from '../../.././Core/Component/NavigationBar'
 class AudioExample extends BaseComponent {
 
+
     constructor(props) {
         super(props);
         this._leftButton = this._leftButton.bind(this);
@@ -55,6 +56,10 @@ class AudioExample extends BaseComponent {
             AudioEncoding: "aac",
             AudioEncodingBitRate: 32000
         });
+    }
+
+    comonentWillMount(){
+        this.props.navigation.hide();
     }
 
     componentDidMount() {

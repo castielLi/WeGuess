@@ -38,6 +38,10 @@ export default function App() {
     //初始化IM
     let im = new IM();
 
+    setInterval(function(){
+        im.addMessage("hello");
+    },100)
+
 
     class InitApp extends BaseComponent {
         constructor() {
