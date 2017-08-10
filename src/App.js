@@ -32,6 +32,7 @@ export default function App() {
     //初始化app的database
     FMDB.initDatabase()
 
+
     //初始化路由表
     Route.initRouteMap(router);
 
@@ -39,7 +40,7 @@ export default function App() {
     let im = new IM();
 
     setInterval(function(){
-        im.addMessage("hello");
+        im.addMessage({"type":"text","content":"hello"});
     },100)
 
 

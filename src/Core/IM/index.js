@@ -3,20 +3,33 @@
  */
 
 import Connect from './socket'
+import * as methods from './Common'
+import * as storeSqlite from './StoreSqlite'
 
 let _connect = new Connect();
+//发送消息队列
 let sendMessageQueue = [];
 let sendMessageQueueState;
+//等待发送消息队列
 let waitSendMessageQueue = [];
+//收到消息队列
 let recieveMessageQueue = [];
+//存储sqlite队列
+let handleSqliteQueueState;
 let handleSqliteQueue = [];
+let waitSqliteQueue = [];
+//发送失败队列
+let sendFailedMessageQueue = [];
 let heartBeatInterval;
 let loopInterval;
 let checkQueueInterval;
 let checkNetEnvironmentInterval;
+let storeSqliteInterval;
 let loopState;
 let netState;
 
+
+let ME = "";
 
 
 let __instance = (function () {
@@ -32,8 +45,9 @@ export default class IM {
         if (__instance()) return __instance();
 
         __instance(this);
-
         this.connect = _connect;
+        //初始化IM的数据库
+        storeSqlite.initIMDatabase();
         this.startIM();
 
     }
@@ -42,6 +56,7 @@ export default class IM {
     startIM(){
        loopState = loopStateType.wait;
        sendMessageQueueState = sendMessageQueueType.empty;
+       handleSqliteQueueState = handleSqliteQueueType.empty;
        this.beginHeartBeat();
        this.beginRunLoop();
     }
@@ -62,20 +77,47 @@ export default class IM {
         if(netState == "NONE" || netState == "none"){
             clearInterval(loopInterval)
             loopState = loopStateType.noNet;
+
+            if(sendMessageQueue.length > 0){
+
+            }
+
             checkNetEnvironmentInterval = setInterval(function () {
 
                 if(netState != 'NONE' && netState != 'none'){
                     clearInterval(checkNetEnvironmentInterval);
-                    if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
-
-                        loopState = loopStateType.wait;
-                    }else
-                        loopState = loopStateType.normal;
+                    // if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
+                    //
+                    //     loopState = loopStateType.wait;
+                    // }else
+                    //     loopState = loopStateType.normal;
                 }
             },200);
         }
 
 
+    }
+
+
+    handleStoreSqlite(obj){
+        if(handleSqliteQueue.length > 0){
+
+            handleSqliteQueueState = handleSqliteQueueType.excuting;
+            console.log(handleSqliteQueueState);
+            for(let item in handleSqliteQueue){
+               obj.storeMessage(item);
+            }
+            handleSqliteQueue = [];
+
+            if(waitSqliteQueue.length > 0){
+                console.log("拷贝等待存储队列到存储队列")
+                handleSqliteQueue = waitSqliteQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },handleSqliteQueue);
+                waitSqliteQueue = [];
+            }
+
+            handleSqliteQueueState = handleSqliteQueueType.empty;
+            console.log(handleSqliteQueueState);
+        }
     }
 
     checkQueue(emptyCallBack,inEmptyCallBack){
@@ -89,7 +131,33 @@ export default class IM {
         }, 1000);
     }
 
-    addMessage(message){
+    addMessage(message,callback=function(){},onprogess="undefined") {
+        if (message.type == "undefined" || message.type == "") {
+            callback(false, "message type error");
+        }
+
+        switch (message.type) {
+            case "audio":
+                // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
+                // if(result.success){
+                    callback(true);
+                    this.addMessageQueue(message);
+                // }else{
+                //     callback(false,"upload server error");
+                // }
+                break;
+            case "text":
+                this.addMessageQueue(message);
+                callback(true);
+                break;
+            // case "image":
+            //     let result = methods.GetUploadTokenFromServer(message.content.name);
+            //     break;
+        }
+    }
+
+
+    addMessageQueue(message){
         if(sendMessageQueueState == sendMessageQueueType.excuting){
             waitSendMessageQueue.push(message);
             console.log("message 加入等待队列")
@@ -101,7 +169,6 @@ export default class IM {
 
     handleSendMessageQueue(obj){
         if(sendMessageQueue.length > 0){
-            loopState = loopStateType.normal;
 
             sendMessageQueueState = sendMessageQueueType.excuting;
             console.log(sendMessageQueueState);
@@ -115,15 +182,37 @@ export default class IM {
                sendMessageQueue = waitSendMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
                waitSendMessageQueue = [];
             }
+
+            if(sendFailedMessageQueue.length > 0){
+                console.log("拷贝失败队列到发送队列")
+                sendMessageQueue = sendFailedMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+                sendFailedMessageQueue = [];
+            }
+
             sendMessageQueueState = sendMessageQueueType.empty;
             console.log(sendMessageQueueState);
         }
-        loopState = loopStateType.wait;
     }
 
     sendMessage(message){
         //发送websocket
         console.log("开始发送消息了")
+
+        //发送失败
+        if(false){
+            sendFailedMessageQueue.push(message);
+        }else{
+            handleSqliteQueue.push(message);
+        }
+    }
+
+    storeMessage(message){
+
+        // if(message.to == ME){
+            storeSqlite.storeSendMessage(message);
+        // }else{
+        //     storeSqlite.storeRecMessage(message);
+        // }
     }
 
     handleRecieveMessageQueue(){
@@ -142,14 +231,19 @@ export default class IM {
     beginRunLoop(){
         let handleSend = this.handleSendMessageQueue;
         let handleRec = this.handleRecieveMessageQueue;
+        let handleStoreSqlite = this.handleStoreSqlite;
         let obj = this;
         loopInterval = setInterval(function () {
 
-              if(loopState == loopStateType.wait) {
-                  loopState = loopStateType.normal;
+              if(sendMessageQueueState == sendMessageQueueType.empty) {
+
                   handleSend(obj);
-                  handleRec(obj);
               }
+
+              if(handleSqliteQueueState == handleSqliteQueueType.empty){
+                  handleStoreSqlite(obj);
+              }
+
         }, 200);
     }
 }
@@ -166,3 +260,7 @@ let sendMessageQueueType = {
     empty : "empty"
 }
 
+let handleSqliteQueueType = {
+    excuting : "excuting",
+    empty : "empty"
+}

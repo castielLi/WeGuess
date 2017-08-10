@@ -4,7 +4,7 @@
 import  * as config from './NetworkConfig'
 import VueResource from 'axios'
 import Vue from 'vue'
-import * as commons from './Common'
+import * as commons from './UploadHelper'
 import Qs from 'qs'
 Vue.use(VueResource)
 

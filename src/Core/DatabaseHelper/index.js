@@ -24,7 +24,7 @@ export default class FMDB {
 
   }
 
-  static queryDatabase(sql, params = []) {
+  static queryDatabase(sql, params = [],callback) {
 
     var db = SQLite.openDatabase({
       name: 'weguess.db',
@@ -34,12 +34,12 @@ export default class FMDB {
 
         tx.executeSql(sql, params, (tx, results) => {
           console.log('query success');
+          callback(result);
         }, errorDB);
 
       });
     }, errorDB);
   }
-
 }
 
 function errorDB(err) {

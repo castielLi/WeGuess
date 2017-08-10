@@ -17,14 +17,14 @@ let __instance = (function() {
 // var ACCESS_KEY = "";
 // var SECRET_KEY = "";
 
-let _network = new netWorking();
+// let _network = new netWorking();
 
 export default class QNY {
     constructor() {
         if (__instance()) return __instance();
 
         __instance(this);
-        this.network = _network;
+        // this.network = _network;
     }
 
 
