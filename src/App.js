@@ -17,7 +17,7 @@ import BaseComponent from './Core/Component'
 import Route from './Core/route/router'
 import * as router from './modules/routerMap'
 import IM from './Core/IM'
-
+import message from './Core/IM/dto/message'
 
 export default function App() {
 
@@ -40,7 +40,17 @@ export default function App() {
     let im = new IM();
 
     setInterval(function(){
-        im.addMessage({"type":"text","content":"hello"});
+        let addMessage = new message();
+        addMessage.type = "text";
+        addMessage.to = "hello";
+        addMessage.from = "me";
+        addMessage.localPath = "";
+        addMessage.url = "";
+        addMessage.isSend = false;
+        addMessage.date = new Date().toDateString();
+        addMessage.content = "hello world";
+        addMessage.way = "chatroom";
+        im.addMessage(addMessage);
     },100)
 
 

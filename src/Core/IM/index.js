@@ -6,6 +6,7 @@ import Connect from './socket'
 import * as methods from './Common'
 import * as storeSqlite from './StoreSqlite'
 
+
 let _connect = new Connect();
 //发送消息队列
 let sendMessageQueue = [];
@@ -99,27 +100,9 @@ export default class IM {
     }
 
 
-    handleStoreSqlite(obj){
-        if(handleSqliteQueue.length > 0){
 
-            handleSqliteQueueState = handleSqliteQueueType.excuting;
-            console.log(handleSqliteQueueState);
-            for(let item in handleSqliteQueue){
-               obj.storeMessage(item);
-            }
-            handleSqliteQueue = [];
 
-            if(waitSqliteQueue.length > 0){
-                console.log("拷贝等待存储队列到存储队列")
-                handleSqliteQueue = waitSqliteQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },handleSqliteQueue);
-                waitSqliteQueue = [];
-            }
-
-            handleSqliteQueueState = handleSqliteQueueType.empty;
-            console.log(handleSqliteQueueState);
-        }
-    }
-
+    //检查send 和 rec队列执行回调
     checkQueue(emptyCallBack,inEmptyCallBack){
         checkQueueInterval = setInterval(function () {
             if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
@@ -131,6 +114,12 @@ export default class IM {
         }, 1000);
     }
 
+    //删除当前聊天所有消息
+    deleteCurrentChatMessage(client){
+
+    }
+
+    //外部接口，添加消息
     addMessage(message,callback=function(){},onprogess="undefined") {
         if (message.type == "undefined" || message.type == "") {
             callback(false, "message type error");
@@ -140,8 +129,8 @@ export default class IM {
             case "audio":
                 // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
                 // if(result.success){
-                    callback(true);
-                    this.addMessageQueue(message);
+                callback(true);
+                this.addMessageQueue(message);
                 // }else{
                 //     callback(false,"upload server error");
                 // }
@@ -156,7 +145,7 @@ export default class IM {
         }
     }
 
-
+    //添加消息至消息队列
     addMessageQueue(message){
         if(sendMessageQueueState == sendMessageQueueType.excuting){
             waitSendMessageQueue.push(message);
@@ -167,13 +156,14 @@ export default class IM {
         }
     }
 
+    //处理消息队列
     handleSendMessageQueue(obj){
         if(sendMessageQueue.length > 0){
 
             sendMessageQueueState = sendMessageQueueType.excuting;
             console.log(sendMessageQueueState);
             for(let item in sendMessageQueue){
-                obj.sendMessage(item);
+                obj.sendMessage(sendMessageQueue[item]);
             }
             sendMessageQueue = [];
 
@@ -194,6 +184,7 @@ export default class IM {
         }
     }
 
+    //发送消息
     sendMessage(message){
         //发送websocket
         console.log("开始发送消息了")
@@ -203,6 +194,27 @@ export default class IM {
             sendFailedMessageQueue.push(message);
         }else{
             handleSqliteQueue.push(message);
+        }
+    }
+
+    handleStoreSqlite(obj){
+        if(handleSqliteQueue.length > 0){
+
+            handleSqliteQueueState = handleSqliteQueueType.excuting;
+            console.log(handleSqliteQueueState);
+            for(let item in handleSqliteQueue){
+                obj.storeMessage(handleSqliteQueue[item]);
+            }
+            handleSqliteQueue = [];
+
+            if(waitSqliteQueue.length > 0){
+                console.log("拷贝等待存储队列到存储队列")
+                handleSqliteQueue = waitSqliteQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },handleSqliteQueue);
+                waitSqliteQueue = [];
+            }
+
+            handleSqliteQueueState = handleSqliteQueueType.empty;
+            console.log(handleSqliteQueueState);
         }
     }
 
