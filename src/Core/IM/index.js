@@ -115,8 +115,13 @@ export default class IM {
     }
 
     //删除当前聊天所有消息
-    deleteCurrentChatMessage(client){
+    deleteCurrentChatMessage(name,chatType){
+       storeSqlite.deleteClientRecode(name,chatType);
+    }
 
+    //删除当条消息
+    deleteMessage(message,chatType,client){
+       storeSqlite.deleteMessage(message,chatType,client);
     }
 
     //外部接口，添加消息

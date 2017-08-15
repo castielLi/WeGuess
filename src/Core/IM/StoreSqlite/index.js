@@ -17,8 +17,16 @@ export function storeSendMessage(message){
 
 export function storeRecMessage(message){
 
-
 }
+
+export function deleteClientRecode(name,chatType){
+    IMFMDB.DeleteChatByClientId(name,chatType);
+}
+
+export function deleteMessage(message,chatType,client){
+    IMFMDB.DeleteChatMessage(message,chatType,client);
+}
+
 
 export function initIMDatabase(){
     IMFMDB.initIMDataBase();
@@ -77,6 +85,9 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
                             console.log("create chat table success");
 
                             //添加数据进数据库
+
+                            insertClientRecode(client,message.way,tx);
+
                             insertChat(message,tableName,tx);
 
                         }, errorDB);
@@ -87,14 +98,90 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
         }, errorDB);
 }
 
-IMFMDB.DeleteChatByClientId = function(){
+//删除当前用户的聊天记录
+IMFMDB.DeleteChatByClientId = function(name,chatType){
+    var db = SQLite.openDatabase({
+        name: 'IM.db',
+        createFromLocation: "1"
+    }, () => {
+        db.transaction((tx) => {
 
+            // tx.executeSql(sqls.ExcuteIMSql.QueryChatTypeFromChatList, [name], (tx, results) => {
+            //
+            //     console.log(results);
+            //     // chatList = results;
+            //     if(results.rows.length) {
+            //
+            //         deleteClientRecodeByName(name,tx);
+
+                    // if(results.rows.item(0).Type == "chatroom")
+                    if(chatType =="chatroom"){
+
+                        deleteClientChatList("ChatRoom_" + name, tx);
+                    }else {
+                        deleteClientChatList("Private_" + name, tx);
+                    }
+        //         }
+        //     }, errorDB);
+        //
+        });
+    }, errorDB);
 }
 
+//删除聊天室聊天记录
+IMFMDB.DeleteChatByChatRoomId = function(chatRoom){
+    var db = SQLite.openDatabase({
+        name: 'IM.db',
+        createFromLocation: "1"
+    }, () => {
+        db.transaction((tx) => {
+
+            tx.executeSql(sqls.ExcuteIMSql.QueryChatTypeFromChatList, [client], (tx, results) => {
+
+                console.log(results);
+                // chatList = results;
+                if(results.rows.length) {
+
+                    deleteClientRecode(chatRoom);
+                    deleteClientChatList("ChatRoom_" + chatRoom);
+                }
+            }, errorDB);
+
+        });
+    }, errorDB);
+}
+
+//删除具体消息
+IMFMDB.DeleteChatMessage = function(message,chatType,client){
+
+    let tableName = chatType=="chatroom"? "ChatRoom_"+client : "Private"+client;
+
+    let deleteSql = sqls.ExcuteIMSql.DeleteMessageById;
+
+    deleteSql = commonMethods.sqlFormat(deleteSql,[tableName,message.id]);
+
+    var db = SQLite.openDatabase({
+        name: 'IM.db',
+        createFromLocation: "1"
+    }, () => {
+        db.transaction((tx) => {
+
+            tx.executeSql(deleteSql, [], (tx, results) => {
+
+                console.log("delete current message success");
+
+            }, errorDB);
+
+        });
+    }, errorDB);
+}
+
+//按照需求获取当前用户的聊天记录
 IMFMDB.getQueryChatListByClientId = function(){
 
 }
 
+//获取所有聊天用户
 IMFMDB.getAllChatClientList = function(){
     var db = SQLite.openDatabase({
         name: 'IM.db',
@@ -102,7 +189,7 @@ IMFMDB.getAllChatClientList = function(){
     }, () => {
         db.transaction((tx) => {
 
-            tx.executeSql(sqls.GetChatList, [], (tx, results) => {
+            tx.executeSql(sqls.ExcuteIMSql.GetChatList, [], (tx, results) => {
 
                 console.log(results);
                 chatList = results;
@@ -121,6 +208,42 @@ function insertChat(message,tableName,tx){
     tx.executeSql(insertSql, [], (tx, results) => {
 
         console.log("insert meesage success");
+
+    }, errorDB);
+}
+
+function insertClientRecode(client,way,tx){
+    let insertSql = sqls.ExcuteIMSql.InsertChatRecode;
+
+    insertSql = commonMethods.sqlFormat(insertSql,[client,way]);
+
+    tx.executeSql(insertSql, [], (tx, results) => {
+
+        console.log("insert recode success");
+
+    }, errorDB);
+}
+
+function deleteClientRecodeByName(name,tx){
+    let deleteSql = sqls.ExcuteIMSql.DeleteChatFromChatList;
+
+    deleteSql = commonMethods.sqlFormat(deleteSql,[name]);
+
+    tx.executeSql(deleteSql, [], (tx, results) => {
+
+        console.log("delete recode success");
+
+    }, errorDB);
+}
+
+function deleteClientChatList(tableName,tx){
+    let deleteSql = sqls.ExcuteIMSql.DeleteChatTableByName;
+
+    deleteSql = commonMethods.sqlFormat(deleteSql,[tableName]);
+
+    tx.executeSql(deleteSql, [], (tx, results) => {
+
+        console.log("delete chat list success");
 
     }, errorDB);
 }
