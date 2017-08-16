@@ -15,6 +15,8 @@ let sendMessageQueueState;
 let waitSendMessageQueue = [];
 //收到消息队列
 let recieveMessageQueue = [];
+let recMessageQueueState;
+let waitRecMessageQueue = [];
 //存储sqlite队列
 let handleSqliteQueueState;
 let handleSqliteQueue = [];
@@ -150,6 +152,8 @@ export default class IM {
         }
     }
 
+
+
     //添加消息至消息队列
     addMessageQueue(message){
         if(sendMessageQueueState == sendMessageQueueType.excuting){
@@ -202,6 +206,11 @@ export default class IM {
         }
     }
 
+
+
+
+
+
     handleStoreSqlite(obj){
         if(handleSqliteQueue.length > 0){
 
@@ -232,9 +241,53 @@ export default class IM {
         // }
     }
 
-    handleRecieveMessageQueue(){
 
+
+
+
+
+    //websocket接口,添加接受消息队列
+    addRecMessage(message){
+
+        if(recMessageQueueState == recMessageQueueType.excuting){
+            waitRecMessageQueue.push(message);
+            console.log("message 加入等待接受队列")
+        }else{
+            recieveMessageQueue.push(message);
+            console.log("message 加入接受队列")
+        }
     }
+
+    handleRecieveMessageQueue(obj){
+
+        if(recieveMessageQueue.length > 0){
+
+            recMessageQueueState = recMessageQueueType.excuting;
+            console.log(recMessageQueueState);
+            for(let item in recieveMessageQueue){
+                // obj.sendMessage(sendMessageQueue[item]);
+            }
+            recieveMessageQueue = [];
+
+            if(waitRecMessageQueue.length > 0){
+                console.log("拷贝等待队列到接受队列")
+                recieveMessageQueue = waitRecMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },recieveMessageQueue);
+                waitRecMessageQueue = [];
+            }
+
+            recMessageQueueState = recMessageQueueType.empty;
+            console.log(recMessageQueueState);
+        }
+    }
+
+    recMessage(message) {
+
+        //处理收到消息的逻辑
+
+        //添加sqlite队列
+        handleSqliteQueue.push(message);
+    }
+
 
     //心跳包
     beginHeartBeat(){
@@ -273,6 +326,11 @@ let loopStateType = {
 };
 
 let sendMessageQueueType = {
+    excuting : "excuting",
+    empty : "empty"
+}
+
+let recMessageQueueType = {
     excuting : "excuting",
     empty : "empty"
 }

@@ -39,28 +39,29 @@ export default function App() {
     //初始化IM
     let im = new IM();
 
-    // setInterval(function(){
-    //     let addMessage = new message();
-    //     addMessage.type = "text";
-    //     addMessage.to = "hello";
-    //     addMessage.from = "me";
-    //     addMessage.localPath = "";
-    //     addMessage.url = "";
-    //     addMessage.isSend = false;
-    //     addMessage.date = new Date().toDateString();
-    //     addMessage.content = "hello world";
-    //     addMessage.way = "chatroom";
-    //     im.addMessage(addMessage);
-    // },100)
+    setInterval(function(){
+        let addMessage = new message();
+        addMessage.type = "text";
+        addMessage.to = "hello";
+        addMessage.from = "me";
+        addMessage.localPath = "";
+        addMessage.url = "";
+        addMessage.isSend = false;
+        addMessage.date = new Date().toDateString();
+        addMessage.content = "hello world";
+        addMessage.way = "chatroom";
+        // im.addMessage(addMessage);
+        im.addRecMessage(addMessage);
+    },100)
 
 
-    //todo:使用chatwayenum枚举来控制类型
-    // im.deleteCurrentChatMessage("hello","chatroom")
-
-
-    let deleteMessage = new message();
-    deleteMessage.id = 59;
-    im.deleteMessage(deleteMessage,"chatroom","hello");
+    // //todo:使用chatwayenum枚举来控制类型
+    // // im.deleteCurrentChatMessage("hello","chatroom")
+    //
+    //
+    // let deleteMessage = new message();
+    // deleteMessage.id = 59;
+    // im.deleteMessage(deleteMessage,"chatroom","hello");
 
 
     class InitApp extends BaseComponent {
