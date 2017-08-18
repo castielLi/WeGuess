@@ -35,7 +35,7 @@ export const InitialRoute = {
 export const RouteMap = {
     'Root': {
         'Root': {
-            component: MainTabbar,
+            component: Main,
             params: {}
         }
     },

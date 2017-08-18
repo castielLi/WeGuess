@@ -9,7 +9,9 @@ import * as commonMethods from './formatQuerySql'
 import ChatWayEnum from '../dto/ChatWayEnum'
 
 let chatList = [];
-
+export function selectAllMessage(){
+    IMFMDB.SelectAll()
+}
 export function storeSendMessage(message){
 
     IMFMDB.InsertMessageWithCondition(message,message.to)
@@ -50,7 +52,22 @@ IMFMDB.initIMDataBase = function(){
             });
         }, errorDB);
     }
+IMFMDB.SelectAll = function(){
+     var db = SQLite.openDatabase({
+            name: 'IM.db',
+            createFromLocation: "1"
+        }, () => {
+            db.transaction((tx) => {
+                
 
+                    tx.executeSql('select * from ChatRecode', [], (tx, results) => {
+                        console.log('查询ChatRecode数据表所有数据');
+                        console.log(results.rows)
+                    }, errorDB);
+                
+            });
+        }, errorDB);
+}
 //todo：想办法进行批量操作
 IMFMDB.InsertMessageWithCondition = function(message,client){
 
@@ -63,7 +80,7 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
             db.transaction((tx) => {
 
                 tx.executeSql(checkChatExist, [client], (tx, results) => {
-
+                    console.log('说话啊说话啊说话啊说话啊说话啊说话啊')
                     if(results.rows.length){
                         //如果当前聊天对象在数据库中存在有数据
                         //添加数据进数据库
