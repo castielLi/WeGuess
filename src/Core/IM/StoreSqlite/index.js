@@ -12,11 +12,12 @@ let chatList = [];
 
 export function storeSendMessage(message){
 
-    IMFMDB.InsertMessageWithCondition(message,message.to)
+     IMFMDB.InsertMessageWithCondition(message,message.to)
 }
 
 export function storeRecMessage(message){
 
+     IMFMDB.InsertMessageWithCondition(message,message.from)
 }
 
 export function deleteClientRecode(name,chatType){
@@ -25,6 +26,10 @@ export function deleteClientRecode(name,chatType){
 
 export function deleteMessage(message,chatType,client){
     IMFMDB.DeleteChatMessage(message,chatType,client);
+}
+
+export function updateMessageStatus() {
+
 }
 
 
@@ -70,7 +75,7 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
 
                         let tableName = message.way == ChatWayEnum.Private?"Private_" + client:"ChatRoom_" + client;
 
-                        insertChat(message,tableName,tx);
+                         insertChat(message,tableName,tx);
 
                     }else{
                         //如果当前聊天是新的聊天对象
@@ -124,6 +129,30 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
         //         }
         //     }, errorDB);
         //
+        });
+    }, errorDB);
+}
+
+
+IMFMDB.UpdateMessageStatues = function(message,name){
+
+    var db = SQLite.openDatabase({
+        name: 'IM.db',
+        createFromLocation: "1"
+    }, () => {
+        db.transaction((tx) => {
+            let tableName = "";
+            if(message.type == ChatWayEnum.Private){
+                tableName = "Private_" + name;
+            }else{
+                tableName = "ChatRoom_" + name;
+            }
+
+            tx.executeSql(sqls.ExcuteIMSql.UpdateMessageStatusByMessageId, [tableName,message.isSend,message.id], (tx, results) => {
+
+                console.log("update" + message.id + "is send statues" + message.isSend);
+            }, errorDB);
+
         });
     }, errorDB);
 }
@@ -201,9 +230,9 @@ IMFMDB.getAllChatClientList = function(){
 }
 
 function insertChat(message,tableName,tx){
-    let insertSql = sqls.ExcuteIMSql.InsertMessageToPrivateTalk;
+    let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
 
-    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.to,message.from,message.date,message.content,message.type,message.localPath,message.url,message.isSend]);
+    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.id,message.to,message.from,message.date,message.content,message.type,message.localPath,message.url,message.isSend]);
 
     tx.executeSql(insertSql, [], (tx, results) => {
 

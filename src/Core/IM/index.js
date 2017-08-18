@@ -5,9 +5,10 @@
 import Connect from './socket'
 import * as methods from './Common'
 import * as storeSqlite from './StoreSqlite'
+import UUIDGenerator from 'react-native-uuid-generator';
 
 
-let _connect = new Connect();
+let _socket = new Connect();
 //发送消息队列
 let sendMessageQueue = [];
 let sendMessageQueueState;
@@ -21,8 +22,8 @@ let waitRecMessageQueue = [];
 let handleSqliteQueueState;
 let handleSqliteQueue = [];
 let waitSqliteQueue = [];
-//发送失败队列
-let sendFailedMessageQueue = [];
+//ack队列
+let ackMessageQueue = [];
 let heartBeatInterval;
 let loopInterval;
 let checkQueueInterval;
@@ -48,11 +49,11 @@ export default class IM {
         if (__instance()) return __instance();
 
         __instance(this);
-        this.connect = _connect;
+        this.socket = _socket;
+        this.socket.onRecieveCallback(this.recMessage)
         //初始化IM的数据库
         storeSqlite.initIMDatabase();
         this.startIM();
-
     }
 
 
@@ -60,6 +61,7 @@ export default class IM {
        loopState = loopStateType.wait;
        sendMessageQueueState = sendMessageQueueType.empty;
        handleSqliteQueueState = handleSqliteQueueType.empty;
+       recMessageQueueState = recMessageQueueType.empty;
        this.beginHeartBeat();
        this.beginRunLoop();
     }
@@ -128,12 +130,30 @@ export default class IM {
 
     //外部接口，添加消息
     addMessage(message,callback=function(){},onprogess="undefined") {
+
+        let messageUUID = "";
+
         if (message.type == "undefined" || message.type == "") {
             callback(false, "message type error");
         }
 
+        //先生成唯一的messageID并且添加message进sqlite保存
+        UUIDGenerator.getRandomUUID().then((uuid) => {
+            messageId = message.to + "_" +uuid;
+            message.id = messageId;
+            messageUUID = messageId;
+            this.storeSendMessage(message);
+        });
+
         switch (message.type) {
-            case "audio":
+            case "text":
+                this.addMessageQueue(message);
+                callback(true);
+                break;
+            // case "image":
+            //     let result = methods.GetUploadTokenFromServer(message.content.name);
+            //     break;
+            default:
                 // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
                 // if(result.success){
                 callback(true);
@@ -142,14 +162,9 @@ export default class IM {
                 //     callback(false,"upload server error");
                 // }
                 break;
-            case "text":
-                this.addMessageQueue(message);
-                callback(true);
-                break;
-            // case "image":
-            //     let result = methods.GetUploadTokenFromServer(message.content.name);
-            //     break;
         }
+
+        return messageUUID;
     }
 
 
@@ -182,11 +197,11 @@ export default class IM {
                waitSendMessageQueue = [];
             }
 
-            if(sendFailedMessageQueue.length > 0){
-                console.log("拷贝失败队列到发送队列")
-                sendMessageQueue = sendFailedMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
-                sendFailedMessageQueue = [];
-            }
+            // if(sendFailedMessageQueue.length > 0){
+            //     console.log("拷贝失败队列到发送队列")
+            //     sendMessageQueue = sendFailedMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+            //     sendFailedMessageQueue = [];
+            // }
 
             sendMessageQueueState = sendMessageQueueType.empty;
             console.log(sendMessageQueueState);
@@ -198,11 +213,23 @@ export default class IM {
         //发送websocket
         console.log("开始发送消息了")
 
+        this.socket.sendMessage(message.id);
+
+        ackMessageQueue.push(message);
+
         //发送失败
         if(false){
-            sendFailedMessageQueue.push(message);
+            // sendFailedMessageQueue.push(message);
         }else{
             handleSqliteQueue.push(message);
+        }
+    }
+
+    storeSendMessage(message){
+        if(message.to != ME){
+            storeSqlite.storeSendMessage(message);
+        }else{
+             storeSqlite.storeRecMessage(message);
         }
     }
 
@@ -210,14 +237,13 @@ export default class IM {
 
 
 
-
-    handleStoreSqlite(obj){
+    handleUpdateSqlite(obj){
         if(handleSqliteQueue.length > 0){
 
             handleSqliteQueueState = handleSqliteQueueType.excuting;
             console.log(handleSqliteQueueState);
             for(let item in handleSqliteQueue){
-                obj.storeMessage(handleSqliteQueue[item]);
+                obj.updateSqliteMessage(handleSqliteQueue[item]);
             }
             handleSqliteQueue = [];
 
@@ -232,13 +258,9 @@ export default class IM {
         }
     }
 
-    storeMessage(message){
+    updateSqliteMessage(message){
 
-        // if(message.to == ME){
-            storeSqlite.storeSendMessage(message);
-        // }else{
-        //     storeSqlite.storeRecMessage(message);
-        // }
+
     }
 
 
@@ -265,7 +287,7 @@ export default class IM {
             recMessageQueueState = recMessageQueueType.excuting;
             console.log(recMessageQueueState);
             for(let item in recieveMessageQueue){
-                // obj.sendMessage(sendMessageQueue[item]);
+                obj.recMessage(recieveMessageQueue[item]);
             }
             recieveMessageQueue = [];
 
@@ -283,6 +305,18 @@ export default class IM {
     recMessage(message) {
 
         //处理收到消息的逻辑
+        console.log("IM Core:消息内容"+message);
+
+        for(let item in ackMessageQueue){
+            if(ackMessageQueue[item].id == message){
+                ackMessageQueue.pop(ackMessageQueue[item]);
+                console.log("ack队列pop出：" + message)
+                console.log(ackMessageQueue.length);
+                break;
+            }
+        }
+
+
 
         //添加sqlite队列
         handleSqliteQueue.push(message);
@@ -301,7 +335,7 @@ export default class IM {
     beginRunLoop(){
         let handleSend = this.handleSendMessageQueue;
         let handleRec = this.handleRecieveMessageQueue;
-        let handleStoreSqlite = this.handleStoreSqlite;
+        let handleUpdateSqlite = this.handleUpdateSqlite;
         let obj = this;
         loopInterval = setInterval(function () {
 
@@ -311,7 +345,11 @@ export default class IM {
               }
 
               if(handleSqliteQueueState == handleSqliteQueueType.empty){
-                  handleStoreSqlite(obj);
+                  handleUpdateSqlite(obj);
+              }
+
+              if(recMessageQueueState == recMessageQueueType.empty){
+                  handleRec(obj);
               }
 
         }, 200);

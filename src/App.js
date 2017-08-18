@@ -50,9 +50,9 @@ export default function App() {
         addMessage.date = new Date().toDateString();
         addMessage.content = "hello world";
         addMessage.way = "chatroom";
-        // im.addMessage(addMessage);
-        im.addRecMessage(addMessage);
-    },100)
+        im.addMessage(addMessage);
+        // im.addRecMessage(addMessage);
+    },2000)
 
 
     // //todo:使用chatwayenum枚举来控制类型
