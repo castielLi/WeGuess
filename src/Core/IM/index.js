@@ -71,7 +71,7 @@ export default class IM {
     }
 
     stopIM(){
-        checkQueue(this.stopIMRunCycle,null);
+        this.checkQueue(this.stopIMRunCycle,null);
     }
 
     stopIMRunCycle(){
@@ -177,7 +177,7 @@ export default class IM {
     addMessageQueue(message){
         if(sendMessageQueueState == sendMessageQueueType.excuting){
             waitSendMessageQueue.push(message);
-            console.log("message 加入等待队列")
+            console.log("message 加入等待发送队列")
         }else{
             sendMessageQueue.push(message);
             console.log("message 加入发送队列")

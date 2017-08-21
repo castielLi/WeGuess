@@ -16,7 +16,7 @@ export default class FMDB {
         for (key in excuteSqls.initTables) {
           let sql = excuteSqls.initTables[key];
           tx.executeSql(sql, [], (tx, results) => {
-            console.log('create success');
+            console.log('create weguess database success');
           }, errorDB);
         }
       });

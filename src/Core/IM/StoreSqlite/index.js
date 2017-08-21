@@ -1,7 +1,7 @@
 /**
  * Created by apple on 2017/8/9.
  */
-
+import { Platform, StyleSheet } from 'react-native';
 import FMDB from '../../DatabaseHelper/index'
 let SQLite = require('react-native-sqlite-storage')
 import * as sqls from './IMExcuteSql'
@@ -38,22 +38,28 @@ export function initIMDatabase(){
     // IMFMDB.getAllChatList();
 }
 
+var databaseObj = {
+    name :"IM.db",//数据库文件  
+}
+if(Platform.OS === 'ios'){
+    databaseObj.createFromLocation='1'
+}
 
 let IMFMDB = {};
 IMFMDB.initIMDataBase = function(){
         var db = SQLite.openDatabase({
-            name: 'IM.db',
-            createFromLocation: "1"
+            ...databaseObj
+
         }, () => {
             db.transaction((tx) => {
                 for (key in sqls.InitIMTable) {
                     let sql = sqls.InitIMTable[key];
                     tx.executeSql(sql, [], (tx, results) => {
                         console.log('create IM database success');
-                    }, errorDB);
+                    }, (err)=>{errorDB('初始化数据库',err)});
                 }
             });
-        }, errorDB);
+        }, (err)=>{errorDB('初始化数据库',err)});
     }
 
 //todo：想办法进行批量操作
@@ -62,13 +68,11 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
         let checkChatExist = sqls.ExcuteIMSql.QueryChatIsExist;
 
         var db = SQLite.openDatabase({
-            name: 'IM.db',
-            createFromLocation: "1"
+            ...databaseObj
         }, () => {
             db.transaction((tx) => {
 
                 tx.executeSql(checkChatExist, [client], (tx, results) => {
-
                     if(results.rows.length){
                         //如果当前聊天对象在数据库中存在有数据
                         //添加数据进数据库
@@ -85,7 +89,7 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
 
                         createTableSql = commonMethods.sqlFormat(createTableSql,[tableName]);
 
-                        tx.executeSql(createTableSql, [tableName], (tx, results) => {
+                        tx.executeSql(createTableSql, [], (tx, results) => {
 
                             console.log("create chat table success");
 
@@ -95,9 +99,9 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
 
                             insertChat(message,tableName,tx);
 
-                        }, errorDB);
+                        }, (err)=>{errorDB('创建新聊天对象表',err)});
                     }
-                }, errorDB);
+                }, (err)=>{errorDB('查询所有聊天对象',err)});
 
             });
         }, errorDB);
@@ -106,8 +110,7 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
 //删除当前用户的聊天记录
 IMFMDB.DeleteChatByClientId = function(name,chatType){
     var db = SQLite.openDatabase({
-        name: 'IM.db',
-        createFromLocation: "1"
+        ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
@@ -137,8 +140,7 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
 IMFMDB.UpdateMessageStatues = function(message,name){
 
     var db = SQLite.openDatabase({
-        name: 'IM.db',
-        createFromLocation: "1"
+       ...databaseObj
     }, () => {
         db.transaction((tx) => {
             let tableName = "";
@@ -160,8 +162,7 @@ IMFMDB.UpdateMessageStatues = function(message,name){
 //删除聊天室聊天记录
 IMFMDB.DeleteChatByChatRoomId = function(chatRoom){
     var db = SQLite.openDatabase({
-        name: 'IM.db',
-        createFromLocation: "1"
+       ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
@@ -190,8 +191,7 @@ IMFMDB.DeleteChatMessage = function(message,chatType,client){
     deleteSql = commonMethods.sqlFormat(deleteSql,[tableName,message.id]);
 
     var db = SQLite.openDatabase({
-        name: 'IM.db',
-        createFromLocation: "1"
+       ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
@@ -213,8 +213,7 @@ IMFMDB.getQueryChatListByClientId = function(){
 //获取所有聊天用户
 IMFMDB.getAllChatClientList = function(){
     var db = SQLite.openDatabase({
-        name: 'IM.db',
-        createFromLocation: "1"
+       ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
@@ -238,7 +237,7 @@ function insertChat(message,tableName,tx){
 
         console.log("insert meesage success");
 
-    }, errorDB);
+    }, (err)=>{errorDB('向聊天对象插入详细聊天',err)});
 }
 
 function insertClientRecode(client,way,tx){
@@ -277,8 +276,8 @@ function deleteClientChatList(tableName,tx){
     }, errorDB);
 }
 
-function errorDB(err) {
-    console.log("SQL Error: " + err);
+function errorDB(type,err) {
+    console.log("SQL Error: " +type,err);
 }
 
 function successDB() {

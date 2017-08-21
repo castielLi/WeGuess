@@ -51,6 +51,7 @@ export default function App() {
         addMessage.content = "hello world";
         addMessage.way = "chatroom";
         im.addMessage(addMessage);
+<<<<<<< HEAD
         // im.addRecMessage(addMessage);
     },200)
 
@@ -58,6 +59,10 @@ export default function App() {
         clearInterval(sendMessage)
     },10000)
 
+=======
+        //im.addRecMessage(addMessage);
+    },3000)
+>>>>>>> origin/master
 
 
 
