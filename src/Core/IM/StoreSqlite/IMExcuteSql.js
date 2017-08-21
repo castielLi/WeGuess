@@ -11,10 +11,11 @@ export const ExcuteIMSql = {
     "GetChatList":"select client from ChatRecode",
     "InsertChatRecode":"insert into ChatRecode (Client,Type) values (?,?)",
     "CreateChatTable"
-        : "CREATE TABLE IF NOT EXISTS ? (Id INTEGER PRIMARY KEY AUTOINCREMENT,Send varchar(255), Rec varchar(255) , Time varchar(255), Content varchar(255), Type varchar(255), LocalPath varchar(255), Url varchar(255) , IsSend Boolean)",
-     "InsertMessageToPrivateTalk":"insert into ? (Send,Rec,Time,Content,Type,LocalPath,Url,IsSend) values (?,?,?,?,?,?,?,?)",
+        : "CREATE TABLE IF NOT EXISTS ? (Id INTEGER PRIMARY KEY AUTOINCREMENT,MessageId varchat(255),Send varchar(255), Rec varchar(255) , Time varchar(255), Content varchar(255), Type varchar(255), LocalPath varchar(255), Url varchar(255) , IsSend Boolean)",
+     "InsertMessageToTalk":"insert into ? (MessageId,Send,Rec,Time,Content,Type,LocalPath,Url,IsSend) values (?,?,?,?,?,?,?,?,?)",
     "DeleteChatFromChatList":"delete from ChatRecode where client = ?",
     "DeleteChatTableByName":"delete from ?",
     "QueryChatTypeFromChatList":"select Type from ChatRecode where client = ?",
     "DeleteMessageById":"delete from ? where Id = ?",
+    "UpdateMessageStatusByMessageId":"update ? set IsSend=? where Id = ?"
 }

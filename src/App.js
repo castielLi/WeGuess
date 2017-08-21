@@ -55,6 +55,7 @@ export default function App() {
     },3000)
 
 
+
     // //todo:使用chatwayenum枚举来控制类型
     // // im.deleteCurrentChatMessage("hello","chatroom")
     //

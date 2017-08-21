@@ -5,7 +5,7 @@
 
 export default class message{
     constructor(){
-        this.id = -1;
+        this.id = "";
         this.to = "";
         this.from = "";
         this.type = "";
