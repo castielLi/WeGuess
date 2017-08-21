@@ -367,7 +367,7 @@ export default class IM {
               //     handleRec(obj);
               // }
 
-        }, 200);
+        }, 100);
     }
 }
 
