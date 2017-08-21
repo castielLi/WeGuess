@@ -31,14 +31,14 @@ export default class Connect extends Component{
         });
 
         this.sendMessage = function(message){
+            console.log("Socket Core: 发送消息"+message);
             this.webSocket.send(message);
         }
 
 
         this.webSocket.addEventListener('message', function (event) {
-             console.log("Socket Core:收到了一条新消息")
+             console.log("Socket Core:收到了一条新消息:" + event.data)
              onRecieveMessage(event.data.split(" ")[1]);
-
         });
 
         this.onRecieveCallback = function(callback){

@@ -24,6 +24,9 @@ let handleSqliteQueue = [];
 let waitSqliteQueue = [];
 //ack队列
 let ackMessageQueue = [];
+let waitAckMessageQueue = [];
+let ackMessageQueueState;
+
 let heartBeatInterval;
 let loopInterval;
 let checkQueueInterval;
@@ -62,6 +65,7 @@ export default class IM {
        sendMessageQueueState = sendMessageQueueType.empty;
        handleSqliteQueueState = handleSqliteQueueType.empty;
        recMessageQueueState = recMessageQueueType.empty;
+       ackMessageQueueState = ackQueueType.empty;
        this.beginHeartBeat();
        this.beginRunLoop();
     }
@@ -143,28 +147,28 @@ export default class IM {
             message.id = messageId;
             messageUUID = messageId;
             this.storeSendMessage(message);
+
+            switch (message.type) {
+                case "text":
+                    this.addMessageQueue(message);
+                    callback(true);
+                    break;
+                // case "image":
+                //     let result = methods.GetUploadTokenFromServer(message.content.name);
+                //     break;
+                default:
+                    // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
+                    // if(result.success){
+                    callback(true);
+                    this.addMessageQueue(message);
+                    // }else{
+                    //     callback(false,"upload server error");
+                    // }
+                    break;
+            }
+
+            return messageUUID;
         });
-
-        switch (message.type) {
-            case "text":
-                this.addMessageQueue(message);
-                callback(true);
-                break;
-            // case "image":
-            //     let result = methods.GetUploadTokenFromServer(message.content.name);
-            //     break;
-            default:
-                // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
-                // if(result.success){
-                callback(true);
-                this.addMessageQueue(message);
-                // }else{
-                //     callback(false,"upload server error");
-                // }
-                break;
-        }
-
-        return messageUUID;
     }
 
 
@@ -187,15 +191,16 @@ export default class IM {
             sendMessageQueueState = sendMessageQueueType.excuting;
             console.log(sendMessageQueueState);
             for(let item in sendMessageQueue){
-                obj.sendMessage(sendMessageQueue[item]);
+                obj.sendMessage(sendMessageQueue[item],obj);
+                sendMessageQueue.pop(sendMessageQueue[item]);
             }
-            sendMessageQueue = [];
+            // sendMessageQueue = [];
 
-            if(waitSendMessageQueue.length > 0){
-               console.log("拷贝等待队列到发送队列")
-               sendMessageQueue = waitSendMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
-               waitSendMessageQueue = [];
-            }
+            // if(waitSendMessageQueue.length > 0){
+            //    console.log("拷贝等待队列到发送队列")
+            //    sendMessageQueue = waitSendMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+            //    waitSendMessageQueue = [];
+            // }
 
             // if(sendFailedMessageQueue.length > 0){
             //     console.log("拷贝失败队列到发送队列")
@@ -209,13 +214,15 @@ export default class IM {
     }
 
     //发送消息
-    sendMessage(message){
+    sendMessage(message,obj){
         //发送websocket
         console.log("开始发送消息了")
 
         this.socket.sendMessage(message.id);
 
-        ackMessageQueue.push(message);
+        console.log("添加" + message.id +"进队列");
+        obj.addAckQueue(message);
+        console.log("ack queue 长度" + ackMessageQueue.length);
 
         //发送失败
         if(false){
@@ -244,14 +251,15 @@ export default class IM {
             console.log(handleSqliteQueueState);
             for(let item in handleSqliteQueue){
                 obj.updateSqliteMessage(handleSqliteQueue[item]);
+                handleSqliteQueue.pop(handleSqliteQueue[item]);
             }
-            handleSqliteQueue = [];
-
-            if(waitSqliteQueue.length > 0){
-                console.log("拷贝等待存储队列到存储队列")
-                handleSqliteQueue = waitSqliteQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },handleSqliteQueue);
-                waitSqliteQueue = [];
-            }
+            // handleSqliteQueue = [];
+            //
+            // if(waitSqliteQueue.length > 0){
+            //     console.log("拷贝等待存储队列到存储队列")
+            //     handleSqliteQueue = waitSqliteQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },handleSqliteQueue);
+            //     waitSqliteQueue = [];
+            // }
 
             handleSqliteQueueState = handleSqliteQueueType.empty;
             console.log(handleSqliteQueueState);
@@ -264,8 +272,16 @@ export default class IM {
     }
 
 
-
-
+    //添加消息至ack队列
+    addAckQueue(message){
+        if(ackMessageQueueState == ackQueueType.excuting){
+            waitAckMessageQueue.push(message);
+            console.log("message 加入等待队列")
+        }else{
+            ackMessageQueue.push(message);
+            console.log("message 加入发送队列")
+        }
+    }
 
 
     //websocket接口,添加接受消息队列
@@ -285,40 +301,39 @@ export default class IM {
         if(recieveMessageQueue.length > 0){
 
             recMessageQueueState = recMessageQueueType.excuting;
-            console.log(recMessageQueueState);
+
             for(let item in recieveMessageQueue){
                 obj.recMessage(recieveMessageQueue[item]);
+                recieveMessageQueue.pop(recieveMessageQueue[item]);
             }
-            recieveMessageQueue = [];
-
-            if(waitRecMessageQueue.length > 0){
-                console.log("拷贝等待队列到接受队列")
-                recieveMessageQueue = waitRecMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },recieveMessageQueue);
-                waitRecMessageQueue = [];
-            }
+            // recieveMessageQueue = [];
+            //
+            // if(waitRecMessageQueue.length > 0){
+            //     console.log("拷贝等待队列到接受队列")
+            //     recieveMessageQueue = waitRecMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },recieveMessageQueue);
+            //     waitRecMessageQueue = [];
+            // }
 
             recMessageQueueState = recMessageQueueType.empty;
-            console.log(recMessageQueueState);
+
         }
     }
 
     recMessage(message) {
 
         //处理收到消息的逻辑
-        console.log("IM Core:消息内容"+message);
+        console.log("IM Core:消息内容"+message + " 开始执行pop程序");
 
         for(let item in ackMessageQueue){
             if(ackMessageQueue[item].id == message){
-                ackMessageQueue.pop(ackMessageQueue[item]);
+                ackMessageQueue.splice(item, 1);
                 console.log("ack队列pop出：" + message)
                 console.log(ackMessageQueue.length);
+                index = true;
                 break;
             }
         }
 
-
-
-        //添加sqlite队列
         handleSqliteQueue.push(message);
     }
 
@@ -348,9 +363,9 @@ export default class IM {
                   handleUpdateSqlite(obj);
               }
 
-              if(recMessageQueueState == recMessageQueueType.empty){
-                  handleRec(obj);
-              }
+              // if(recMessageQueueState == recMessageQueueType.empty){
+              //     handleRec(obj);
+              // }
 
         }, 200);
     }
@@ -374,6 +389,11 @@ let recMessageQueueType = {
 }
 
 let handleSqliteQueueType = {
+    excuting : "excuting",
+    empty : "empty"
+}
+
+let ackQueueType = {
     excuting : "excuting",
     empty : "empty"
 }

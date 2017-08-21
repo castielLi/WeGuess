@@ -39,7 +39,7 @@ export default function App() {
     //初始化IM
     let im = new IM();
 
-    setInterval(function(){
+    let sendMessage = setInterval(function(){
         let addMessage = new message();
         addMessage.type = "text";
         addMessage.to = "hello";
@@ -52,7 +52,13 @@ export default function App() {
         addMessage.way = "chatroom";
         im.addMessage(addMessage);
         // im.addRecMessage(addMessage);
-    },2000)
+    },200)
+
+    setInterval(function(){
+        clearInterval(sendMessage)
+    },10000)
+
+
 
 
     // //todo:使用chatwayenum枚举来控制类型
