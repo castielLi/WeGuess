@@ -4,6 +4,7 @@
 
 export const InitIMTable = {
     "createChatRecodeTable":"CREATE TABLE IF NOT EXISTS ChatRecode (Client varchar(255), Type varchar(255))",
+    "CreateSendFailMessageTable":"CREATE TABLE IF NOT EXISTS FailMessageRecode (Id INTEGER PRIMARY KEY AUTOINCREMENT,messageId varchat(255),send varchar(255), rec varchar(255) , time varchar(255), content varchar(255), type varchar(255), localPath varchar(255), url varchar(255))",
 }
 
 export const ExcuteIMSql = {
@@ -11,11 +12,14 @@ export const ExcuteIMSql = {
     "GetChatList":"select client from ChatRecode",
     "InsertChatRecode":"insert into ChatRecode (Client,Type) values (?,?)",
     "CreateChatTable"
-        : "CREATE TABLE IF NOT EXISTS ? (Id INTEGER PRIMARY KEY AUTOINCREMENT,MessageId varchat(255),Send varchar(255), Rec varchar(255) , Time varchar(255), Content varchar(255), Type varchar(255), LocalPath varchar(255), Url varchar(255) , IsSend Boolean)",
-     "InsertMessageToTalk":"insert into ? (MessageId,Send,Rec,Time,Content,Type,LocalPath,Url,IsSend) values (?,?,?,?,?,?,?,?,?)",
+        : "CREATE TABLE IF NOT EXISTS ? (Id INTEGER PRIMARY KEY AUTOINCREMENT,messageId varchat(255),send varchar(255), rec varchar(255) , time varchar(255), content varchar(255), type varchar(255), localPath varchar(255), url varchar(255) , isSend Boolean)",
+     "InsertMessageToTalk":"insert into ? (messageId,send,rec,time,content,type,localPath,url,isSend) values (?,?,?,?,?,?,?,?,?)",
     "DeleteChatFromChatList":"delete from ChatRecode where client = ?",
     "DeleteChatTableByName":"delete from ?",
     "QueryChatTypeFromChatList":"select Type from ChatRecode where client = ?",
     "DeleteMessageById":"delete from ? where Id = ?",
-    "UpdateMessageStatusByMessageId":"update ? set IsSend=? where Id = ?"
+    "UpdateMessageStatusByMessageId":"update ? set IsSend=? where Id = ?",
+    "AddFailedMessage":"insert into FailMessageRecode (messageId,send,rec,time,content,type,localPath,url) values (?,?,?,?,?,?,?,?)",
+    "GetAllFailedMessages":"select * from FailMessageRecode",
+    "DeleteAllFailedMessages":"delete from FailMessageRecode",
 }

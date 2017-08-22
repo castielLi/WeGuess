@@ -25,24 +25,37 @@ export default class Connect extends Component{
         __instance(this);
 
         this.webSocket = new WebSocket(configs.serverUrl);
+        this.reConnectNet = this.reConnectNet.bind(this);
+        this.addEventListenner = this.addEventListenner.bind(this);
+
+        this.addEventListenner();
+    }
+
+    addEventListenner(){
+        this.webSocket.addEventListener('message', function (event) {
+            console.log("Socket Core:收到了一条新消息:" + event.data)
+            onRecieveMessage(event.data.split(" ")[1]);
+        });
 
         this.webSocket.addEventListener('open', function (event) {
             console.log('Hello Server!');
         });
+    }
 
-        this.sendMessage = function(message){
-            console.log("Socket Core: 发送消息"+message);
-            this.webSocket.send(message);
-        }
+    sendMessage(message){
+        console.log("Socket Core: 发送消息"+message);
+        this.webSocket.send(message);
+    }
 
 
-        this.webSocket.addEventListener('message', function (event) {
-             console.log("Socket Core:收到了一条新消息:" + event.data)
-             onRecieveMessage(event.data.split(" ")[1]);
-        });
 
-        this.onRecieveCallback = function(callback){
-            onRecieveMessage = callback;
-        }
+
+    onRecieveCallback(callback){
+        onRecieveMessage = callback;
+    }
+
+    reConnectNet(){
+       this.webSocket = new WebSocket(configs.serverUrl);
+       this.addEventListenner();
     }
 }

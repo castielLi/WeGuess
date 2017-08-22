@@ -12,12 +12,12 @@ let chatList = [];
 
 export function storeSendMessage(message){
 
-     IMFMDB.InsertMessageWithCondition(message,message.to)
+     IMFMDB.InsertMessageWithCondition(message,message.rec)
 }
 
 export function storeRecMessage(message){
 
-     IMFMDB.InsertMessageWithCondition(message,message.from)
+     IMFMDB.InsertMessageWithCondition(message,message.send)
 }
 
 export function deleteClientRecode(name,chatType){
@@ -26,6 +26,14 @@ export function deleteClientRecode(name,chatType){
 
 export function deleteMessage(message,chatType,client){
     IMFMDB.DeleteChatMessage(message,chatType,client);
+}
+
+export function addFailedSendMessage(message){
+    IMFMDB.addFailedMessage(message);
+}
+
+export function getAllFailedSendMessage(callback){
+    return IMFMDB.getAllFailedMessages(callback)
 }
 
 export function updateMessageStatus() {
@@ -150,9 +158,9 @@ IMFMDB.UpdateMessageStatues = function(message,name){
                 tableName = "ChatRoom_" + name;
             }
 
-            tx.executeSql(sqls.ExcuteIMSql.UpdateMessageStatusByMessageId, [tableName,message.isSend,message.id], (tx, results) => {
+            tx.executeSql(sqls.ExcuteIMSql.UpdateMessageStatusByMessageId, [tableName,message.isSend,message.messageId], (tx, results) => {
 
-                console.log("update" + message.id + "is send statues" + message.isSend);
+                console.log("update" + message.messageId + "is send statues" + message.isSend);
             }, errorDB);
 
         });
@@ -228,10 +236,59 @@ IMFMDB.getAllChatClientList = function(){
     }, errorDB);
 }
 
+//添加发送失败的消息进数据库
+IMFMDB.addFailedMessage = function(message){
+
+
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+        db.transaction((tx) => {
+
+            let addSql = sqls.ExcuteIMSql.AddFailedMessage;
+
+            addSql = commonMethods.sqlFormat(addSql,[message.messageId,message.rec,message.send,message.time,message.content,message.type,message.localPath,message.url]);
+
+            tx.executeSql(addSql, [], (tx, results) => {
+
+                console.log("add failed message success");
+
+            }, errorDB);
+
+        });
+    }, errorDB);
+
+
+}
+
+//获取所有发送失败的消息
+IMFMDB.getAllFailedMessages = function(callback){
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+        db.transaction((tx) => {
+
+            let querySql = sqls.ExcuteIMSql.GetAllFailedMessages;
+
+            tx.executeSql(querySql, [], (tx, results) => {
+
+                callback(results.rows.raw());
+
+                tx.executeSql(sqls.ExcuteIMSql.DeleteAllFailedMessages, [], (tx, results) => {
+
+                    console.log("已经删除failedmessage")
+                }, errorDB);
+
+            }, errorDB);
+
+        });
+    }, errorDB);
+}
+
 function insertChat(message,tableName,tx){
     let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
 
-    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.id,message.to,message.from,message.date,message.content,message.type,message.localPath,message.url,message.isSend]);
+    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.messageId,message.rec,message.send,message.time,message.content,message.type,message.localPath,message.url,message.isSend]);
 
     tx.executeSql(insertSql, [], (tx, results) => {
 

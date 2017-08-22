@@ -9,6 +9,10 @@ import UUIDGenerator from 'react-native-uuid-generator';
 
 
 let _socket = new Connect();
+
+//网络状态
+let networkStatus = "";
+
 //发送消息队列
 let sendMessageQueue = [];
 let sendMessageQueueState;
@@ -70,6 +74,12 @@ export default class IM {
        this.beginRunLoop();
     }
 
+    setNetworkStatus(netState) {
+        if (netState == "NONE" || netState == "none") {
+            networkStatus = networkStatuesType.none;
+        }
+    }
+
     stopIM(){
         this.checkQueue(this.stopIMRunCycle,null);
     }
@@ -84,12 +94,14 @@ export default class IM {
        netState = connectionInfo;
 
         if(netState == "NONE" || netState == "none"){
-            clearInterval(loopInterval)
-            loopState = loopStateType.noNet;
 
-            if(sendMessageQueue.length > 0){
+            networkStatus = networkStatuesType.none;
+            // clearInterval(loopInterval)
+            // loopState = loopStateType.noNet;
 
-            }
+            // if(sendMessageQueue.length > 0){
+            //
+            // }
 
             checkNetEnvironmentInterval = setInterval(function () {
 
@@ -100,11 +112,21 @@ export default class IM {
                     //     loopState = loopStateType.wait;
                     // }else
                     //     loopState = loopStateType.normal;
+
+                    //todo:恢复网络了后要重新发送消息
+
+                    _socket.reConnectNet();
+
+                    storeSqlite.getAllFailedSendMessage(function(failedMessages){
+                        console.log(failedMessages);
+                        sendMessageQueue = failedMessages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+                    });
+
                 }
             },200);
+        }else{
+            networkStatus = networkStatuesType.normal;
         }
-
-
     }
 
 
@@ -143,8 +165,8 @@ export default class IM {
 
         //先生成唯一的messageID并且添加message进sqlite保存
         UUIDGenerator.getRandomUUID().then((uuid) => {
-            messageId = message.to + "_" +uuid;
-            message.id = messageId;
+            messageId = message.rec + "_" +uuid;
+            message.messageId = messageId;
             messageUUID = messageId;
             this.storeSendMessage(message);
 
@@ -218,22 +240,18 @@ export default class IM {
         //发送websocket
         console.log("开始发送消息了")
 
-        this.socket.sendMessage(message.id);
-
-        console.log("添加" + message.id +"进队列");
-        obj.addAckQueue(message);
-        console.log("ack queue 长度" + ackMessageQueue.length);
-
-        //发送失败
-        if(false){
-            // sendFailedMessageQueue.push(message);
+        if(networkStatus == networkStatuesType.normal) {
+            this.socket.sendMessage(message.messageId);
+            console.log("添加" + message.messageId + "进队列");
+            obj.addAckQueue(message);
+            console.log("ack queue 长度" + ackMessageQueue.length);
         }else{
-            handleSqliteQueue.push(message);
+            storeSqlite.addFailedSendMessage(message);
         }
     }
 
     storeSendMessage(message){
-        if(message.to != ME){
+        if(message.rec != ME){
             storeSqlite.storeSendMessage(message);
         }else{
              storeSqlite.storeRecMessage(message);
@@ -325,11 +343,10 @@ export default class IM {
         console.log("IM Core:消息内容"+message + " 开始执行pop程序");
 
         for(let item in ackMessageQueue){
-            if(ackMessageQueue[item].id == message){
+            if(ackMessageQueue[item].messageId == message){
                 ackMessageQueue.splice(item, 1);
                 console.log("ack队列pop出：" + message)
                 console.log(ackMessageQueue.length);
-                index = true;
                 break;
             }
         }
@@ -367,7 +384,7 @@ export default class IM {
               //     handleRec(obj);
               // }
 
-        }, 100);
+        }, 200);
     }
 }
 
@@ -396,4 +413,9 @@ let handleSqliteQueueType = {
 let ackQueueType = {
     excuting : "excuting",
     empty : "empty"
+}
+
+let networkStatuesType = {
+    none : "none",
+    normal : "normal"
 }
