@@ -5,11 +5,11 @@
 
 export default class message{
     constructor(){
-        this.id = "";
-        this.to = "";
-        this.from = "";
+        this.messageId = "";
+        this.rec = "";
+        this.send = "";
         this.type = "";
-        this.date = "";
+        this.time = "";
         this.localPath = "";
         this.url = "";
         this.isSend = false;
