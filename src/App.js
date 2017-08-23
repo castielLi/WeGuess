@@ -53,7 +53,7 @@ export default function App() {
         im.addMessage(addMessage);
 
         // im.addRecMessage(addMessage);
-    },100)
+    },2000)
 
     setInterval(function(){
         clearInterval(sendMessage)

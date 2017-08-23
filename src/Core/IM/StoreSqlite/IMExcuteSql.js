@@ -17,5 +17,5 @@ export const ExcuteIMSql = {
     "DeleteChatTableByName":"delete from ?",
     "QueryChatTypeFromChatList":"select Type from ChatRecode where client = ?",
     "DeleteMessageById":"delete from ? where Id = ?",
-    "UpdateMessageStatusByMessageId":"update ? set IsSend=? where Id = ?"
+    "UpdateMessageStatusByMessageId":"update ? set IsSend = ? where Id = ?"
 }

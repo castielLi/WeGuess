@@ -57,6 +57,7 @@ export default class IM {
         //初始化IM的数据库
         storeSqlite.initIMDatabase();
         this.startIM();
+        setTimeout(storeSqlite.selectAllIsSend,15000)
     }
 
 
@@ -245,11 +246,13 @@ export default class IM {
 
 
     handleUpdateSqlite(obj){
+
         if(handleSqliteQueue.length > 0){
 
             handleSqliteQueueState = handleSqliteQueueType.excuting;
             console.log(handleSqliteQueueState);
             for(let item in handleSqliteQueue){
+
                 obj.updateSqliteMessage(handleSqliteQueue[item]);
                 handleSqliteQueue.pop(handleSqliteQueue[item]);
             }
@@ -267,8 +270,7 @@ export default class IM {
     }
 
     updateSqliteMessage(message){
-
-
+        storeSqlite.updateMessageStatus(message);
     }
 
 
@@ -335,6 +337,7 @@ export default class IM {
         }
 
         handleSqliteQueue.push(message);
+
     }
 
 

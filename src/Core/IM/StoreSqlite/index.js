@@ -9,6 +9,9 @@ import * as commonMethods from './formatQuerySql'
 import ChatWayEnum from '../dto/ChatWayEnum'
 
 let chatList = [];
+export function selectAllIsSend(){
+    IMFMDB.SelectAllIsSend()
+}
 
 export function storeSendMessage(message){
 
@@ -28,8 +31,9 @@ export function deleteMessage(message,chatType,client){
     IMFMDB.DeleteChatMessage(message,chatType,client);
 }
 
-export function updateMessageStatus() {
-
+export function updateMessageStatus(message) {
+    console.log('正在修改单条数据状态')
+    IMFMDB.UpdateMessageStatues(message,message.to,message.id)
 }
 
 
@@ -59,8 +63,26 @@ IMFMDB.initIMDataBase = function(){
                     }, (err)=>{errorDB('初始化数据库',err)});
                 }
             });
-        }, (err)=>{errorDB('初始化数据库',err)});
+        }, (err)=>{errorDB('打开数据库',err)});
     }
+
+IMFMDB.SelectAllIsSend = function(){
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+        db.transaction((tx) => {
+
+            tx.executeSql("select * from ChatRoom_hello where IsSend = 'true'", [], (tx, results) => {
+                for(var i=0;i<results.rows.length;i++){
+                    console.log(results.rows.item(i));
+                }
+                
+              
+            }, (err)=>{errorDB('查找指定用户的数据',err)});
+        
+        });
+    }, errorDB);
+}
 
 //todo：想办法进行批量操作
 IMFMDB.InsertMessageWithCondition = function(message,client){
@@ -137,26 +159,29 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
 }
 
 
-IMFMDB.UpdateMessageStatues = function(message,name){
+IMFMDB.UpdateMessageStatues = function(message,name,id){
 
     var db = SQLite.openDatabase({
        ...databaseObj
     }, () => {
         db.transaction((tx) => {
             let tableName = "";
-            if(message.type == ChatWayEnum.Private){
+            if(message.way == ChatWayEnum.Private){
                 tableName = "Private_" + name;
             }else{
                 tableName = "ChatRoom_" + name;
             }
 
-            tx.executeSql(sqls.ExcuteIMSql.UpdateMessageStatusByMessageId, [tableName,message.isSend,message.id], (tx, results) => {
+            let updateMessageStatusByMessageId = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
 
-                console.log("update" + message.id + "is send statues" + message.isSend);
-            }, errorDB);
+            updateMessageStatusByMessageId = commonMethods.sqlFormat(updateMessageStatusByMessageId,[tableName,'true',id]);
+            console.log(updateMessageStatusByMessageId)
+            tx.executeSql(updateMessageStatusByMessageId, [], (tx, results) => {
+                console.log("update" + id + "is send statues 成功");
+            }, (err)=>{errorDB('更新消息状态',err)});
 
         });
-    }, errorDB);
+    }, (err)=>{errorDB('打开数据库',err)});
 }
 
 //删除聊天室聊天记录
