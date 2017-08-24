@@ -36,8 +36,8 @@ export function getAllFailedSendMessage(callback){
     return IMFMDB.getAllFailedMessages(callback)
 }
 
-export function updateMessageStatus() {
-
+export function updateMessageStatus(messageId,status) {
+    IMFMDB.UpdateMessageStatues(messageId,status)
 }
 
 
@@ -64,7 +64,7 @@ IMFMDB.initIMDataBase = function(){
                 let sql = sqls.InitIMTable[key];
                 tx.executeSql(sql, [], (tx, results) => {
                     console.log('create IM database success');
-                }, (err)=>{errorDB('初始化数据库',err)});
+                }, (err)=>{errorDB('创建数据数据表',err)});
             }
         });
     }, (err)=>{errorDB('初始化数据库',err)});
@@ -114,7 +114,7 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
             }, (err)=>{errorDB('查询所有聊天对象',err)});
 
         });
-    }, errorDB);
+    }, (err)=>{errorDB('初始化数据库',err)});
 }
 
 //删除当前用户的聊天记录
@@ -146,27 +146,23 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
     }, errorDB);
 }
 
-
-IMFMDB.UpdateMessageStatues = function(message,name){
+//更新消息的isSend
+IMFMDB.UpdateMessageStatues = function(messageId,status){
 
     var db = SQLite.openDatabase({
         ...databaseObj
     }, () => {
         db.transaction((tx) => {
-            let tableName = "";
-            if(message.type == ChatWayEnum.Private){
-                tableName = "Private_" + name;
-            }else{
-                tableName = "ChatRoom_" + name;
-            }
-
-            tx.executeSql(sqls.ExcuteIMSql.UpdateMessageStatusByMessageId, [tableName,message.status,message.messageId], (tx, results) => {
-
-                console.log("update" + message.messageId + "is send statues" + message.status);
-            }, errorDB);
+            let client = InterceptionClientFromId(messageId);
+            let tableName = "ChatRoom_"+client;
+            let updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
+            updateSql = commonMethods.sqlFormat(updateSql,[tableName,status,messageId]);
+            tx.executeSql(updateSql, [], (tx, results) => {
+                console.log("update" + messageId + "is send statues" + status);
+            }, (err)=>{errorDB('更新消息状态',err)});
 
         });
-    }, errorDB);
+    }, (err)=>{errorDB('初始化数据库',err)});
 }
 
 //删除聊天室聊天记录
@@ -348,6 +344,18 @@ function deleteClientChatList(tableName,tx){
     }, errorDB);
 }
 
+//从id截取用户名
+function InterceptionClientFromId(str){
+    let client = '';
+    client = str.slice(0,str.indexOf('_'));
+    return client;
+}
+//从表名截取用户名
+function InterceptionClientFromTable(str){
+    let client = '';
+    client = str.slice(str.indexOf('_')+1);
+    return client;
+}
 function errorDB(type,err) {
     console.log("SQL Error: " +type,err);
 }
