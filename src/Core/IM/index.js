@@ -61,18 +61,17 @@ export default class IM {
         //初始化IM的数据库
         storeSqlite.initIMDatabase();
         this.startIM();
-        setTimeout(storeSqlite.selectAllIsSend,15000)
     }
 
 
     startIM(){
-       loopState = loopStateType.wait;
-       sendMessageQueueState = sendMessageQueueType.empty;
-       handleSqliteQueueState = handleSqliteQueueType.empty;
-       recMessageQueueState = recMessageQueueType.empty;
-       ackMessageQueueState = ackQueueType.empty;
-       this.beginHeartBeat();
-       this.beginRunLoop();
+        loopState = loopStateType.wait;
+        sendMessageQueueState = sendMessageQueueType.empty;
+        handleSqliteQueueState = handleSqliteQueueType.empty;
+        recMessageQueueState = recMessageQueueType.empty;
+        ackMessageQueueState = ackQueueType.empty;
+        this.beginHeartBeat();
+        this.beginRunLoop();
     }
 
     setNetworkStatus(netState) {
@@ -92,7 +91,7 @@ export default class IM {
     }
 
     handleNetEnvironment(connectionInfo){
-       netState = connectionInfo;
+        netState = connectionInfo;
 
         if(netState == "NONE" || netState == "none"){
 
@@ -147,12 +146,12 @@ export default class IM {
 
     //删除当前聊天所有消息
     deleteCurrentChatMessage(name,chatType){
-       storeSqlite.deleteClientRecode(name,chatType);
+        storeSqlite.deleteClientRecode(name,chatType);
     }
 
     //删除当条消息
     deleteMessage(message,chatType,client){
-       storeSqlite.deleteMessage(message,chatType,client);
+        storeSqlite.deleteMessage(message,chatType,client);
     }
 
     //外部接口，添加消息
@@ -255,7 +254,7 @@ export default class IM {
         if(message.rec != ME){
             storeSqlite.storeSendMessage(message);
         }else{
-             storeSqlite.storeRecMessage(message);
+            storeSqlite.storeRecMessage(message);
         }
     }
 
@@ -264,13 +263,11 @@ export default class IM {
 
 
     handleUpdateSqlite(obj){
-
         if(handleSqliteQueue.length > 0){
 
             handleSqliteQueueState = handleSqliteQueueType.excuting;
             console.log(handleSqliteQueueState);
             for(let item in handleSqliteQueue){
-
                 obj.updateSqliteMessage(handleSqliteQueue[item]);
                 handleSqliteQueue.pop(handleSqliteQueue[item]);
             }
@@ -288,7 +285,8 @@ export default class IM {
     }
 
     updateSqliteMessage(message){
-        storeSqlite.updateMessageStatus(message);
+
+
     }
 
 
@@ -354,13 +352,12 @@ export default class IM {
         }
 
         handleSqliteQueue.push(message);
-
     }
 
 
     //心跳包
     beginHeartBeat(){
-       heartBeatInterval = setInterval(function () {
+        heartBeatInterval = setInterval(function () {
 
 
         }, 10000);
@@ -374,18 +371,18 @@ export default class IM {
         let obj = this;
         loopInterval = setInterval(function () {
 
-              if(sendMessageQueueState == sendMessageQueueType.empty) {
+            if(sendMessageQueueState == sendMessageQueueType.empty) {
 
-                  handleSend(obj);
-              }
+                handleSend(obj);
+            }
 
-              if(handleSqliteQueueState == handleSqliteQueueType.empty){
-                  handleUpdateSqlite(obj);
-              }
+            if(handleSqliteQueueState == handleSqliteQueueType.empty){
+                handleUpdateSqlite(obj);
+            }
 
-              // if(recMessageQueueState == recMessageQueueType.empty){
-              //     handleRec(obj);
-              // }
+            // if(recMessageQueueState == recMessageQueueType.empty){
+            //     handleRec(obj);
+            // }
 
         }, 200);
     }
