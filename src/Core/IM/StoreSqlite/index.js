@@ -154,6 +154,7 @@ IMFMDB.UpdateMessageStatues = function(messageId,status){
     }, () => {
         db.transaction((tx) => {
             let client = InterceptionClientFromId(messageId);
+            //假设默认为聊天室
             let tableName = "ChatRoom_"+client;
             let updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
             updateSql = commonMethods.sqlFormat(updateSql,[tableName,status,messageId]);
