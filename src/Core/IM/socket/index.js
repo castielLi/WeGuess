@@ -18,14 +18,17 @@ let onRecieveMessage = "undefined";
 
 export default class Connect extends Component{
 
-    constructor() {
+    constructor(token) {
         super();
         if (__instance()) return __instance();
 
         __instance(this);
 
-        this.webSocket = new WebSocket(configs.serverUrl);
+        this.webSocket = new WebSocket(configs.serverUrl + "/?account=" + token);
+        // this.webSocket = new WebSocket(configs.serverUrl);
+        console.log("account token:" + token);
         this.reConnectNet = this.reConnectNet.bind(this);
+
         this.addEventListenner = this.addEventListenner.bind(this);
 
         this.addEventListenner();

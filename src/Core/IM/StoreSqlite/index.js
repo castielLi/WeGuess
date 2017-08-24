@@ -36,8 +36,8 @@ export function getAllFailedSendMessage(callback){
     return IMFMDB.getAllFailedMessages(callback)
 }
 
-export function updateMessageStatus(messageId,status) {
-    IMFMDB.UpdateMessageStatues(messageId,status)
+export function updateMessageStatus(message) {
+    IMFMDB.UpdateMessageStatues(message)
 }
 
 
@@ -147,19 +147,27 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
 }
 
 //更新消息的isSend
-IMFMDB.UpdateMessageStatues = function(messageId,status){
+IMFMDB.UpdateMessageStatues = function(message){
 
     var db = SQLite.openDatabase({
         ...databaseObj
     }, () => {
         db.transaction((tx) => {
-            let client = InterceptionClientFromId(messageId);
+            let tableName = "";
+            let client = InterceptionClientFromId(message.messageId);
             //假设默认为聊天室
-            let tableName = "ChatRoom_"+client;
+
+
+            if(message.way == ChatWayEnum.ChatRoom){
+                 tableName = "ChatRoom_"+client;
+            }else{
+                tableName = "Private_"+client;
+            }
+
             let updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
-            updateSql = commonMethods.sqlFormat(updateSql,[tableName,status,messageId]);
+            updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.messageId]);
             tx.executeSql(updateSql, [], (tx, results) => {
-                console.log("update" + messageId + "is send statues" + status);
+                console.log("update " + message.messageId + "is send statues:" + message.status);
             }, (err)=>{errorDB('更新消息状态',err)});
 
         });
