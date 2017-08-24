@@ -160,9 +160,9 @@ IMFMDB.UpdateMessageStatues = function(message,name){
                 tableName = "ChatRoom_" + name;
             }
 
-            tx.executeSql(sqls.ExcuteIMSql.UpdateMessageStatusByMessageId, [tableName,message.isSend,message.messageId], (tx, results) => {
+            tx.executeSql(sqls.ExcuteIMSql.UpdateMessageStatusByMessageId, [tableName,message.status,message.messageId], (tx, results) => {
 
-                console.log("update" + message.messageId + "is send statues" + message.isSend);
+                console.log("update" + message.messageId + "is send statues" + message.status);
             }, errorDB);
 
         });
@@ -303,7 +303,7 @@ function insertIndexForTable(tableName,tx){
 function insertChat(message,tableName,tx){
     let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
 
-    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.messageId,message.rec,message.send,message.time,message.content,message.type,message.localPath,message.url,message.isSend]);
+    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.messageId,message.rec,message.send,message.time,message.content,message.type,message.localPath,message.url,message.status]);
 
     tx.executeSql(insertSql, [], (tx, results) => {
 

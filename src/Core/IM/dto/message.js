@@ -12,7 +12,7 @@ export default class message{
         this.time = "";
         this.localPath = "";
         this.url = "";
-        this.isSend = false;
+        this.status = "";
         this.content = "";
         this.way = "";
     }

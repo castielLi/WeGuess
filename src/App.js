@@ -46,7 +46,6 @@ export default function App() {
         addMessage.send = "me";
         addMessage.localPath = "";
         addMessage.url = "";
-        addMessage.isSend = false;
         addMessage.time = new Date().toDateString();
         addMessage.content = "hello world";
         addMessage.way = "chatroom";
