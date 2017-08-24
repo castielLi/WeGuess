@@ -296,8 +296,7 @@ export default class IM {
     }
 
     updateSqliteMessage(message){
-
-
+        storeSqlite.updateMessageStatus(message,'true');
     }
 
 
