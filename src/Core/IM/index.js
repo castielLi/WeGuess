@@ -6,6 +6,8 @@ import Connect from './socket'
 import * as methods from './Common'
 import * as storeSqlite from './StoreSqlite'
 import UUIDGenerator from 'react-native-uuid-generator';
+import MessageStatus from "./dto/MessageStatus"
+import * as configs from './IMconfig'
 
 
 let _socket = new Connect();
@@ -181,6 +183,14 @@ export default class IM {
                 default:
                     // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
                     // if(result.success){
+
+
+                    // message.status = MessageStatus.PrepareToUpload;
+                    // handleSqliteQueue.push(message)
+                    //
+                    // message.status = MessageStatus.PrepareToSend;
+                    // handleSqliteQueue.push(message)
+
                     callback(true);
                     this.addMessageQueue(message);
                     // }else{
@@ -243,7 +253,8 @@ export default class IM {
         if(networkStatus == networkStatuesType.normal) {
             this.socket.sendMessage(message.messageId);
             console.log("添加" + message.messageId + "进队列");
-            obj.addAckQueue(message);
+            //初始加入ack队列，发送次数默认为1次
+            obj.addAckQueue(message,1);
             console.log("ack queue 长度" + ackMessageQueue.length);
         }else{
             storeSqlite.addFailedSendMessage(message);
@@ -291,12 +302,13 @@ export default class IM {
 
 
     //添加消息至ack队列
-    addAckQueue(message){
+    addAckQueue(message,times){
+        let time = new Date().getTime();
         if(ackMessageQueueState == ackQueueType.excuting){
-            waitAckMessageQueue.push(message);
+            waitAckMessageQueue.push({"message":message,"time":time,"hasSend":times});
             console.log("message 加入等待队列")
         }else{
-            ackMessageQueue.push(message);
+            ackMessageQueue.push({"message":message,"time":time,"hasSend":times});
             console.log("message 加入发送队列")
         }
     }
@@ -353,6 +365,24 @@ export default class IM {
 
         handleSqliteQueue.push(message);
     }
+
+
+
+
+
+    handAckQueue(){
+        console.log("开始执行ack队列处理")
+
+        let time = new Date().getTime();
+        for(let item in ackMessageQueue){
+            if(time - ackMessageQueue[item].time > configs.timeOutResend){
+
+            }
+        }
+    }
+
+
+
 
 
     //心跳包
