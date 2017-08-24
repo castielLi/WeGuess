@@ -37,7 +37,6 @@ export function getAllFailedSendMessage(callback){
 }
 
 export function updateMessageStatus() {
-
 }
 
 
@@ -296,6 +295,19 @@ function insertChat(message,tableName,tx){
 
     }, (err)=>{errorDB('向聊天对象插入详细聊天',err)});
 }
+
+function buildIndexForTable(tableName,tx){
+    let insertSql = sqls.ExcuteIMSql.InsertChatRecode;
+
+    insertSql = commonMethods.sqlFormat(insertSql,[client,way]);
+
+    tx.executeSql(insertSql, [], (tx, results) => {
+
+        console.log("create index success for" + tableName);
+
+    }, errorDB);
+}
+
 
 function insertClientRecode(client,way,tx){
     let insertSql = sqls.ExcuteIMSql.InsertChatRecode;

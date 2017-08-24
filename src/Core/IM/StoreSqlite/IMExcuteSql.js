@@ -13,7 +13,8 @@ export const ExcuteIMSql = {
     "InsertChatRecode":"insert into ChatRecode (Client,Type) values (?,?)",
     "CreateChatTable"
         : "CREATE TABLE IF NOT EXISTS ? (Id INTEGER PRIMARY KEY AUTOINCREMENT,messageId varchat(255),send varchar(255), rec varchar(255) , time varchar(255), content varchar(255), type varchar(255), localPath varchar(255), url varchar(255) , isSend Boolean)",
-     "InsertMessageToTalk":"insert into ? (messageId,send,rec,time,content,type,localPath,url,isSend) values (?,?,?,?,?,?,?,?,?)",
+    "CreateChatTableIndex":"CREATE INDEX index_id ON ?(messageId)",
+    "InsertMessageToTalk":"insert into ? (messageId,send,rec,time,content,type,localPath,url,isSend) values (?,?,?,?,?,?,?,?,?)",
     "DeleteChatFromChatList":"delete from ChatRecode where client = ?",
     "DeleteChatTableByName":"delete from ?",
     "QueryChatTypeFromChatList":"select Type from ChatRecode where client = ?",
