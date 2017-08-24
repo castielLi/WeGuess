@@ -42,12 +42,12 @@ export default function App() {
     let sendMessage = setInterval(function(){
         let addMessage = new message();
         addMessage.type = "text";
-        addMessage.to = "hello";
-        addMessage.from = "me";
+        addMessage.rec = "hello";
+        addMessage.send = "me";
         addMessage.localPath = "";
         addMessage.url = "";
         addMessage.isSend = false;
-        addMessage.date = new Date().toDateString();
+        addMessage.time = new Date().toDateString();
         addMessage.content = "hello world";
         addMessage.way = "chatroom";
         im.addMessage(addMessage);
