@@ -103,6 +103,8 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
 
                         //添加数据进数据库
 
+                        insertIndexForTable(tableName,tx);
+
                         insertClientRecode(client,message.way,tx);
 
                         insertChat(message,tableName,tx);
@@ -283,6 +285,19 @@ IMFMDB.getAllFailedMessages = function(callback){
 
         });
     }, errorDB);
+}
+
+function insertIndexForTable(tableName,tx){
+    let insertSql = sqls.ExcuteIMSql.CreateChatTableIndex;
+
+    insertSql = commonMethods.sqlFormat(insertSql,[tableName]);
+
+    tx.executeSql(insertSql, [], (tx, results) => {
+
+        console.log("insert index success for" + tableName);
+
+    }, (err)=>{errorDB('向'+tableName + "添加索引",err)
+    });
 }
 
 function insertChat(message,tableName,tx){
