@@ -12,12 +12,12 @@ let chatList = [];
 
 export function storeSendMessage(message){
 
-     IMFMDB.InsertMessageWithCondition(message,message.rec)
+    IMFMDB.InsertMessageWithCondition(message,message.rec)
 }
 
 export function storeRecMessage(message){
 
-     IMFMDB.InsertMessageWithCondition(message,message.send)
+    IMFMDB.InsertMessageWithCondition(message,message.send)
 }
 
 export function deleteClientRecode(name,chatType){
@@ -37,6 +37,7 @@ export function getAllFailedSendMessage(callback){
 }
 
 export function updateMessageStatus() {
+
 }
 
 
@@ -46,7 +47,7 @@ export function initIMDatabase(){
 }
 
 var databaseObj = {
-    name :"IM.db",//数据库文件  
+    name :"IM.db",//数据库文件
 }
 if(Platform.OS === 'ios'){
     databaseObj.createFromLocation='1'
@@ -54,64 +55,64 @@ if(Platform.OS === 'ios'){
 
 let IMFMDB = {};
 IMFMDB.initIMDataBase = function(){
-        var db = SQLite.openDatabase({
-            ...databaseObj
+    var db = SQLite.openDatabase({
+        ...databaseObj
 
-        }, () => {
-            db.transaction((tx) => {
-                for (key in sqls.InitIMTable) {
-                    let sql = sqls.InitIMTable[key];
-                    tx.executeSql(sql, [], (tx, results) => {
-                        console.log('create IM database success');
-                    }, (err)=>{errorDB('初始化数据库',err)});
-                }
-            });
-        }, (err)=>{errorDB('初始化数据库',err)});
-    }
+    }, () => {
+        db.transaction((tx) => {
+            for (key in sqls.InitIMTable) {
+                let sql = sqls.InitIMTable[key];
+                tx.executeSql(sql, [], (tx, results) => {
+                    console.log('create IM database success');
+                }, (err)=>{errorDB('初始化数据库',err)});
+            }
+        });
+    }, (err)=>{errorDB('初始化数据库',err)});
+}
 
 //todo：想办法进行批量操作
 IMFMDB.InsertMessageWithCondition = function(message,client){
 
-        let checkChatExist = sqls.ExcuteIMSql.QueryChatIsExist;
+    let checkChatExist = sqls.ExcuteIMSql.QueryChatIsExist;
 
-        var db = SQLite.openDatabase({
-            ...databaseObj
-        }, () => {
-            db.transaction((tx) => {
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+        db.transaction((tx) => {
 
-                tx.executeSql(checkChatExist, [client], (tx, results) => {
-                    if(results.rows.length){
-                        //如果当前聊天对象在数据库中存在有数据
+            tx.executeSql(checkChatExist, [client], (tx, results) => {
+                if(results.rows.length){
+                    //如果当前聊天对象在数据库中存在有数据
+                    //添加数据进数据库
+
+                    let tableName = message.way == ChatWayEnum.Private?"Private_" + client:"ChatRoom_" + client;
+
+                    insertChat(message,tableName,tx);
+
+                }else{
+                    //如果当前聊天是新的聊天对象
+                    let createTableSql = sqls.ExcuteIMSql.CreateChatTable;
+
+                    let tableName = message.way == ChatWayEnum.Private?"Private_" + client:"ChatRoom_" + client;
+
+                    createTableSql = commonMethods.sqlFormat(createTableSql,[tableName]);
+
+                    tx.executeSql(createTableSql, [], (tx, results) => {
+
+                        console.log("create chat table success");
+
                         //添加数据进数据库
 
-                        let tableName = message.way == ChatWayEnum.Private?"Private_" + client:"ChatRoom_" + client;
+                        insertClientRecode(client,message.way,tx);
 
-                         insertChat(message,tableName,tx);
+                        insertChat(message,tableName,tx);
 
-                    }else{
-                        //如果当前聊天是新的聊天对象
-                        let createTableSql = sqls.ExcuteIMSql.CreateChatTable;
+                    }, (err)=>{errorDB('创建新聊天对象表',err)});
+                }
+            }, (err)=>{errorDB('查询所有聊天对象',err)});
 
-                        let tableName = message.way == ChatWayEnum.Private?"Private_" + client:"ChatRoom_" + client;
-
-                        createTableSql = commonMethods.sqlFormat(createTableSql,[tableName]);
-
-                        tx.executeSql(createTableSql, [], (tx, results) => {
-
-                            console.log("create chat table success");
-
-                            //添加数据进数据库
-
-                            insertClientRecode(client,message.way,tx);
-
-                            insertChat(message,tableName,tx);
-
-                        }, (err)=>{errorDB('创建新聊天对象表',err)});
-                    }
-                }, (err)=>{errorDB('查询所有聊天对象',err)});
-
-            });
-        }, errorDB);
+        });
+    }, errorDB);
 }
 
 //删除当前用户的聊天记录
@@ -129,16 +130,16 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
             //
             //         deleteClientRecodeByName(name,tx);
 
-                    // if(results.rows.item(0).Type == "chatroom")
-                    if(chatType =="chatroom"){
+            // if(results.rows.item(0).Type == "chatroom")
+            if(chatType =="chatroom"){
 
-                        deleteClientChatList("ChatRoom_" + name, tx);
-                    }else {
-                        deleteClientChatList("Private_" + name, tx);
-                    }
-        //         }
-        //     }, errorDB);
-        //
+                deleteClientChatList("ChatRoom_" + name, tx);
+            }else {
+                deleteClientChatList("Private_" + name, tx);
+            }
+            //         }
+            //     }, errorDB);
+            //
         });
     }, errorDB);
 }
@@ -147,7 +148,7 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
 IMFMDB.UpdateMessageStatues = function(message,name){
 
     var db = SQLite.openDatabase({
-       ...databaseObj
+        ...databaseObj
     }, () => {
         db.transaction((tx) => {
             let tableName = "";
@@ -169,7 +170,7 @@ IMFMDB.UpdateMessageStatues = function(message,name){
 //删除聊天室聊天记录
 IMFMDB.DeleteChatByChatRoomId = function(chatRoom){
     var db = SQLite.openDatabase({
-       ...databaseObj
+        ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
@@ -198,7 +199,7 @@ IMFMDB.DeleteChatMessage = function(message,chatType,client){
     deleteSql = commonMethods.sqlFormat(deleteSql,[tableName,message.id]);
 
     var db = SQLite.openDatabase({
-       ...databaseObj
+        ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
@@ -220,7 +221,7 @@ IMFMDB.getQueryChatListByClientId = function(){
 //获取所有聊天用户
 IMFMDB.getAllChatClientList = function(){
     var db = SQLite.openDatabase({
-       ...databaseObj
+        ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
@@ -295,19 +296,6 @@ function insertChat(message,tableName,tx){
 
     }, (err)=>{errorDB('向聊天对象插入详细聊天',err)});
 }
-
-function buildIndexForTable(tableName,tx){
-    let insertSql = sqls.ExcuteIMSql.InsertChatRecode;
-
-    insertSql = commonMethods.sqlFormat(insertSql,[client,way]);
-
-    tx.executeSql(insertSql, [], (tx, results) => {
-
-        console.log("create index success for" + tableName);
-
-    }, errorDB);
-}
-
 
 function insertClientRecode(client,way,tx){
     let insertSql = sqls.ExcuteIMSql.InsertChatRecode;

@@ -19,8 +19,5 @@ export const ExcuteIMSql = {
     "DeleteChatTableByName":"delete from ?",
     "QueryChatTypeFromChatList":"select Type from ChatRecode where client = ?",
     "DeleteMessageById":"delete from ? where Id = ?",
-    "UpdateMessageStatusByMessageId":"update ? set IsSend=? where Id = ?",
-    "AddFailedMessage":"insert into FailMessageRecode (messageId,send,rec,time,content,type,localPath,url) values (?,?,?,?,?,?,?,?)",
-    "GetAllFailedMessages":"select * from FailMessageRecode",
-    "DeleteAllFailedMessages":"delete from FailMessageRecode",
+    "UpdateMessageStatusByMessageId":"update ? set IsSend = ? where Id = ?"
 }
