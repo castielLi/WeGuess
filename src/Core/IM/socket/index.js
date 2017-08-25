@@ -5,6 +5,7 @@ import * as configs from './socketConfig'
 import React, {
     Component
 } from 'react';
+import MessageCommandEnum from '../dto/MessageCommandEnum'
 
 let __instance = (function () {
     let instance;
@@ -37,7 +38,10 @@ export default class Connect extends Component{
     addEventListenner(){
         this.webSocket.addEventListener('message', function (event) {
             console.log("Socket Core:收到了一条新消息:" + event.data)
-            onRecieveMessage(event.data.split(" ")[1]);
+            let message = JSON.parse(event.data);
+            if(message.Command == MessageCommandEnum.MSG_REV_ACK) {
+                onRecieveMessage(message.MSGID);
+            }
         });
 
         this.webSocket.addEventListener('open', function (event) {
@@ -47,7 +51,7 @@ export default class Connect extends Component{
 
     sendMessage(message){
         console.log("Socket Core: 发送消息"+message);
-        this.webSocket.send(message);
+        this.webSocket.send(JSON.stringify(message));
     }
 
 

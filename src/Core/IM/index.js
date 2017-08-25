@@ -10,6 +10,7 @@ import MessageStatus from "./dto/MessageStatus"
 import * as configs from './IMconfig'
 
 
+
 let _socket = new Connect("1");
 
 //网络状态
@@ -41,8 +42,8 @@ let storeSqliteInterval;
 let loopState;
 let netState;
 
-
-let ME = "";
+//假设账号token就是1
+let ME = "1";
 
 
 let __instance = (function () {
@@ -157,18 +158,18 @@ export default class IM {
     }
 
     //外部接口，添加消息
-    addMessage(message,callback=function(){},onprogess="undefined") {
+    addMessage(message,way="",callback=function(){},onprogess="undefined") {
 
         let messageUUID = "";
 
-        if (message.type == "undefined" || message.type == "") {
+        if (message.type == "undefined") {
             callback(false, "message type error");
         }
 
         //先生成唯一的messageID并且添加message进sqlite保存
         UUIDGenerator.getRandomUUID().then((uuid) => {
-            messageId = message.rec + "_" +uuid;
-            message.messageId = messageId;
+            messageId = message.Data.Data.Receiver + "_" +uuid;
+            message.MSGID = messageId;
             messageUUID = messageId;
             this.storeSendMessage(message);
 
@@ -256,8 +257,8 @@ export default class IM {
         console.log("开始发送消息了")
 
         if(networkStatus == networkStatuesType.normal) {
-            this.socket.sendMessage(message.messageId);
-            console.log("添加" + message.messageId + "进队列");
+            this.socket.sendMessage(message);
+            console.log("添加" + message.MSGID + "进队列");
             //初始加入ack队列，发送次数默认为1次
             obj.addAckQueue(message,1);
             console.log("ack queue 长度" + ackMessageQueue.length);
@@ -272,7 +273,7 @@ export default class IM {
     }
 
     storeSendMessage(message){
-        if(message.rec != ME){
+        if(message.Data.Data.Receiver != ME){
             storeSqlite.storeSendMessage(message);
         }else{
             storeSqlite.storeRecMessage(message);
@@ -366,7 +367,7 @@ export default class IM {
         let updateMessage = {};
 
         for(let item in ackMessageQueue){
-            if(ackMessageQueue[item].message.messageId == message){
+            if(ackMessageQueue[item].message.MSGID == message){
                 updateMessage = ackMessageQueue[item].message;
                 ackMessageQueue.splice(item, 1);
                 console.log("ack队列pop出：" + message)
@@ -400,8 +401,8 @@ export default class IM {
 
                     ackMessageQueue.splice(item, 1);
                 }else {
-                    obj.socket.sendMessage(ackMessageQueue[item].message.messageId);
-                    console.log("重新发送" + ackMessageQueue[item].message.messageId);
+                    obj.socket.sendMessage(ackMessageQueue[item].message);
+                    console.log("重新发送" + ackMessageQueue[item].message.MSGID);
                     ackMessageQueue[item].time = time;
                     ackMessageQueue[item].hasSend += 1;
                 }
