@@ -17,7 +17,15 @@ import BaseComponent from './Core/Component'
 import Route from './Core/route/router'
 import * as router from './modules/routerMap'
 import IM from './Core/IM'
-import message from './Core/IM/dto/message'
+
+import ChatCommandEnum from './Core/IM/dto/ChatCommandEnum'
+import MessageBodyTypeEnum from './Core/IM/dto/MessageBodyTypeEnum'
+import MessageCommandEnum from './Core/IM/dto/MessageCommandEnum'
+
+import SendMessageBodyDto from './Core/IM/dto/SendMessageBodyDto'
+import SendMessageDto from './Core/IM/dto/SendMessageDto'
+import messageBodyChatDto from './Core/IM/dto/messageBodyChatDto'
+
 
 export default function App() {
 
@@ -40,15 +48,25 @@ export default function App() {
     let im = new IM();
 
     let sendMessage = setInterval(function(){
-        let addMessage = new message();
+        let addMessage = new SendMessageDto();
+        let messageBody = new SendMessageBodyDto();
+        let messageData = new messageBodyChatDto();
+
+        messageData.Data = "hello world";
+        messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
+        messageData.Sender = "1";
+        messageData.Receiver = "2";
+
+        messageBody.LocalTime = new Date().getTime();
+        messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
+        messageBody.Data = messageData;
+
+
+        addMessage.Command = MessageCommandEnum.MSG_BODY;
+        addMessage.Data = messageBody;
         addMessage.type = "text";
-        addMessage.rec = "hello";
-        addMessage.send = "me";
-        addMessage.localPath = "";
-        addMessage.url = "";
-        addMessage.time = new Date().toDateString();
-        addMessage.content = "hello world";
         addMessage.way = "chatroom";
+
         im.addMessage(addMessage);
 
         // im.addRecMessage(addMessage);

@@ -10,14 +10,14 @@ import ChatWayEnum from '../dto/ChatWayEnum'
 
 let chatList = [];
 
-export function storeSendMessage(message){
+export function storeSendMessage(message,way){
 
-    IMFMDB.InsertMessageWithCondition(message,message.rec)
+    IMFMDB.InsertMessageWithCondition(message,message.Data.Data.Receiver)
 }
 
-export function storeRecMessage(message){
+export function storeRecMessage(message,way){
 
-    IMFMDB.InsertMessageWithCondition(message,message.send)
+    IMFMDB.InsertMessageWithCondition(message,message.Data.Data.Sender)
 }
 
 export function deleteClientRecode(name,chatType){
@@ -36,8 +36,8 @@ export function getAllFailedSendMessage(callback){
     return IMFMDB.getAllFailedMessages(callback)
 }
 
-export function updateMessageStatus(messageId,status) {
-    IMFMDB.UpdateMessageStatues(messageId,status)
+export function updateMessageStatus(message) {
+    IMFMDB.UpdateMessageStatues(message)
 }
 
 
@@ -147,19 +147,27 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
 }
 
 //更新消息的isSend
-IMFMDB.UpdateMessageStatues = function(messageId,status){
+IMFMDB.UpdateMessageStatues = function(message){
 
     var db = SQLite.openDatabase({
         ...databaseObj
     }, () => {
         db.transaction((tx) => {
-            let client = InterceptionClientFromId(messageId);
+            let tableName = "";
+            let client = InterceptionClientFromId(message.MSGID);
             //假设默认为聊天室
-            let tableName = "ChatRoom_"+client;
+
+
+            if(message.way == ChatWayEnum.ChatRoom){
+                 tableName = "ChatRoom_"+client;
+            }else{
+                tableName = "Private_"+client;
+            }
+
             let updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
-            updateSql = commonMethods.sqlFormat(updateSql,[tableName,status,messageId]);
+            updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.MSGID]);
             tx.executeSql(updateSql, [], (tx, results) => {
-                console.log("update" + messageId + "is send statues" + status);
+                console.log("update " + message.MSGID + "is send statues:" + message.status);
             }, (err)=>{errorDB('更新消息状态',err)});
 
         });
@@ -195,7 +203,7 @@ IMFMDB.DeleteChatMessage = function(message,chatType,client){
 
     let deleteSql = sqls.ExcuteIMSql.DeleteMessageById;
 
-    deleteSql = commonMethods.sqlFormat(deleteSql,[tableName,message.id]);
+    deleteSql = commonMethods.sqlFormat(deleteSql,[tableName,message.MSGID]);
 
     var db = SQLite.openDatabase({
         ...databaseObj
@@ -244,9 +252,12 @@ IMFMDB.addFailedMessage = function(message){
     }, () => {
         db.transaction((tx) => {
 
+            let localPath = " ";
+            let url = " ";
+
             let addSql = sqls.ExcuteIMSql.AddFailedMessage;
 
-            addSql = commonMethods.sqlFormat(addSql,[message.messageId,message.rec,message.send,message.time,message.content,message.type,message.localPath,message.url]);
+            addSql = commonMethods.sqlFormat(addSql,[message.MSGID,message.Data.Data.Receiver,message.Data.Data.Sender,message.Data.LocalTime,message.Data.Data.Data,message.type,localPath,url]);
 
             tx.executeSql(addSql, [], (tx, results) => {
 
@@ -300,7 +311,10 @@ function insertIndexForTable(tableName,tx){
 function insertChat(message,tableName,tx){
     let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
 
-    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.messageId,message.rec,message.send,message.time,message.content,message.type,message.localPath,message.url,message.status]);
+    let localPath = " ";
+    let url = " ";
+
+    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.MSGID,message.Data.Data.Sender,message.Data.Data.Receiver,message.Data.LocalTime,message.Data.Data.Data,message.type,localPath,url,message.status]);
 
     tx.executeSql(insertSql, [], (tx, results) => {
 

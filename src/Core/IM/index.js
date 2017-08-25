@@ -6,9 +6,12 @@ import Connect from './socket'
 import * as methods from './Common'
 import * as storeSqlite from './StoreSqlite'
 import UUIDGenerator from 'react-native-uuid-generator';
+import MessageStatus from "./dto/MessageStatus"
+import * as configs from './IMconfig'
 
 
-let _socket = new Connect();
+
+let _socket = new Connect("1");
 
 //网络状态
 let networkStatus = "";
@@ -39,8 +42,8 @@ let storeSqliteInterval;
 let loopState;
 let netState;
 
-
-let ME = "";
+//假设账号token就是1
+let ME = "1";
 
 
 let __instance = (function () {
@@ -155,24 +158,29 @@ export default class IM {
     }
 
     //外部接口，添加消息
-    addMessage(message,callback=function(){},onprogess="undefined") {
+    addMessage(message,way="",callback=function(){},onprogess="undefined") {
 
         let messageUUID = "";
 
-        if (message.type == "undefined" || message.type == "") {
+        if (message.type == "undefined") {
             callback(false, "message type error");
         }
 
         //先生成唯一的messageID并且添加message进sqlite保存
         UUIDGenerator.getRandomUUID().then((uuid) => {
-            messageId = message.rec + "_" +uuid;
-            message.messageId = messageId;
+            messageId = message.Data.Data.Receiver + "_" +uuid;
+            message.MSGID = messageId;
             messageUUID = messageId;
             this.storeSendMessage(message);
 
             switch (message.type) {
                 case "text":
+
                     this.addMessageQueue(message);
+
+                    message.status = MessageStatus.PrepareToSend;
+                    handleSqliteQueue.push(message)
+
                     callback(true);
                     break;
                 // case "image":
@@ -181,6 +189,14 @@ export default class IM {
                 default:
                     // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
                     // if(result.success){
+
+
+                    // message.status = MessageStatus.PrepareToUpload;
+                    // handleSqliteQueue.push(message)
+                    //
+                    // message.status = MessageStatus.PrepareToSend;
+                    // handleSqliteQueue.push(message)
+
                     callback(true);
                     this.addMessageQueue(message);
                     // }else{
@@ -214,7 +230,7 @@ export default class IM {
             console.log(sendMessageQueueState);
             for(let item in sendMessageQueue){
                 obj.sendMessage(sendMessageQueue[item],obj);
-                sendMessageQueue.pop(sendMessageQueue[item]);
+                sendMessageQueue.shift();
             }
             // sendMessageQueue = [];
 
@@ -241,17 +257,23 @@ export default class IM {
         console.log("开始发送消息了")
 
         if(networkStatus == networkStatuesType.normal) {
-            this.socket.sendMessage(message.messageId);
-            console.log("添加" + message.messageId + "进队列");
-            obj.addAckQueue(message);
+            this.socket.sendMessage(message);
+            console.log("添加" + message.MSGID + "进队列");
+            //初始加入ack队列，发送次数默认为1次
+            obj.addAckQueue(message,1);
             console.log("ack queue 长度" + ackMessageQueue.length);
+
+            message.status = MessageStatus.WaitAck;
+            handleSqliteQueue.push(message)
         }else{
             storeSqlite.addFailedSendMessage(message);
+            message.status = MessageStatus.PrepareToSend;
+            handleSqliteQueue.push(message)
         }
     }
 
     storeSendMessage(message){
-        if(message.rec != ME){
+        if(message.Data.Data.Receiver != ME){
             storeSqlite.storeSendMessage(message);
         }else{
             storeSqlite.storeRecMessage(message);
@@ -269,7 +291,7 @@ export default class IM {
             console.log(handleSqliteQueueState);
             for(let item in handleSqliteQueue){
                 obj.updateSqliteMessage(handleSqliteQueue[item]);
-                handleSqliteQueue.pop(handleSqliteQueue[item]);
+                handleSqliteQueue.shift();
             }
             // handleSqliteQueue = [];
             //
@@ -285,17 +307,18 @@ export default class IM {
     }
 
     updateSqliteMessage(message){
-        storeSqlite.updateMessageStatus(message,'true');
+        storeSqlite.updateMessageStatus(message);
     }
 
 
     //添加消息至ack队列
-    addAckQueue(message){
+    addAckQueue(message,times){
+        let time = new Date().getTime();
         if(ackMessageQueueState == ackQueueType.excuting){
-            waitAckMessageQueue.push(message);
+            waitAckMessageQueue.push({"message":message,"time":time,"hasSend":times});
             console.log("message 加入等待队列")
         }else{
-            ackMessageQueue.push(message);
+            ackMessageQueue.push({"message":message,"time":time,"hasSend":times});
             console.log("message 加入发送队列")
         }
     }
@@ -321,7 +344,7 @@ export default class IM {
 
             for(let item in recieveMessageQueue){
                 obj.recMessage(recieveMessageQueue[item]);
-                recieveMessageQueue.pop(recieveMessageQueue[item]);
+                recieveMessageQueue.shift();
             }
             // recieveMessageQueue = [];
             //
@@ -341,8 +364,11 @@ export default class IM {
         //处理收到消息的逻辑
         console.log("IM Core:消息内容"+message + " 开始执行pop程序");
 
+        let updateMessage = {};
+
         for(let item in ackMessageQueue){
-            if(ackMessageQueue[item].messageId == message){
+            if(ackMessageQueue[item].message.MSGID == message){
+                updateMessage = ackMessageQueue[item].message;
                 ackMessageQueue.splice(item, 1);
                 console.log("ack队列pop出：" + message)
                 console.log(ackMessageQueue.length);
@@ -350,8 +376,42 @@ export default class IM {
             }
         }
 
-        handleSqliteQueue.push(message);
+        updateMessage.status = MessageStatus.SendSuccess;
+        handleSqliteQueue.push(updateMessage);
     }
+
+
+
+
+
+    handAckQueue(obj){
+
+        if(ackMessageQueue.length < 1){
+            return;
+        }
+
+        console.log("开始执行ack队列超时处理")
+        let time = new Date().getTime();
+        for(let item in ackMessageQueue){
+            if(time - ackMessageQueue[item].time > configs.timeOutResend){
+
+                if(ackMessageQueue[item].hasSend > 3) {
+                    ackMessageQueue[item].message.status = MessageStatus.SendFailed;
+                    handleSqliteQueue.push(ackMessageQueue[item].message);
+
+                    ackMessageQueue.splice(item, 1);
+                }else {
+                    obj.socket.sendMessage(ackMessageQueue[item].message);
+                    console.log("重新发送" + ackMessageQueue[item].message.MSGID);
+                    ackMessageQueue[item].time = time;
+                    ackMessageQueue[item].hasSend += 1;
+                }
+            }
+        }
+    }
+
+
+
 
 
     //心跳包
@@ -367,6 +427,7 @@ export default class IM {
         let handleSend = this.handleSendMessageQueue;
         let handleRec = this.handleRecieveMessageQueue;
         let handleUpdateSqlite = this.handleUpdateSqlite;
+        let handleAckQueue = this.handAckQueue;
         let obj = this;
         loopInterval = setInterval(function () {
 
@@ -382,6 +443,8 @@ export default class IM {
             // if(recMessageQueueState == recMessageQueueType.empty){
             //     handleRec(obj);
             // }
+
+            handleAckQueue(obj);
 
         }, 200);
     }
