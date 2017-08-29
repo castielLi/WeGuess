@@ -41,6 +41,8 @@ export default class Connect extends Component{
             let message = JSON.parse(event.data);
             if(message.Command == MessageCommandEnum.MSG_REV_ACK) {
                 onRecieveMessage(message.MSGID);
+            }else if(message.Command == MessageCommandEnum.MSG_HEART){
+                onRecieveMessage(message,MessageCommandEnum.MSG_HEART);
             }
         });
 

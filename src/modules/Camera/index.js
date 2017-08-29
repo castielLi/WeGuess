@@ -14,6 +14,18 @@ import {
 import Camera from 'react-native-camera';
 import BaseComponent from '../../Core/Component'
 import NavigationTopBar from '../../Core/Component/NavigationBar';
+import IM from '../../Core/IM'
+
+import ChatCommandEnum from '../../Core/IM/dto/ChatCommandEnum'
+import MessageBodyTypeEnum from '../../Core/IM/dto/MessageBodyTypeEnum'
+import MessageCommandEnum from '../../Core/IM/dto/MessageCommandEnum'
+
+import SendMessageBodyDto from '../../Core/IM/dto/SendMessageBodyDto'
+import SendMessageDto from '../../Core/IM/dto/SendMessageDto'
+import messageBodyChatDto from '../../Core/IM/dto/messageBodyChatDto'
+import uploadResourceDto from '../../Core/IM/dto/uploadResourceDto'
+
+
 
 export default class BadInstagramCloneApp extends BaseComponent {
     constructor(props){
@@ -40,6 +52,7 @@ export default class BadInstagramCloneApp extends BaseComponent {
             <View style={styles.container}>
                 <NavigationTopBar leftButton={this._leftButton} title={this._title} />
                 <Camera
+                    captureTarget={Camera.constants.CaptureTarget.disk}
                     ref={(cam) => {
                         this.camera = cam;
                     }}
@@ -58,7 +71,44 @@ export default class BadInstagramCloneApp extends BaseComponent {
         const options = {};
         //options.location = ...
         this.camera.capture({metadata: options})
-            .then((data) => alert("拍照成功！图片保存地址：\n"+data.path))
+            .then((data) => {
+
+                alert("拍照成功！图片保存地址：\n"+data.path)
+
+                let im = new IM();
+
+                let addMessage = new SendMessageDto();
+                let messageBody = new SendMessageBodyDto();
+                let messageData = new messageBodyChatDto();
+                let file = new uploadResourceDto()
+
+                file.FileType = "image";
+                file.LocalSource = data.path;
+
+                messageData.Data = "";
+                messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
+                messageData.Sender = "1";
+                messageData.Receiver = "2";
+
+                messageBody.LocalTime = new Date().getTime();
+                messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
+                messageBody.Data = messageData;
+
+
+                addMessage.Command = MessageCommandEnum.MSG_BODY;
+                addMessage.Data = messageBody;
+                addMessage.type = "image";
+                addMessage.way = "chatroom";
+                addMessage.Resource = [file];
+
+                im.addMessage(addMessage,function () {
+
+                },function(progress) {
+                    console.log("上传进度" + progress + "%");
+                });
+
+
+            })
             .catch(err => console.error(err));
     }
     changeCameraType(){

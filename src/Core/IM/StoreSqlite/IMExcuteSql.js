@@ -20,6 +20,7 @@ export const ExcuteIMSql = {
     "QueryChatTypeFromChatList":"select Type from ChatRecode where client = ?",
     "DeleteMessageById":"delete from ? where Id = ?",
     "UpdateMessageStatusByMessageId":"update ? set status=? where messageId = ?",
+    "UpdateMessageStatusAndResourceByMessageId":"update ? set status = ? , url = ? where messageId = ?",
     "AddFailedMessage":"insert into FailMessageRecode (messageId,send,rec,time,content,type,localPath,url) values (?,?,?,?,?,?,?,?)",
     "GetAllFailedMessages":"select * from FailMessageRecode",
     "DeleteAllFailedMessages":"delete from FailMessageRecode",

@@ -8,6 +8,7 @@ import * as storeSqlite from './StoreSqlite'
 import UUIDGenerator from 'react-native-uuid-generator';
 import MessageStatus from "./dto/MessageStatus"
 import * as configs from './IMconfig'
+import MessageCommandEnum from './dto/MessageCommandEnum'
 
 
 
@@ -45,6 +46,8 @@ let netState;
 //假设账号token就是1
 let ME = "1";
 
+let currentObj = undefined;
+
 
 let __instance = (function () {
     let instance;
@@ -64,6 +67,7 @@ export default class IM {
         //初始化IM的数据库
         storeSqlite.initIMDatabase();
         this.startIM();
+        currentObj = this;
     }
 
 
@@ -158,7 +162,7 @@ export default class IM {
     }
 
     //外部接口，添加消息
-    addMessage(message,way="",callback=function(){},onprogess="undefined") {
+    addMessage(message,callback=function(){},onprogess="undefined") {
 
         let messageUUID = "";
 
@@ -171,23 +175,46 @@ export default class IM {
             messageId = message.Data.Data.Receiver + "_" +uuid;
             message.MSGID = messageId;
             messageUUID = messageId;
+
             this.storeSendMessage(message);
+
 
             switch (message.type) {
                 case "text":
 
-                    this.addMessageQueue(message);
-
                     message.status = MessageStatus.PrepareToSend;
                     handleSqliteQueue.push(message)
 
+                    this.addMessageQueue(message);
+
                     callback(true);
                     break;
-                // case "image":
-                //     let result = methods.GetUploadTokenFromServer(message.content.name);
-                //     break;
+                case "image":
+
+
+                    message.status = MessageStatus.PrepareToUpload;
+                    handleSqliteQueue.push(message)
+
+
+                    for(let item in message.Resource) {
+                        methods.getUploadPathFromServer(message.Resource[item].LocalSource,function(progress){
+                            // console.log("进度：" + (progress.loaded / progress.total) + "%");
+                            onprogess(progress.loaded/progress.total * 100);
+                        },function(result){
+                            console.log("上传成功" + result);
+
+                            message.Resource[item].RemoteSource = result.url;
+                            message.status = MessageStatus.PrepareToSend;
+                            handleSqliteQueue.push(message)
+
+                            currentObj.addMessageQueue(message);
+                        })
+                    }
+
+
+                    break;
                 default:
-                    // let result = methods.getUploadTokenFromServer(message.content.name,onprogess);
+                    // methods.getUploadPathFromServer()
                     // if(result.success){
 
 
@@ -258,15 +285,19 @@ export default class IM {
 
         if(networkStatus == networkStatuesType.normal) {
             this.socket.sendMessage(message);
-            console.log("添加" + message.MSGID + "进队列");
-            //初始加入ack队列，发送次数默认为1次
-            obj.addAckQueue(message,1);
-            console.log("ack queue 长度" + ackMessageQueue.length);
 
-            message.status = MessageStatus.WaitAck;
-            handleSqliteQueue.push(message)
+            //心跳包不需要进行存储
+            if(message.Command != MessageCommandEnum.MSG_HEART) {
+                console.log("添加" + message.MSGID + "进队列");
+                //初始加入ack队列，发送次数默认为1次
+                obj.addAckQueue(message, 1);
+                console.log("ack queue 长度" + ackMessageQueue.length);
+
+                message.status = MessageStatus.WaitAck;
+                handleSqliteQueue.push(message)
+            }
         }else{
-            storeSqlite.addFailedSendMessage(message);
+            // storeSqlite.addFailedSendMessage(message);
             message.status = MessageStatus.PrepareToSend;
             handleSqliteQueue.push(message)
         }
@@ -359,10 +390,17 @@ export default class IM {
         }
     }
 
-    recMessage(message) {
+    recMessage(message,type=null) {
 
         //处理收到消息的逻辑
         console.log("IM Core:消息内容"+message + " 开始执行pop程序");
+
+        if(type != null){
+            message.Command = MessageCommandEnum.MSG_HEART;
+            console.log("心跳包压入发送队列")
+            sendMessageQueue.push(message);
+            return;
+        }
 
         let updateMessage = {};
 

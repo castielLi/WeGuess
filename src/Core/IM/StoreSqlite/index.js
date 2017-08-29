@@ -164,8 +164,17 @@ IMFMDB.UpdateMessageStatues = function(message){
                 tableName = "Private_"+client;
             }
 
-            let updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
-            updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.MSGID]);
+            let updateSql = "";
+
+            if(message.Resource[0].RemoteSource!="" && message.Resource != []){
+
+                updateSql = sqls.ExcuteIMSql.UpdateMessageStatusAndResourceByMessageId;
+                updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.Resource[0].RemoteSource,message.MSGID]);
+            }else{
+                updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
+                updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.MSGID]);
+            }
+
             tx.executeSql(updateSql, [], (tx, results) => {
                 console.log("update " + message.MSGID + "is send statues:" + message.status);
             }, (err)=>{errorDB('更新消息状态',err)});
@@ -252,7 +261,7 @@ IMFMDB.addFailedMessage = function(message){
     }, () => {
         db.transaction((tx) => {
 
-            let localPath = " ";
+            let localPath = (message.Resource[0].LocalSource!= "" || message.Resource[0].LocalSource.length>0)? message.Resource[0].LocalSource : " ";
             let url = " ";
 
             let addSql = sqls.ExcuteIMSql.AddFailedMessage;
@@ -311,7 +320,7 @@ function insertIndexForTable(tableName,tx){
 function insertChat(message,tableName,tx){
     let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
 
-    let localPath = " ";
+    let localPath = (message.Resource[0].LocalSource!= "" || message.Resource[0].LocalSource.length>0)? message.Resource[0].LocalSource : " ";
     let url = " ";
 
     insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.MSGID,message.Data.Data.Sender,message.Data.Data.Receiver,message.Data.LocalTime,message.Data.Data.Data,message.type,localPath,url,message.status]);
