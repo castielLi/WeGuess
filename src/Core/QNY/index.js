@@ -82,10 +82,10 @@ export default class QNY {
 					success(result);
 					resolve && resolve(index);
 				}, (xhr) => {
-					reject && reject(xhr);
+					reject && reject(index);
 				});
 			}).catch(e => {
-				reject && reject(e);
+				reject && reject(index);
 			});
 		});
 	}

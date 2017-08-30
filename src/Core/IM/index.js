@@ -162,7 +162,7 @@ export default class IM {
     }
 
     //外部接口，添加消息
-    addMessage(message,callback=function(){},onprogess="undefined") {
+    addMessage(message,callback=function(success,content){},onprogess="undefined") {
 
         let messageUUID = "";
 
@@ -212,30 +212,21 @@ export default class IM {
                        }));
                     }
 
-                    Promise.all(uploadQueue).then(function(value){
-                        console.log(value);
-                    }).catch(function (error) {
-                        console.log(error)
+                    Promise.all(uploadQueue).then(function(values){
+                        console.log(values);
+
+                        message.status = MessageStatus.PrepareToSend;
+                        handleSqliteQueue.push(message)
+
+                    }).catch(function (values) {
+                       console.log(values);
+                       callback(false,values);
                     })
 
 
                     break;
                 default:
-                    // methods.getUploadPathFromServer()
-                    // if(result.success){
 
-
-                    // message.status = MessageStatus.PrepareToUpload;
-                    // handleSqliteQueue.push(message)
-                    //
-                    // message.status = MessageStatus.PrepareToSend;
-                    // handleSqliteQueue.push(message)
-
-                    callback(true);
-                    this.addMessageQueue(message);
-                    // }else{
-                    //     callback(false,"upload server error");
-                    // }
                     break;
             }
 
