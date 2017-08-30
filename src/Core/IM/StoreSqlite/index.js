@@ -166,10 +166,16 @@ IMFMDB.UpdateMessageStatues = function(message){
 
             let updateSql = "";
 
-            if(message.Resource[0].RemoteSource!="" && message.Resource != []){
+            if(message.Resource.length > 0){
+
+
+                let remoteSource = "";
+                for(let item in message.Resource){
+                    remoteSource += message.Resource[item].RemoteSource + ",";
+                }
 
                 updateSql = sqls.ExcuteIMSql.UpdateMessageStatusAndResourceByMessageId;
-                updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.Resource[0].RemoteSource,message.MSGID]);
+                updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,remoteSource,message.MSGID]);
             }else{
                 updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
                 updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.MSGID]);
@@ -261,7 +267,14 @@ IMFMDB.addFailedMessage = function(message){
     }, () => {
         db.transaction((tx) => {
 
-            let localPath = (message.Resource[0].LocalSource!= "" || message.Resource[0].LocalSource.length>0)? message.Resource[0].LocalSource : " ";
+            let localPath = "";
+            if(message.Resource.length > 0) {
+                for (let item in message.Resource) {
+                    localPath += message.Resource[item].LocalSource + ",";
+                }
+            }else{
+                localPath = " ";
+            }
             let url = " ";
 
             let addSql = sqls.ExcuteIMSql.AddFailedMessage;
@@ -320,7 +333,14 @@ function insertIndexForTable(tableName,tx){
 function insertChat(message,tableName,tx){
     let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
 
-    let localPath = (message.Resource[0].LocalSource!= "" || message.Resource[0].LocalSource.length>0)? message.Resource[0].LocalSource : " ";
+    let localPath = "";
+    if(message.Resource.length > 0) {
+        for (let item in message.Resource) {
+            localPath += message.Resource[item].LocalSource + ",";
+        }
+    }else{
+        localPath = " ";
+    }
     let url = " ";
 
     insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.MSGID,message.Data.Data.Sender,message.Data.Data.Receiver,message.Data.LocalTime,message.Data.Data.Data,message.type,localPath,url,message.status]);

@@ -8,6 +8,6 @@ import QNY from '../../QNY'
 let net = new network();
 let qny = new QNY();
 
-export function getUploadPathFromServer(fileName,onprogress,success){
-    qny.uploadFile(fileName,onprogress,success);
+export function getUploadPathFromServer(fileName,index,onprogress,success){
+    return qny.uploadFile(fileName,index,onprogress,success);
 }

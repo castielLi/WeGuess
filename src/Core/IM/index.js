@@ -196,20 +196,27 @@ export default class IM {
                     handleSqliteQueue.push(message)
 
 
+                    let uploadQueue = [];
                     for(let item in message.Resource) {
-                        methods.getUploadPathFromServer(message.Resource[item].LocalSource,function(progress){
-                            // console.log("进度：" + (progress.loaded / progress.total) + "%");
-                            onprogess(progress.loaded/progress.total * 100);
-                        },function(result){
-                            console.log("上传成功" + result);
+                       uploadQueue.push(methods.getUploadPathFromServer(message.Resource[item].LocalSource,item,function(progress,index){
+                           // console.log("进度：" + (progress.loaded / progress.total) + "%");
+                           onprogess("第"+index + 1 +"张图片上传进度："+ progress.loaded/progress.total * 100);
+                       },function(result){
 
-                            message.Resource[item].RemoteSource = result.url;
-                            message.status = MessageStatus.PrepareToSend;
-                            handleSqliteQueue.push(message)
+                               console.log("上传成功" + result);
 
-                            currentObj.addMessageQueue(message);
-                        })
+                               message.Resource[item].RemoteSource = result.url;
+                               message.status = MessageStatus.PrepareToSend;
+                               handleSqliteQueue.push(message)
+                               currentObj.addMessageQueue(message);
+                       }));
                     }
+
+                    Promise.all(uploadQueue).then(function(value){
+                        console.log(value);
+                    }).catch(function (error) {
+                        console.log(error)
+                    })
 
 
                     break;

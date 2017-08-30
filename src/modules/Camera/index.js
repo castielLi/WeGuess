@@ -99,7 +99,7 @@ export default class BadInstagramCloneApp extends BaseComponent {
                 addMessage.Data = messageBody;
                 addMessage.type = "image";
                 addMessage.way = "chatroom";
-                addMessage.Resource = [file];
+                addMessage.Resource = [file,file,file];
 
                 im.addMessage(addMessage,function () {
 
