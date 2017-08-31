@@ -7,6 +7,7 @@ let SQLite = require('react-native-sqlite-storage')
 import * as sqls from './IMExcuteSql'
 import * as commonMethods from './formatQuerySql'
 import ChatWayEnum from '../dto/ChatWayEnum'
+import ResourceTypeEnum from '../dto/ResourceTypeEnum'
 
 let chatList = [];
 
@@ -64,7 +65,7 @@ IMFMDB.initIMDataBase = function(){
                 let sql = sqls.InitIMTable[key];
                 tx.executeSql(sql, [], (tx, results) => {
                     console.log('create IM database success');
-                }, (err)=>{errorDB('创建数据数据表',err)});
+                }, (err)=>{errorDB('创建数据表',err)});
             }
         });
     }, (err)=>{errorDB('初始化数据库',err)});
@@ -87,7 +88,12 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
 
                     let tableName = message.way == ChatWayEnum.Private?"Private_" + client:"ChatRoom_" + client;
 
-                    insertChat(message,tableName,tx);
+                    let conetnt = getContentByMessage(message);
+                    updateChat(conetnt,client,tx);
+
+                    insertChat(message,tx);
+
+                    insertChatToSpecialRecode(message,tableName,tx);
 
                 }else{
                     //如果当前聊天是新的聊天对象
@@ -103,11 +109,17 @@ IMFMDB.InsertMessageWithCondition = function(message,client){
 
                         //添加数据进数据库
 
-                        insertIndexForTable(tableName,tx);
+                        let conetnt = getContentByMessage(message);
+
+                        updateChat(conetnt,client,tx);
 
                         insertClientRecode(client,message.way,tx);
 
-                        insertChat(message,tableName,tx);
+                        insertChat(message,tx);
+
+                        insertChatToSpecialRecode(message,tableName,tx);
+
+                        // insertIndexForTable(tableName,tx);
 
                     }, (err)=>{errorDB('创建新聊天对象表',err)});
                 }
@@ -153,20 +165,9 @@ IMFMDB.UpdateMessageStatues = function(message){
         ...databaseObj
     }, () => {
         db.transaction((tx) => {
-            let tableName = "";
-            let client = InterceptionClientFromId(message.MSGID);
-            //假设默认为聊天室
-
-
-            if(message.way == ChatWayEnum.ChatRoom){
-                 tableName = "ChatRoom_"+client;
-            }else{
-                tableName = "Private_"+client;
-            }
-
             let updateSql = "";
 
-            if(message.Resource.length > 0){
+            if(message.Resource!= null && message.Resource.length > 0){
 
 
                 let remoteSource = "";
@@ -175,10 +176,10 @@ IMFMDB.UpdateMessageStatues = function(message){
                 }
 
                 updateSql = sqls.ExcuteIMSql.UpdateMessageStatusAndResourceByMessageId;
-                updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,remoteSource,message.MSGID]);
+                updateSql = commonMethods.sqlFormat(updateSql,[message.status,remoteSource,message.MSGID]);
             }else{
                 updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
-                updateSql = commonMethods.sqlFormat(updateSql,[tableName,message.status,message.MSGID]);
+                updateSql = commonMethods.sqlFormat(updateSql,[message.status,message.MSGID]);
             }
 
             tx.executeSql(updateSql, [], (tx, results) => {
@@ -268,7 +269,7 @@ IMFMDB.addFailedMessage = function(message){
         db.transaction((tx) => {
 
             let localPath = "";
-            if(message.Resource.length > 0) {
+            if(message.Resource!=null && message.Resource.length > 0) {
                 for (let item in message.Resource) {
                     localPath += message.Resource[item].LocalSource + ",";
                 }
@@ -317,24 +318,26 @@ IMFMDB.getAllFailedMessages = function(callback){
     }, errorDB);
 }
 
-function insertIndexForTable(tableName,tx){
-    let insertSql = sqls.ExcuteIMSql.CreateChatTableIndex;
+//为Tablename的表添加索引
+// function insertIndexForTable(tableName,tx){
+//     let insertSql = sqls.ExcuteIMSql.CreateChatTableIndex;
+//
+//     insertSql = commonMethods.sqlFormat(insertSql,[tableName]);
+//
+//     tx.executeSql(insertSql, [], (tx, results) => {
+//
+//         console.log("insert index success for" + tableName);
+//
+//     }, (err)=>{errorDB('向'+tableName + "添加索引",err)
+//     });
+// }
 
-    insertSql = commonMethods.sqlFormat(insertSql,[tableName]);
-
-    tx.executeSql(insertSql, [], (tx, results) => {
-
-        console.log("insert index success for" + tableName);
-
-    }, (err)=>{errorDB('向'+tableName + "添加索引",err)
-    });
-}
-
-function insertChat(message,tableName,tx){
-    let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
+//添加消息进总消息表
+function insertChat(message,tx){
+    let insertSql = sqls.ExcuteIMSql.InsertMessageToRecode;
 
     let localPath = "";
-    if(message.Resource.length > 0) {
+    if(message.Resource!= null && message.Resource.length > 0) {
         for (let item in message.Resource) {
             localPath += message.Resource[item].LocalSource + ",";
         }
@@ -343,7 +346,7 @@ function insertChat(message,tableName,tx){
     }
     let url = " ";
 
-    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.MSGID,message.Data.Data.Sender,message.Data.Data.Receiver,message.Data.LocalTime,message.Data.Data.Data,message.type,localPath,url,message.status]);
+    insertSql = commonMethods.sqlFormat(insertSql,[message.MSGID,message.Data.Data.Sender,message.Data.Data.Receiver,message.Data.LocalTime,message.Data.Data.Data,message.type,localPath,url,message.status]);
 
     tx.executeSql(insertSql, [], (tx, results) => {
 
@@ -352,6 +355,36 @@ function insertChat(message,tableName,tx){
     }, (err)=>{errorDB('向聊天对象插入详细聊天',err)});
 }
 
+//添加messageId到个人消息表
+function insertChatToSpecialRecode(message,tableName,tx){
+    let insertSql = sqls.ExcuteIMSql.InsertMessageToTalk;
+
+    insertSql = commonMethods.sqlFormat(insertSql,[tableName,message.MSGID]);
+
+    tx.executeSql(insertSql, [], (tx, results) => {
+
+        console.log("insert meesage success");
+
+    }, (err)=>{errorDB('向聊天对象插入详细聊天',err)});
+}
+
+
+//修改chat列表中最近的聊天记录
+function updateChat(content,client,tx){
+
+    let updateSql = sqls.ExcuteIMSql.UpdateChatLastContent;
+
+    updateSql = commonMethods.sqlFormat(updateSql,[content,client]);
+
+    tx.executeSql(updateSql, [], (tx, results) => {
+
+        console.log("更改最近一条消息记录为");
+
+    }, (err)=>{errorDB('为'+client+"在会话列表中更新了最新的聊天记录")
+    });
+}
+
+//添加会话记录
 function insertClientRecode(client,way,tx){
     let insertSql = sqls.ExcuteIMSql.InsertChatRecode;
 
@@ -388,6 +421,30 @@ function deleteClientChatList(tableName,tx){
     }, errorDB);
 }
 
+function getContentByMessage(message){
+    let content = "";
+    if(message.Resource != null && message.Resource.length > 0 && message.Resource.length < 2){
+        switch (message.Resource[0].FileType){
+            case ResourceTypeEnum.Image:
+                content = "[图片]";
+                break;
+            case ResourceTypeEnum.Audio:
+                content = "[音频]";
+                break;
+            case ResourceTypeEnum.Video:
+                content = "[视频]";
+                break;
+        }
+
+    }else if(message.Resource == null){
+        content = message.Data.Data.Data
+    }else{
+        content = "[图片]";
+    }
+
+    return content;
+}
+
 //从id截取用户名
 function InterceptionClientFromId(str){
     let client = '';
@@ -407,3 +464,8 @@ function errorDB(type,err) {
 function successDB() {
     console.log("open database");
 }
+
+
+
+
+

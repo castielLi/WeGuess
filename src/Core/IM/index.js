@@ -200,15 +200,12 @@ export default class IM {
                     for(let item in message.Resource) {
                        uploadQueue.push(methods.getUploadPathFromServer(message.Resource[item].LocalSource,item,function(progress,index){
                            // console.log("进度：" + (progress.loaded / progress.total) + "%");
-                           onprogess("第"+index + 1 +"张图片上传进度："+ progress.loaded/progress.total * 100);
+                           onprogess("第"+(index * 1 + 1) +"张图片上传进度："+ progress.loaded/progress.total * 100);
                        },function(result){
 
                                console.log("上传成功" + result);
 
                                message.Resource[item].RemoteSource = result.url;
-                               message.status = MessageStatus.PrepareToSend;
-                               handleSqliteQueue.push(message)
-                               currentObj.addMessageQueue(message);
                        }));
                     }
 
@@ -217,6 +214,8 @@ export default class IM {
 
                         message.status = MessageStatus.PrepareToSend;
                         handleSqliteQueue.push(message)
+
+                        currentObj.addMessageQueue(message);
 
                     }).catch(function (values) {
                        console.log(values);
