@@ -26,7 +26,7 @@
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		144A3759DB334B92BFECE549 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50FD816410904FA8ACE21998 /* FontAwesome.ttf */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		182670441EF0E47A00938198 /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = 182670431EF0E47A00938198 /* test.db */; };
+		1897D6821F5EAA0B0096C838 /* Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 1897D6811F5EAA0B0096C838 /* Test.m */; };
 		283F3BC6F56B43CCA229DAD4 /* libRNAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B893B872A54E461F868BF6FC /* libRNAudio.a */; };
 		294AA94C3C244E1BA129457C /* libReactNativeLocalization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E3463E2B8B474F8549F9AE /* libReactNativeLocalization.a */; };
 		2B047E0E143F4DC98084BE8E /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41E88EF994EA4E1AAFF2F3DD /* Zocial.ttf */; };
@@ -358,7 +358,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = WeGuess/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = WeGuess/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		182670431EF0E47A00938198 /* test.db */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.db; sourceTree = "<group>"; };
+		1897D6801F5EAA0B0096C838 /* Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test.h; sourceTree = "<group>"; };
+		1897D6811F5EAA0B0096C838 /* Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test.m; sourceTree = "<group>"; };
 		2BB59BF754E54ED3B8D34D53 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* WeGuess-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WeGuess-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* WeGuess-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WeGuess-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -558,6 +559,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				1897D6801F5EAA0B0096C838 /* Test.h */,
+				1897D6811F5EAA0B0096C838 /* Test.m */,
 			);
 			name = WeGuess;
 			sourceTree = "<group>";
@@ -636,7 +639,6 @@
 		182670421EF0E47A00938198 /* www */ = {
 			isa = PBXGroup;
 			children = (
-				182670431EF0E47A00938198 /* test.db */,
 			);
 			name = www;
 			path = ../www;
@@ -1263,7 +1265,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				182670441EF0E47A00938198 /* test.db in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				ECE053CA12664E758AFD0979 /* Entypo.ttf in Resources */,
@@ -1340,6 +1341,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1897D6821F5EAA0B0096C838 /* Test.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);

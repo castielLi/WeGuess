@@ -29,12 +29,16 @@ export function deleteMessage(message,chatType,client){
     IMFMDB.DeleteChatMessage(message,chatType,client);
 }
 
-export function addFailedSendMessage(message){
-    IMFMDB.addFailedMessage(message);
+export function addMessageToSendSqlite(message){
+    IMFMDB.addSendMessage(message);
 }
 
-export function getAllFailedSendMessage(callback){
-    return IMFMDB.getAllFailedMessages(callback)
+export function popMessageInSendSqlite(messageId){
+    IMFMDB.popMessageInSendMessageSqlite(messageId);
+}
+
+export function getAllCurrentSendMessage(callback){
+    return IMFMDB.getAllCurrentSendMessages(callback)
 }
 
 export function updateMessageStatus(message) {
@@ -136,24 +140,13 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
     }, () => {
         db.transaction((tx) => {
 
-            // tx.executeSql(sqls.ExcuteIMSql.QueryChatTypeFromChatList, [name], (tx, results) => {
-            //
-            //     console.log(results);
-            //     // chatList = results;
-            //     if(results.rows.length) {
-            //
-            //         deleteClientRecodeByName(name,tx);
-
-            // if(results.rows.item(0).Type == "chatroom")
             if(chatType =="chatroom"){
 
                 deleteClientChatList("ChatRoom_" + name, tx);
             }else {
                 deleteClientChatList("Private_" + name, tx);
             }
-            //         }
-            //     }, errorDB);
-            //
+
         });
     }, errorDB);
 }
@@ -260,7 +253,7 @@ IMFMDB.getAllChatClientList = function(){
 }
 
 //添加发送失败的消息进数据库
-IMFMDB.addFailedMessage = function(message){
+IMFMDB.addSendMessage = function(message){
 
 
     var db = SQLite.openDatabase({
@@ -268,23 +261,13 @@ IMFMDB.addFailedMessage = function(message){
     }, () => {
         db.transaction((tx) => {
 
-            let localPath = "";
-            if(message.Resource!=null && message.Resource.length > 0) {
-                for (let item in message.Resource) {
-                    localPath += message.Resource[item].LocalSource + ",";
-                }
-            }else{
-                localPath = " ";
-            }
-            let url = " ";
+            let addSql = sqls.ExcuteIMSql.AddSendMessage;
 
-            let addSql = sqls.ExcuteIMSql.AddFailedMessage;
-
-            addSql = commonMethods.sqlFormat(addSql,[message.MSGID,message.Data.Data.Receiver,message.Data.Data.Sender,message.Data.LocalTime,message.Data.Data.Data,message.type,localPath,url]);
+            addSql = commonMethods.sqlFormat(addSql,[message.MSGID]);
 
             tx.executeSql(addSql, [], (tx, results) => {
 
-                console.log("add failed message success");
+                console.log("add current send message success");
 
             }, errorDB);
 
@@ -294,23 +277,44 @@ IMFMDB.addFailedMessage = function(message){
 
 }
 
-//获取所有发送失败的消息
-IMFMDB.getAllFailedMessages = function(callback){
+IMFMDB.popMessageInSendMessageSqlite = function(messageId){
     var db = SQLite.openDatabase({
         ...databaseObj
     }, () => {
         db.transaction((tx) => {
 
-            let querySql = sqls.ExcuteIMSql.GetAllFailedMessages;
+            let deleteSql = sqls.ExcuteIMSql.DeleteSendMessageByMessageId;
+
+            deleteSql = commonMethods.sqlFormat(deleteSql,[messageId]);
+
+            tx.executeSql(deleteSql, [], (tx, results) => {
+
+                console.log("已经删除current send message")
+
+            }, errorDB);
+
+        });
+    }, errorDB);
+}
+
+
+//获取所有发送失败的消息
+IMFMDB.getAllCurrentSendMessages = function(callback){
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+        db.transaction((tx) => {
+
+            let querySql = sqls.ExcuteIMSql.GetAllSendMessages;
 
             tx.executeSql(querySql, [], (tx, results) => {
 
                 callback(results.rows.raw());
 
-                tx.executeSql(sqls.ExcuteIMSql.DeleteAllFailedMessages, [], (tx, results) => {
-
-                    console.log("已经删除failedmessage")
-                }, errorDB);
+                // tx.executeSql(sqls.ExcuteIMSql.DeleteAllFailedMessages, [], (tx, results) => {
+                //
+                //     console.log("已经删除failedmessage")
+                // }, errorDB);
 
             }, errorDB);
 

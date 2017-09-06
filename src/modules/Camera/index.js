@@ -24,7 +24,8 @@ import SendMessageBodyDto from '../../Core/IM/dto/SendMessageBodyDto'
 import SendMessageDto from '../../Core/IM/dto/SendMessageDto'
 import messageBodyChatDto from '../../Core/IM/dto/messageBodyChatDto'
 import uploadResourceDto from '../../Core/IM/dto/uploadResourceDto'
-
+import { NativeModules } from 'react-native';
+var test = NativeModules.Test;
 
 
 export default class BadInstagramCloneApp extends BaseComponent {
@@ -47,6 +48,13 @@ export default class BadInstagramCloneApp extends BaseComponent {
             title:"Camera"
         }
     }
+
+    componentDidMount(){
+
+        test.testNormalEvent('调用testDateEvent方法', '测试date格式')
+    }
+
+
     render() {
         return (
             <View style={styles.container}>

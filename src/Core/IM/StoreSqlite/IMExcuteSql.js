@@ -5,7 +5,7 @@
 export const InitIMTable = {
     "createChatRecodeTable":"CREATE TABLE IF NOT EXISTS ChatRecode (Client varchar(255), Type varchar(255), LastMessage varchar(255))",
     "createMessageRecodeTable":"CREATE TABLE IF NOT EXISTS MessageRecode (Id INTEGER PRIMARY KEY AUTOINCREMENT,messageId varchar(255),send varchar(255), rec varchar(255) , time varchar(255), content varchar(255), type varchar(255), localPath varchar(255), url varchar(255) , status varchar(255))",
-    "CreateSendFailMessageTable":"CREATE TABLE IF NOT EXISTS FailMessageRecode (Id INTEGER PRIMARY KEY AUTOINCREMENT,messageId varchar(255),send varchar(255), rec varchar(255) , time varchar(255), content varchar(255), type varchar(255), localPath varchar(255), url varchar(255))",
+    "CreateSendMessageTable":"CREATE TABLE IF NOT EXISTS SendMessageRecode (Id INTEGER PRIMARY KEY AUTOINCREMENT,messageId varchar(255))",
     "CreateChatTableIndex":"CREATE INDEX index_id ON MessageRecode(messageId)",
 }
 
@@ -22,9 +22,10 @@ export const ExcuteIMSql = {
     "DeleteMessageById":"delete from ? where Id = ?",
     "UpdateMessageStatusByMessageId":"update MessageRecode set status=? where messageId = ?",
     "UpdateMessageStatusAndResourceByMessageId":"update MessageRecode set status = ? , url = ? where messageId = ?",
-    "AddFailedMessage":"insert into FailMessageRecode (messageId,send,rec,time,content,type,localPath,url) values (?,?,?,?,?,?,?,?)",
-    "GetAllFailedMessages":"select * from FailMessageRecode",
-    "DeleteAllFailedMessages":"delete from FailMessageRecode",
+    "AddSendMessage":"insert into SendMessageRecode (messageId) values (?)",
+    "GetAllSendMessages":"select * from SendMessageRecode",
+    "DeleteAllSendMessages":"delete from SendMessageRecode",
+    "DeleteSendMessageByMessageId":"delete from SendMessageRecode where messageId = ?",
     "UpdateChatLastContent":"update ChatRecode set LastMessage = ? where Client = ?",
     "InsertMessageToRecode":"insert into MessageRecode (messageId,send,rec,time,content,type,localPath,url) values (?,?,?,?,?,?,?,?)"
 }

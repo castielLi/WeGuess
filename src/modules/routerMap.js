@@ -20,6 +20,8 @@ import TestRefresh from './testRefresh'
 import Main from './Main/page/main.js'
 import Contact from './Contact'
 import Camera from './Camera'
+import Chat from './chatList'
+import Thouch from './enterTool/thouch'
 
 export const MainPage = {
     key: 'MainTabbar',
@@ -90,6 +92,18 @@ export const RouteMap = {
     'Camera':{
         'Camera':{
             component:Camera,
+            parames:{}
+        }
+    },
+    "Chat":{
+        "Chat":{
+            component:Chat,
+            parames:{}
+        }
+    },
+    "EnterTool":{
+        "EnterTool":{
+            component:Thouch,
             parames:{}
         }
     }

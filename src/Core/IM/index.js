@@ -103,12 +103,6 @@ export default class IM {
         if(netState == "NONE" || netState == "none"){
 
             networkStatus = networkStatuesType.none;
-            // clearInterval(loopInterval)
-            // loopState = loopStateType.noNet;
-
-            // if(sendMessageQueue.length > 0){
-            //
-            // }
 
             checkNetEnvironmentInterval = setInterval(function () {
 
@@ -124,9 +118,9 @@ export default class IM {
 
                     _socket.reConnectNet();
 
-                    storeSqlite.getAllFailedSendMessage(function(failedMessages){
-                        console.log(failedMessages);
-                        sendMessageQueue = failedMessages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+                    storeSqlite.getAllCurrentSendMessage(function(currentSendMessages){
+                        console.log(currentSendMessages);
+                        sendMessageQueue = currentSendMessages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
                     });
 
                 }
@@ -256,19 +250,6 @@ export default class IM {
                 obj.sendMessage(sendMessageQueue[item],obj);
                 sendMessageQueue.shift();
             }
-            // sendMessageQueue = [];
-
-            // if(waitSendMessageQueue.length > 0){
-            //    console.log("拷贝等待队列到发送队列")
-            //    sendMessageQueue = waitSendMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
-            //    waitSendMessageQueue = [];
-            // }
-
-            // if(sendFailedMessageQueue.length > 0){
-            //     console.log("拷贝失败队列到发送队列")
-            //     sendMessageQueue = sendFailedMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
-            //     sendFailedMessageQueue = [];
-            // }
 
             sendMessageQueueState = sendMessageQueueType.empty;
             console.log(sendMessageQueueState);
@@ -280,8 +261,13 @@ export default class IM {
         //发送websocket
         console.log("开始发送消息了")
 
+        if(message.Command != MessageCommandEnum.MSG_HEART){
+            storeSqlite.addMessageToSendSqlite(message);
+        }
+
         if(networkStatus == networkStatuesType.normal) {
-            this.socket.sendMessage(message);
+            let success = this.socket.sendMessage(message);
+
 
             //心跳包不需要进行存储
             if(message.Command != MessageCommandEnum.MSG_HEART) {
@@ -294,7 +280,6 @@ export default class IM {
                 handleSqliteQueue.push(message)
             }
         }else{
-            // storeSqlite.addFailedSendMessage(message);
             message.status = MessageStatus.PrepareToSend;
             handleSqliteQueue.push(message)
         }
@@ -318,24 +303,25 @@ export default class IM {
             handleSqliteQueueState = handleSqliteQueueType.excuting;
             console.log(handleSqliteQueueState);
             for(let item in handleSqliteQueue){
+
                 obj.updateSqliteMessage(handleSqliteQueue[item]);
                 handleSqliteQueue.shift();
             }
-            // handleSqliteQueue = [];
-            //
-            // if(waitSqliteQueue.length > 0){
-            //     console.log("拷贝等待存储队列到存储队列")
-            //     handleSqliteQueue = waitSqliteQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },handleSqliteQueue);
-            //     waitSqliteQueue = [];
-            // }
+
 
             handleSqliteQueueState = handleSqliteQueueType.empty;
             console.log(handleSqliteQueueState);
         }
     }
 
+    //更改消息状态
     updateSqliteMessage(message){
         storeSqlite.updateMessageStatus(message);
+    }
+
+    //删除数据库中发送队列的message
+    popCurrentMessageSqlite(messageId){
+        storeSqlite.popMessageInSendSqlite(messageId);
     }
 
 
@@ -374,13 +360,6 @@ export default class IM {
                 obj.recMessage(recieveMessageQueue[item]);
                 recieveMessageQueue.shift();
             }
-            // recieveMessageQueue = [];
-            //
-            // if(waitRecMessageQueue.length > 0){
-            //     console.log("拷贝等待队列到接受队列")
-            //     recieveMessageQueue = waitRecMessageQueue.reduce(function(prev, curr){ prev.push(curr); return prev; },recieveMessageQueue);
-            //     waitRecMessageQueue = [];
-            // }
 
             recMessageQueueState = recMessageQueueType.empty;
 
@@ -401,10 +380,16 @@ export default class IM {
 
         let updateMessage = {};
 
+
         for(let item in ackMessageQueue){
             if(ackMessageQueue[item].message.MSGID == message){
+
+                currentObj.popCurrentMessageSqlite(message)
+
+
                 updateMessage = ackMessageQueue[item].message;
                 ackMessageQueue.splice(item, 1);
+
                 console.log("ack队列pop出：" + message)
                 console.log(ackMessageQueue.length);
                 break;
@@ -435,6 +420,7 @@ export default class IM {
                     handleSqliteQueue.push(ackMessageQueue[item].message);
 
                     ackMessageQueue.splice(item, 1);
+                    obj.popCurrentMessageSqlite(message.MSGID)
                 }else {
                     obj.socket.sendMessage(ackMessageQueue[item].message);
                     console.log("重新发送" + ackMessageQueue[item].message.MSGID);
@@ -475,9 +461,6 @@ export default class IM {
                 handleUpdateSqlite(obj);
             }
 
-            // if(recMessageQueueState == recMessageQueueType.empty){
-            //     handleRec(obj);
-            // }
 
             handleAckQueue(obj);
 

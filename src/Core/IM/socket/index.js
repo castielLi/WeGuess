@@ -52,8 +52,12 @@ export default class Connect extends Component{
     }
 
     sendMessage(message){
-        console.log("Socket Core: 发送消息"+message);
-        this.webSocket.send(JSON.stringify(message));
+        if(this.webSocket.readyState == this.webSocket.OPEN){
+            console.log("Socket Core: 发送消息"+message);
+            this.webSocket.send(JSON.stringify(message));
+            return true;
+        }
+        return false;
     }
 
 

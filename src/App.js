@@ -26,6 +26,9 @@ import SendMessageBodyDto from './Core/IM/dto/SendMessageBodyDto'
 import SendMessageDto from './Core/IM/dto/SendMessageDto'
 import messageBodyChatDto from './Core/IM/dto/messageBodyChatDto'
 
+import { NativeModules } from 'react-native';
+var test = NativeModules.Test;
+
 
 export default function App() {
 
@@ -46,6 +49,8 @@ export default function App() {
 
     //初始化IM
     let im = new IM();
+
+    test.testNormalEvent('调用testDateEvent方法', '测试date格式')
 
     // let sendMessage = setInterval(function(){
     //     let addMessage = new SendMessageDto();
@@ -80,7 +85,7 @@ export default function App() {
 
 
     // //todo:使用chatwayenum枚举来控制类型
-    // // im.deleteCurrentChatMessage("hello","chatroom")
+    // im.deleteCurrentChatMessage("2","chatroom")
     //
     //
     // let deleteMessage = new message();
