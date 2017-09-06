@@ -35,6 +35,11 @@ let ackMessageQueue = [];
 let waitAckMessageQueue = [];
 let ackMessageQueueState;
 
+//资源队列
+let resourceQueueState;
+let resourceQueue = [];
+let waitResourceQueue = [];
+
 let heartBeatInterval;
 let loopInterval;
 let checkQueueInterval;
@@ -77,6 +82,7 @@ export default class IM {
         handleSqliteQueueState = handleSqliteQueueType.empty;
         recMessageQueueState = recMessageQueueType.empty;
         ackMessageQueueState = ackQueueType.empty;
+        resourceQueueState = resourceQueueType.empty;
         this.beginHeartBeat();
         this.beginRunLoop();
     }
@@ -97,6 +103,7 @@ export default class IM {
         clearInterval(checkQueueInterval)
     }
 
+    //网络状态变换回调
     handleNetEnvironment(connectionInfo){
         netState = connectionInfo;
 
@@ -185,41 +192,11 @@ export default class IM {
                     break;
                 case "image":
 
-
                     message.status = MessageStatus.PrepareToUpload;
                     handleSqliteQueue.push(message)
-
-
-                    let uploadQueue = [];
-                    for(let item in message.Resource) {
-                       uploadQueue.push(methods.getUploadPathFromServer(message.Resource[item].LocalSource,item,function(progress,index){
-                           // console.log("进度：" + (progress.loaded / progress.total) + "%");
-                           onprogess("第"+(index * 1 + 1) +"张图片上传进度："+ progress.loaded/progress.total * 100);
-                       },function(result){
-
-                               console.log("上传成功" + result);
-
-                               message.Resource[item].RemoteSource = result.url;
-                       }));
-                    }
-
-                    Promise.all(uploadQueue).then(function(values){
-                        console.log(values);
-
-                        message.status = MessageStatus.PrepareToSend;
-                        handleSqliteQueue.push(message)
-
-                        currentObj.addMessageQueue(message);
-
-                    }).catch(function (values) {
-                       console.log(values);
-                       callback(false,values);
-                    })
-
-
+                    resourceQueue.push({onprogress:onprogess,message:message})
                     break;
                 default:
-
                     break;
             }
 
@@ -228,16 +205,81 @@ export default class IM {
     }
 
 
+    //向resource队列中添加对象
+    addResourceQueue(object){
+
+        // if(resourceQueueState == resourceQueueType.excuting){
+        //     waitResourceQueue.push(object);
+        //     // console.log("message 加入等待资源队列")
+        // }else{
+            resourceQueue.push(object);
+            console.log("message 加入资源队列")
+        // }
+    }
+
+    //执行resource队列
+    handleResourceQueue(obj){
+
+        if(resourceQueue.length > 0){
+
+            resourceQueueState = resourceQueueType.excuting;
+
+            for(let item in resourceQueue){
+                obj.uploadResource(resourceQueue[item]);
+                resourceQueue.shift();
+            }
+            resourceQueueState = resourceQueueType.empty;
+
+        }
+    }
+
+    //执行upload函数体
+    uploadResource(obj){
+
+        let message = obj["message"];
+        let progressHandles = obj["onprogress"];
+
+        let uploadQueue = [];
+        for(let item in message.Resource) {
+            uploadQueue.push(methods.getUploadPathFromServer(message.Resource[item].LocalSource,item,function(progress,index){
+                // console.log("进度：" + (progress.loaded / progress.total) + "%");
+                let onprogess = progressHandles[index*1];
+                onprogess("第"+(index * 1 + 1) +"张图片上传进度："+ progress.loaded/progress.total * 100);
+            },function(result){
+
+                console.log("上传成功" + result);
+
+                message.Resource[item].RemoteSource = result.url;
+            }));
+        }
+
+        Promise.all(uploadQueue).then(function(values){
+            console.log(values);
+
+            message.status = MessageStatus.PrepareToSend;
+            handleSqliteQueue.push(message)
+
+            currentObj.addMessageQueue(message);
+
+        }).catch(function (values) {
+            console.log(values);
+            callback(false,values);
+        })
+
+    }
+
+
+
 
     //添加消息至消息队列
     addMessageQueue(message){
-        if(sendMessageQueueState == sendMessageQueueType.excuting){
-            waitSendMessageQueue.push(message);
-            console.log("message 加入等待发送队列")
-        }else{
+        // if(sendMessageQueueState == sendMessageQueueType.excuting){
+        //     waitSendMessageQueue.push(message);
+        //     console.log("message 加入等待发送队列")
+        // }else{
             sendMessageQueue.push(message);
             console.log("message 加入发送队列")
-        }
+        // }
     }
 
     //处理消息队列
@@ -285,6 +327,7 @@ export default class IM {
         }
     }
 
+    //存储消息
     storeSendMessage(message){
         if(message.Data.Data.Receiver != ME){
             storeSqlite.storeSendMessage(message);
@@ -296,7 +339,7 @@ export default class IM {
 
 
 
-
+    //处理更新sqlite队列
     handleUpdateSqlite(obj){
         if(handleSqliteQueue.length > 0){
 
@@ -325,29 +368,19 @@ export default class IM {
     }
 
 
-    //添加消息至ack队列
-    addAckQueue(message,times){
-        let time = new Date().getTime();
-        if(ackMessageQueueState == ackQueueType.excuting){
-            waitAckMessageQueue.push({"message":message,"time":time,"hasSend":times});
-            console.log("message 加入等待队列")
-        }else{
-            ackMessageQueue.push({"message":message,"time":time,"hasSend":times});
-            console.log("message 加入发送队列")
-        }
-    }
+
 
 
     //websocket接口,添加接受消息队列
     addRecMessage(message){
 
-        if(recMessageQueueState == recMessageQueueType.excuting){
-            waitRecMessageQueue.push(message);
-            console.log("message 加入等待接受队列")
-        }else{
+        // if(recMessageQueueState == recMessageQueueType.excuting){
+        //     waitRecMessageQueue.push(message);
+        //     console.log("message 加入等待接受队列")
+        // }else{
             recieveMessageQueue.push(message);
             console.log("message 加入接受队列")
-        }
+        // }
     }
 
     handleRecieveMessageQueue(obj){
@@ -402,8 +435,19 @@ export default class IM {
 
 
 
+    //添加消息至ack队列
+    addAckQueue(message,times){
+        let time = new Date().getTime();
+        // if(ackMessageQueueState == ackQueueType.excuting){
+        //     waitAckMessageQueue.push({"message":message,"time":time,"hasSend":times});
+        //     console.log("message 加入等待队列")
+        // }else{
+        ackMessageQueue.push({"message":message,"time":time,"hasSend":times});
+        console.log("message 加入发送队列")
+        // }
+    }
 
-
+    //处理ack队列
     handAckQueue(obj){
 
         if(ackMessageQueue.length < 1){
@@ -449,6 +493,7 @@ export default class IM {
         let handleRec = this.handleRecieveMessageQueue;
         let handleUpdateSqlite = this.handleUpdateSqlite;
         let handleAckQueue = this.handAckQueue;
+        let handleResource = this.handleResourceQueue;
         let obj = this;
         loopInterval = setInterval(function () {
 
@@ -461,6 +506,9 @@ export default class IM {
                 handleUpdateSqlite(obj);
             }
 
+            if(resourceQueueState == resourceQueueType.empty){
+                handleResource(obj)
+            }
 
             handleAckQueue(obj);
 
@@ -486,6 +534,11 @@ let recMessageQueueType = {
 }
 
 let handleSqliteQueueType = {
+    excuting : "excuting",
+    empty : "empty"
+}
+
+let resourceQueueType = {
     excuting : "excuting",
     empty : "empty"
 }

@@ -111,9 +111,13 @@ export default class BadInstagramCloneApp extends BaseComponent {
 
                 im.addMessage(addMessage,function () {
 
+                },[function(progress) {
+                    console.log("第一条上传进度" + progress + "%");
                 },function(progress) {
-                    console.log("上传进度" + progress + "%");
-                });
+                    console.log("第二条上传进度" + progress + "%");
+                },function(progress) {
+                    console.log("第三条上传进度" + progress + "%");
+                }]);
 
 
             })
