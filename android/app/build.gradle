@@ -141,6 +141,7 @@ dependencies {
     compile project(':react-native-fs')
     compile project(':react-native-uuid-generator')
     compile project(':react-native-filesystem')
+    compile project(':react-native-message-bubble')
     compile project(':react-native-sound')
     compile project(':react-native-audio')
     compile project(':react-native-sqlite-storage')

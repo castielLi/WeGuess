@@ -48,6 +48,9 @@ class Main extends BaseComponent {
                 },{
         	        key:'Camera',
                     id:'Camera'
+                },{
+                    key:'ChatDetail',
+                    id:'ChatDetail'
                 }
                 ],
             refresh: false,
