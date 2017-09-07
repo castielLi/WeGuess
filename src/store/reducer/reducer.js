@@ -3,7 +3,9 @@
  */
 import { combineReducers } from 'redux';
 import loginStore from '../../modules/Login/reducer';
+import chatRecordStore from '../../commonReducer/index';
 
 export default combineReducers({
-    loginStore
+    loginStore,
+    chatRecordStore
 });
