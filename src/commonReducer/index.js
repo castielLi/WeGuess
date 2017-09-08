@@ -1,17 +1,10 @@
-// const initialState = {
-//     ChatRecord:{
-//         'li':[{state:'loading',message:{}},{state:'loading',message:{}}...],
-//         'zhang':[{state:'loading',message:{}},{state:'loading',message:{}}...],
-//         ...
-//     }
-// }
 const initialState = {
-    ChatRecord:{
-        'li':[{state:'loading',message:{}},{state:'loading',message:{}}]
+    ChatRecord: {
+        'li': []
     }
 }
-export default function chatRecordStore(state = initialState,action){
-	 switch (action.type) {
+export default function chatRecordStore(state = initialState, action) {
+    switch (action.type) {
         case 'ADD_CLIENT':
             state.ChatRecord[action.client] = []
             return {

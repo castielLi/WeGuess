@@ -187,14 +187,14 @@ export default class IM {
                     handleSqliteQueue.push(message)
 
                     this.addMessageQueue(message);
-
-                    callback(true);
+                    callback(true,message.MSGID);
                     break;
                 case "image":
 
                     message.status = MessageStatus.PrepareToUpload;
                     handleSqliteQueue.push(message)
                     resourceQueue.push({onprogress:onprogess,message:message})
+                    callback(true,message.MSGID);
                     break;
                 default:
                     break;

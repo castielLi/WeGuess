@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Text,StyleSheet,View } from 'react-native';
+import { Text,StyleSheet,View ,TextInput} from 'react-native';
 import NavigationTopBar from '../../.././Core/Component/NavigationBar'
 import ContainerComponent from '../../.././Core/Component/ContainerComponent'
-
+import ThouchBar from './thouchBar';
 export default class ChatDetail extends ContainerComponent {
 	 constructor(props) {
         super(props);
@@ -28,8 +28,10 @@ export default class ChatDetail extends ContainerComponent {
     return (
     	<View style={styles.container}>
     		<NavigationTopBar leftButton={this._leftButton} title={this._title} />
-    		<Text>List</Text>
-    		<Text>ThouchBar</Text>
+    		<View style={{flex:1,backgroundColor:'red'}}>
+                <Text>List</Text>
+            </View>
+    		<ThouchBar></ThouchBar>
     	</View>
       
     );
