@@ -18,12 +18,7 @@ export function changeThouchBarInit(){
 		type:'CHANGE_INIT'
 	}
 }
-export function changeHeight(height){
-	return{
-		type:'CHANGE_INPUTHEIGHT',
-		height
-	}
-}
+
 export function focusInput(){
 	return{
 		type:'FOCUS_INPUT'

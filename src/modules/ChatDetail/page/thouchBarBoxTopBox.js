@@ -35,8 +35,10 @@ class ThouchBarBoxTopBox extends Component {
       speakTxt:'按住说话', 
       sendMessage:{data:'',from:'',id:'',uri:'',type:''},
       path:'',
-      fileName:''
+      fileName:'',
+      thouchBarTopBoxHeight:0
     };  
+    this.changeThouchBarTopBoxHeight = this.changeThouchBarTopBoxHeight.bind(this);
     this.toRecord = this.toRecord.bind(this);
     this.toExpression = this.toExpression.bind(this);
     this.toPlus = this.toPlus.bind(this);
@@ -48,6 +50,11 @@ class ThouchBarBoxTopBox extends Component {
     this._onPressOut = this._onPressOut.bind(this);
     this.getInputObject = this.getInputObject.bind(this);
   }  
+  changeThouchBarTopBoxHeight(height){
+    this.setState({
+      thouchBarTopBoxHeight:height
+    })
+  }
   toRecord(){
     if(this.props.thouchBarStore.isRecordPage){
       this.input.focus();
@@ -133,7 +140,7 @@ class ThouchBarBoxTopBox extends Component {
         <TouchableHighlight style={[styles.speakBox,{left:this.props.thouchBarStore.isRecordPage?60:-999}]} underlayColor={'#bbb'} activeOpacity={0.5} onPressIn={this._onPressIn} onPressOut={this._onPressOut}>
            <Text style={styles.speakTxt}>{this.state.speakTxt}</Text>
         </TouchableHighlight>
-        <AutoExpandingTextInput getInputObject={this.getInputObject}></AutoExpandingTextInput>
+        <AutoExpandingTextInput getInputObject={this.getInputObject} changeThouchBarTopBoxHeight={this.changeThouchBarTopBoxHeight}></AutoExpandingTextInput>
       </View>
       )
   }
@@ -155,7 +162,7 @@ class ThouchBarBoxTopBox extends Component {
   }
 	render(){
 		return(
-			<View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?62:Math.max(62,this.props.thouchBarStore.inputHeight+20)}]}>
+			<View style={[styles.thouchBarBoxTop,{height:this.state.thouchBarTopBoxHeight?62:Math.max(62,this.state.thouchBarTopBoxHeight+20)}]}>
 	          {this.renderEnterBox()}
 	          <TouchableHighlight style={[styles.button,styles.voiceButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toRecord}>
 	            {this.renderVoiceButton()}
@@ -170,7 +177,7 @@ class ThouchBarBoxTopBox extends Component {
 			)
 	}
   shouldComponentUpdate(nextProps,nextState){
-    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextProps.thouchBarStore.inputHeight!==this.props.thouchBarStore.inputHeight||nextState!==this.state){
+    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextState!==this.state){
       return true
     }
     return false;

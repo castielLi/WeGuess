@@ -21,11 +21,13 @@ class AutoExpandingTextInput extends Component {
   constructor(props) {  
     super(props); 
     this.state={
-      data:''
+      data:'',
+      inputHeight:0,
+      isLock:false
     } 
     this._onChangeText = this._onChangeText.bind(this);
     this._onSubmitEditing = this._onSubmitEditing.bind(this);
-    this._onContentSizeChange = this._onContentSizeChange.bind(this);
+    this._onChange = this._onChange.bind(this);
   }  
   
   _onChangeText(data){
@@ -33,8 +35,11 @@ class AutoExpandingTextInput extends Component {
       data
     })
   }
-  //每次提交会执行两次
+  //multiline设为true，每次提交_onSubmitEditing会执行两次
   _onSubmitEditing(){
+    if(this.state.isLock) return;
+    this.state.isLock = true;
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     //
     if(this.state.data){
       //初始化消息
@@ -43,6 +48,7 @@ class AutoExpandingTextInput extends Component {
         message.MSGID = messageId;
         //更新chatRecordStore
         this.props.addMessage('li',message,'private')
+        this.state.isLock = false;
       });
      
       this.input.clear();
@@ -50,12 +56,15 @@ class AutoExpandingTextInput extends Component {
     }
     return
   }
-  _onContentSizeChange(event) {
-
+  _onChange(event) {
     let height = event.nativeEvent.contentSize.height;
+    console.log(height)
     //限制高度 
     if(height>(30+26*5)) return;
-    this.props.changeHeight(height);
+    this.setState({
+      inputHeight:height
+    })
+    this.props.changeThouchBarTopBoxHeight(height);
     }
   componentWillMount(){
      this.props.changeThouchBarInit();
@@ -69,9 +78,10 @@ class AutoExpandingTextInput extends Component {
        onSubmitEditing = {this._onSubmitEditing}
        blurOnSubmit = {false}
        underlineColorAndroid = {'transparent'}  
-       multiline={true}  
-       onContentSizeChange={this._onContentSizeChange}
-       style={[styles.textInputStyle,{height:Math.max(40,this.props.thouchBarStore.inputHeight),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
+       multiline={true}
+       onChange={this._onChange}  
+       //onContentSizeChange={(event)=>{alert(event.nativeEvent.contentSize.height)}}
+       style={[styles.textInputStyle,{height:Math.max(40,this.state.inputHeight),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
        >  
       </TextInput>  
     );  
@@ -96,11 +106,10 @@ const styles = StyleSheet.create({
     borderWidth:1,   
     backgroundColor:'#fff',  
     borderRadius:10,
-    //overflow:'hidden',
-    // paddingLeft:5,
-    // paddingRight:5,
+    overflow:'hidden',
     padding:0,
-    margin:0
+    paddingLeft:5,
+    paddingRight:5,
   },
 
 });  

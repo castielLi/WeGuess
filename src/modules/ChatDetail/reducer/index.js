@@ -38,12 +38,6 @@ export default function thouchBarStore(state = initialState,action){
             return {
                ...initialState
             };
-        case 'CHANGE_INPUTHEIGHT':
-            return {
-                ...state,
-                inputHeight:action.height
-            };
-
         case 'FOCUS_INPUT':
             return {
                  ...state,
