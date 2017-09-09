@@ -31,7 +31,6 @@ class ThouchBarBoxTopBox extends Component {
  	constructor(props) {  
     super(props);  
     this.state = {  
-      inputHeight:62,
       speakTxt:'按住说话', 
       sendMessage:{data:'',from:'',id:'',uri:'',type:''},
       path:'',
@@ -162,7 +161,7 @@ class ThouchBarBoxTopBox extends Component {
   }
 	render(){
 		return(
-			<View style={[styles.thouchBarBoxTop,{height:this.state.thouchBarTopBoxHeight?62:Math.max(62,this.state.thouchBarTopBoxHeight+20)}]}>
+			<View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?62:Math.max(62,this.state.thouchBarTopBoxHeight+20)}]}>
 	          {this.renderEnterBox()}
 	          <TouchableHighlight style={[styles.button,styles.voiceButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toRecord}>
 	            {this.renderVoiceButton()}

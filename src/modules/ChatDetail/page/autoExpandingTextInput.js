@@ -57,6 +57,7 @@ class AutoExpandingTextInput extends Component {
     return
   }
   _onChange(event) {
+    console.log(event.nativeEvent.contentSize)
     let height = event.nativeEvent.contentSize.height;
     console.log(height)
     //限制高度 
@@ -80,7 +81,7 @@ class AutoExpandingTextInput extends Component {
        underlineColorAndroid = {'transparent'}  
        multiline={true}
        onChange={this._onChange}  
-       //onContentSizeChange={(event)=>{alert(event.nativeEvent.contentSize.height)}}
+       //onContentSizeChange={this._onChange}
        style={[styles.textInputStyle,{height:Math.max(40,this.state.inputHeight),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
        >  
       </TextInput>  
