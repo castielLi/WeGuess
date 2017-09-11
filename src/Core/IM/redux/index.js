@@ -51,11 +51,7 @@ export default function chatRecordStore(state = initialState, action) {
             };
 
         case 'ADD_MESSAGE':
-<<<<<<< HEAD
-            state.ChatRecord[action.client].push({status:"loading",message:action.message})
-=======
             state.ChatRecord[action.client].push({status:'loading',message:action.message})
->>>>>>> master
             return {
                 ...state
             };
