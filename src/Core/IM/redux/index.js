@@ -4,7 +4,7 @@
 //     ChatRecord:{
 //         'li':[
 //             {
-//             status:'loading',
+//             status:'loading',//'loading',true,false
 //             message:{                 
 //                     MSGID:'',
 //                     Command:6,//
@@ -15,9 +15,9 @@
 //                     }],
 //             Data:{
 //                 IsAck :true;
-//                 IsOfflineSaved :false;
-//                 IsHistorySaved :false;
-//                 IsOfflineNotify :true;
+//                 IsOfflineSaved :false,
+//                 IsHistorySaved :false,
+//                 IsOfflineNotify :true,
 //                 LocalTime :"",
 //                 Command : 1,
 //                 //ServerTime :"",
