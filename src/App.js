@@ -48,6 +48,18 @@ export default function App() {
 
     //初始化IM
     let im = new IM();
+
+    let handleMessageResult = function(success,message){
+
+    }
+
+    let handleMessageChange = function(message){
+
+    }
+
+    im.connectIM(handleMessageResult,handleMessageChange)
+
+
     //store.dispatch(Action.updateMessageRemoteSource(message.MSGID,item,result.url));
 
     // let sendMessage = setInterval(function(){

@@ -9,7 +9,7 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import MessageStatus from "./dto/MessageStatus"
 import * as configs from './IMconfig'
 import MessageCommandEnum from './dto/MessageCommandEnum'
-import store from '../../store/index';
+
 
 let _socket = new Connect("1");
 
@@ -53,6 +53,15 @@ let ME = "1";
 let currentObj = undefined;
 
 
+//上层应用IM的接口
+//返回消息结果回调
+let AppMessageResultHandle = undefined;
+//function(success:boolean,data:{})
+//返回修改消息状态回调
+let AppMessageChangeStatusHandle = undefined;
+//function(message:message);
+
+
 let __instance = (function () {
     let instance;
     return (newInstance) => {
@@ -74,6 +83,12 @@ export default class IM {
         currentObj = this;
     }
 
+
+    //赋值外部IM接口
+    connectIM(getMessageResultHandle,changeMessageHandle){
+        AppMessageResultHandle = getMessageResultHandle;
+        AppMessageChangeStatusHandle = changeMessageHandle;
+    }
 
     startIM(){
         loopState = loopStateType.wait;
@@ -237,6 +252,7 @@ export default class IM {
 
         let message = obj["message"];
         let progressHandles = obj["onprogress"];
+        let callback = obj["callback"];
 
         let uploadQueue = [];
         for(let item in message.Resource) {
@@ -245,22 +261,23 @@ export default class IM {
                 let onprogess = progressHandles[index*1];
                 onprogess("第"+(index * 1 + 1) +"张图片上传进度："+ progress.loaded/progress.total * 100);
             },function(result){
-
                 console.log("上传成功" + result);
-
                 message.Resource[item].RemoteSource = result.url;
-                console.log(store)
-            
             }));
         }
 
         Promise.all(uploadQueue).then(function(values){
             console.log(values);
 
+            callback(true,message);
+
             message.status = MessageStatus.PrepareToSend;
             handleSqliteQueue.push(message)
 
             currentObj.addMessageQueue(message);
+
+            //App上层修改message细节
+            AppMessageChangeStatusHandle(message);
 
         }).catch(function (values) {
             console.log('上传失败上传失败上传失败上传失败',values);
@@ -430,6 +447,9 @@ export default class IM {
             }
         }
 
+        //回调App上层发送成功
+        AppMessageResultHandle(true,message);
+
         updateMessage.status = MessageStatus.SendSuccess;
         handleSqliteQueue.push(updateMessage);
     }
@@ -461,6 +481,10 @@ export default class IM {
             if(time - ackMessageQueue[item].time > configs.timeOutResend){
 
                 if(ackMessageQueue[item].hasSend > 3) {
+
+                    //回调App上层发送失败
+                    AppMessageResultHandle(false,message);
+
                     ackMessageQueue[item].message.status = MessageStatus.SendFailed;
                     handleSqliteQueue.push(ackMessageQueue[item].message);
 

@@ -9,5 +9,6 @@ export default combineReducers({
     loginStore,
     chatRecordStore,
     //聊天栏状态
-    thouchBarStore
+    thouchBarStore,
+
 });

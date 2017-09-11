@@ -38,6 +38,9 @@ export default class Connect extends Component{
     addEventListenner(){
         this.webSocket.addEventListener('message', function (event) {
             console.log("Socket Core:收到了一条新消息:" + event.data)
+            if(event.data.length  <= 0){
+                return ;
+            }
             let message = JSON.parse(event.data);
             if(message.Command == MessageCommandEnum.MSG_REV_ACK) {
                 onRecieveMessage(message.MSGID);
