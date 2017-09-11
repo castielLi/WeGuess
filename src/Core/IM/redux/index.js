@@ -2,39 +2,37 @@
 //state示例
 // {
 //     ChatRecord:{
-//         status:'loading',
-//         message:{
-//             'li':[
-//                 {
+//         'li':[
+//             {
+//             status:'loading',
+//             message:{                 
 //                     MSGID:'',
 //                     Command:6,//
 //                     Resource:[{
-//                         FileType:0,
+//                         FileType:'',
 //                         LocalSource:'',
 //                         RemoteSource:'',
 //                     }],
-//                     Data:{
-//                         IsAck :true;
-//                         IsOfflineSaved :false;
-//                         IsHistorySaved :false;
-//                         IsOfflineNotify :true;
-//                         LocalTime :"",
-//                         //ServerTime :"",
-//                         Data :{
-//                             Command : -1,
-//                             Data :"",
-//                             Sender :"",
-//                             Receiver :"",
-//                         }
-//                     },
-//                     type:'',
-//                     way:'',
-//                     status:
-//                 },{
-
+//             Data:{
+//                 IsAck :true;
+//                 IsOfflineSaved :false;
+//                 IsHistorySaved :false;
+//                 IsOfflineNotify :true;
+//                 LocalTime :"",
+//                 //ServerTime :"",
+//                 Data :{
+//                     Command : -1,
+//                     Data :"",
+//                     Sender :"",
+//                     Receiver :"",
 //                 }
-//             ]
-//         }
+//             },
+//             type:'',
+//             way:'',
+//             status:''        
+//                 }
+//             }
+//         ]
 //     }
 // }
 const initialState = {

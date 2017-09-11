@@ -56,7 +56,7 @@ imagePikerCallBack(response){
     // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
     //初始化消息
-    let message = createResourceMessageObj('image','private',[{LocalSource:response.uri,RemoteSource:''}],'','li');
+    let message = createResourceMessageObj('image','private',[{FileType:'image',LocalSource:response.uri,RemoteSource:''}],'','li');
     im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
         //更新chatRecordStore
