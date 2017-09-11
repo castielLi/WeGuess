@@ -50,11 +50,11 @@ export default function App() {
     let im = new IM();
 
     let handleMessageResult = function(success,message){
-
+       console.log("发送结果来了")
     }
 
     let handleMessageChange = function(message){
-
+       console.log("状态改变了");
     }
 
     im.connectIM(handleMessageResult,handleMessageChange)

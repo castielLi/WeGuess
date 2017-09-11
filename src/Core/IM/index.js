@@ -269,8 +269,6 @@ export default class IM {
         Promise.all(uploadQueue).then(function(values){
             console.log(values);
 
-            callback(true,message);
-
             message.status = MessageStatus.PrepareToSend;
             handleSqliteQueue.push(message)
 
@@ -281,7 +279,6 @@ export default class IM {
 
         }).catch(function (values) {
             console.log('上传失败上传失败上传失败上传失败',values);
-            callback(false,values);
         })
 
     }
