@@ -13,6 +13,7 @@ export function addMessage(client,message){
 		message
 	}
 }
+
 //修改某条消息的状态 {status:'修改该状态',message:{...}}
 export function updateMessageStatus(status,MSGID){
 	return{

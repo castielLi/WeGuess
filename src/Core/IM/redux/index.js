@@ -51,6 +51,8 @@ export default function chatRecordStore(state = initialState, action) {
             };
 
         case 'ADD_MESSAGE':
+            //若超过50条，删除最旧的一条消息
+            state.ChatRecord[action.client].length>=50&&state.ChatRecord[action.client].shift();
             state.ChatRecord[action.client].push({status:'loading',message:action.message})
             return {
                 ...state
