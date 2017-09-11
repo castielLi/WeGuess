@@ -15,10 +15,10 @@ import {
     connect
 } from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as Actions from '../reducer/action';
-import * as commonActions from '../../../Core/IM/redux/action';
+import * as Actions from '../../reducer/action';
+import * as commonActions from '../../../../Core/IM/redux/action';
 import {createResourceMessageObj} from './createMessageObj';
-import IM from '../../../Core/IM/index';
+import IM from '../../../../Core/IM/index';
 const im = new IM();
 var ImagePicker = require('react-native-image-picker');
 var {height, width} = Dimensions.get('window');
@@ -80,44 +80,44 @@ render(){
           <Swiper style={styles.wrapper} showsButtons={false} activeDotColor={'#434343'} loop={false} >
              <View style={styles.swiperSlide}>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
             </View>
             <View style={styles.swiperSlide}>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
             </View>
             <View style={styles.swiperSlide}>
              <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
-                <Image source={require('../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
             </View>
           </Swiper>
