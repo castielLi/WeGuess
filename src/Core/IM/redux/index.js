@@ -1,3 +1,42 @@
+//用于处理聊天页面聊天记录的reducer
+//state示例
+// {
+//     ChatRecord:{
+//         status:'loading',
+//         message:{
+//             'li':[
+//                 {
+//                     MSGID:'',
+//                     Command:6,//
+//                     Resource:[{
+//                         FileType:0,
+//                         LocalSource:'',
+//                         RemoteSource:'',
+//                     }],
+//                     Data:{
+//                         IsAck :true;
+//                         IsOfflineSaved :false;
+//                         IsHistorySaved :false;
+//                         IsOfflineNotify :true;
+//                         LocalTime :"",
+//                         //ServerTime :"",
+//                         Data :{
+//                             Command : -1,
+//                             Data :"",
+//                             Sender :"",
+//                             Receiver :"",
+//                         }
+//                     },
+//                     type:'',
+//                     way:'',
+//                     status:
+//                 },{
+
+//                 }
+//             ]
+//         }
+//     }
+// }
 const initialState = {
     ChatRecord: {
         'li': []
@@ -5,6 +44,7 @@ const initialState = {
 }
 export default function chatRecordStore(state = initialState, action) {
     switch (action.type) {
+        //第一次聊天，向聊天记录redux中添加用户标记
         case 'ADD_CLIENT':
             state.ChatRecord[action.client] = []
             return {
