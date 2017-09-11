@@ -20,7 +20,7 @@ import {bindActionCreators} from 'redux';
 import * as Actions from '../reducer/action';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AutoExpandingTextInput from './autoExpandingTextInput';
-import * as commonActions from '../../../commonReducer/action';
+import * as commonActions from '../../../Core/IM/redux/action';
 import {createResourceMessageObj} from './createMessageObj';
 import IM from '../../../Core/IM/index';
 

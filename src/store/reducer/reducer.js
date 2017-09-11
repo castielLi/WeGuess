@@ -3,7 +3,7 @@
  */
 import { combineReducers } from 'redux';
 import loginStore from '../../modules/Login/reducer';
-import chatRecordStore from '../../commonReducer/index';
+import chatRecordStore from '../../Core/IM/redux/index';
 import thouchBarStore from '../../modules/ChatDetail/reducer/index';
 export default combineReducers({
     loginStore,
