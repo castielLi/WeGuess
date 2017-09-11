@@ -62,18 +62,19 @@ export default function chatRecordStore(state = initialState, action) {
                     itemArr.status = action.status;
                 }
             });
-            return {
-                ...state
-            }
-        case 'UPDATE_MESSAGES_REMOTESOURCE':
+            //聊天内容页面需要刷新，实现某用户聊天数组的深拷贝，改变聊天数组的引用
+            state.ChatRecord[action.client] = state.ChatRecord[action.client].concat([]);
+            return state;
+
+        case 'UPDATE_MESSAGES':
             state.ChatRecord[action.client].forEach(function(itemArr,index,arr) {
                 if(itemArr.message.MSGID === action.MSGID){
-                    itemArr.message.Resource[action.index].RemoteSource = action.RemoteSource;
+                    itemArr.message = action.message;
                 }
             });
-            return {
-                ...state
-            }
+            //聊天内容页面无需刷新,聊天数组的引用无需变化
+            return state;
+
         default:
             return state;
     }
