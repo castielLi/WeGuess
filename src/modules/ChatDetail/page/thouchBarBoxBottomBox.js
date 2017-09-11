@@ -16,7 +16,7 @@ import {
 } from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as Actions from '../reducer/action';
-import * as commonActions from '../../../commonReducer/action';
+import * as commonActions from '../../../Core/IM/redux/action';
 import {createResourceMessageObj} from './createMessageObj';
 import IM from '../../../Core/IM/index';
 const im = new IM();

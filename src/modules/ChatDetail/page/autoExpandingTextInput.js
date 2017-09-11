@@ -11,7 +11,7 @@ import {
     connect
 } from 'react-redux';
 import * as Actions from '../reducer/action';
-import * as commonActions from '../../../commonReducer/action';
+import * as commonActions from '../../../Core/IM/redux/action';
 import {createTextMessageObj} from './createMessageObj';
 import IM from '../../../Core/IM/index';
 var {height, width} = Dimensions.get('window');
