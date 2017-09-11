@@ -27,6 +27,8 @@ import SendMessageDto from './Core/IM/dto/SendMessageDto'
 import messageBodyChatDto from './Core/IM/dto/messageBodyChatDto'
 
 
+
+
 export default function App() {
 
 
@@ -47,40 +49,41 @@ export default function App() {
     //初始化IM
     let im = new IM();
 
-    let sendMessage = setInterval(function(){
-        let addMessage = new SendMessageDto();
-        let messageBody = new SendMessageBodyDto();
-        let messageData = new messageBodyChatDto();
 
-        messageData.Data = "hello world";
-        messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
-        messageData.Sender = "1";
-        messageData.Receiver = "2";
-
-        messageBody.LocalTime = new Date().getTime();
-        messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
-        messageBody.Data = messageData;
-
-
-        addMessage.Command = MessageCommandEnum.MSG_BODY;
-        addMessage.Data = messageBody;
-        addMessage.type = "text";
-        addMessage.way = "chatroom";
-
-        im.addMessage(addMessage);
-
-        // im.addRecMessage(addMessage);
-    },2000)
-
-    setInterval(function(){
-        clearInterval(sendMessage)
-    },10000)
+    // let sendMessage = setInterval(function(){
+    //     let addMessage = new SendMessageDto();
+    //     let messageBody = new SendMessageBodyDto();
+    //     let messageData = new messageBodyChatDto();
+    //
+    //     messageData.Data = "hello world";
+    //     messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
+    //     messageData.Sender = "1";
+    //     messageData.Receiver = "2";
+    //
+    //     messageBody.LocalTime = new Date().getTime();
+    //     messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
+    //     messageBody.Data = messageData;
+    //
+    //
+    //     addMessage.Command = MessageCommandEnum.MSG_BODY;
+    //     addMessage.Data = messageBody;
+    //     addMessage.type = "text";
+    //     addMessage.way = "chatroom";
+    //
+    //     im.addMessage(addMessage);
+    //
+    //     // im.addRecMessage(addMessage);
+    // },2000)
+    //
+    // setInterval(function(){
+    //     clearInterval(sendMessage)
+    // },10000)
 
 
 
 
     // //todo:使用chatwayenum枚举来控制类型
-    // // im.deleteCurrentChatMessage("hello","chatroom")
+    // im.deleteCurrentChatMessage("2","chatroom")
     //
     //
     // let deleteMessage = new message();

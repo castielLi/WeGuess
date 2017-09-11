@@ -1,6 +1,7 @@
 
 let RPC_TIMEOUT = 3600000; // default rpc timeout: one hour
 let TOKEN_URL="http://www.zyyft.s1.natapp.cc/api/qiniuyun/get?key=";
+// let TOKEN_URL="http://192.168.0.133:9039/api/qiniuyun/get?key=";
 let QIY_URL ="http://otf8y2r54.bkt.clouddn.com/";
 //华东访问地址
 let EAST_CHINA_HTTP_DOWNLOAD = 'http://iovip.qbox.me';

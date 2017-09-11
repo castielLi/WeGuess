@@ -51,7 +51,8 @@ export default class QNY {
     // }
 
 
-	uploadFile(fileUri, onprogress) {
+	//todo:做成多张图片可以统一上传 promise.race
+	uploadFile(fileUri,index, onprogress,success) {
 		return new Promise((resolve, reject) => {
 			let keys = fileUri.split("/");
 			let key = keys[keys.length - 1];
@@ -72,18 +73,19 @@ export default class QNY {
 					// formInput对象如何配置请参考七牛官方文档“直传文件”一节
 				}
 				Rpc.uploadFile(fileUri, response.Value, formInput, function(event, xhr) {
-					onprogress(event);
+					onprogress(event,index);
 				}).then(() => {
 					let result = {
 						key: key,
 						url: Config.QIY_URL + key
 					}
-					resolve && resolve(result);
+					success(result);
+					resolve && resolve(index);
 				}, (xhr) => {
-					reject && reject(xhr);
+					reject && reject(index);
 				});
 			}).catch(e => {
-				reject && reject(e);
+				reject && reject(index);
 			});
 		});
 	}

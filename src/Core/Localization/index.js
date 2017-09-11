@@ -12,7 +12,8 @@ export default class Localization{
 	  		TestRefresh:"TestRefresh",
 	  		Contact:"Contact",
 	  		ChangeLanguage:"ChangeLanguage",
-			Camera:"Camera"
+			Camera:"Camera",
+			ChatDetail:"ChatDetail"
 	  	},
 	  	recode:{
 	  		recode:"RECODE",
@@ -38,7 +39,8 @@ export default class Localization{
 	  		XXX:"XXX",
 	  		Contact:"通讯录",
 	  		ChangeLanguage:"切换语言",
-            Camera:"照相机"
+            Camera:"照相机",
+            ChatDetail:'聊天'
 	  	},
 	  	recode:{
 	  		recode:"录音",

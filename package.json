@@ -1,51 +1,56 @@
 {
-	"name": "WeGuess",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
-	},
-	"dependencies": {
-		"@remobile/react-native-file": "^1.0.3",
-		"base-64": "^0.1.0",
-		"react": "16.0.0-alpha.12",
-		"react-native": "0.45.1",
-		"react-native-audio": "^3.2.2",
-		"react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
-		"react-native-contacts": "^0.8.2",
-		"react-native-deprecated-custom-components": "^0.1.0",
-		"react-native-filesystem": "^0.1.0",
-		"react-native-fs": "^2.3.3",
-		"react-native-gifted-chat": "^0.1.4",
-		"react-native-lightbox": "^0.6.0",
-		"react-native-localization": "^0.1.31",
-		"react-native-navbar": "^1.7.1",
-		"react-native-navigation": "^1.1.99",
-		"react-native-network-info": "^2.2.0",
-		"react-native-popup": "^0.6.1",
-		"react-native-qiniu": "^0.3.0",
-		"react-native-sound": "^0.10.1",
-		"react-native-sqlite-storage": "^3.3.2",
-		"react-native-storage": "^0.2.2",
-		"react-native-uuid-generator": "^2.0.0",
-		"react-native-vector-icons": "^4.2.0",
-		"react-navigation": "^1.0.0-beta.11",
-		"react-redux": "^5.0.5",
-		"react-timer-mixin": "^0.13.3",
-		"redux": "^3.6.0",
-		"redux-persist": "^4.8.0",
-		"redux-thunk": "^2.2.0",
-		"rn-workers": "^0.1.7",
-		"whatwg-fetch": "^2.0.3"
-	},
-	"devDependencies": {
-		"babel-jest": "20.0.3",
-		"babel-preset-react-native": "1.9.2",
-		"jest": "20.0.4",
-		"react-test-renderer": "16.0.0-alpha.6"
-	},
-	"jest": {
-		"preset": "react-native"
-	}
+  "name": "WeGuess",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@remobile/react-native-file": "^1.0.3",
+    "base-64": "^0.1.0",
+    "react": "16.0.0-alpha.12",
+    "react-native": "^0.45.1",
+    "react-native-audio": "^3.2.2",
+    "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+    "react-native-contacts": "^0.8.2",
+    "react-native-deprecated-custom-components": "^0.1.0",
+    "react-native-filesystem": "^0.1.0",
+    "react-native-fs": "^2.3.3",
+    "react-native-gifted-chat": "^0.1.4",
+    "react-native-image-picker": "^0.26.6",
+    "react-native-lightbox": "^0.6.0",
+    "react-native-localization": "^0.1.31",
+    "react-native-message-bubble": "^1.0.6",
+    "react-native-navbar": "^1.7.1",
+    "react-native-navigation": "^1.1.99",
+    "react-native-network-info": "^2.2.0",
+    "react-native-popup": "^0.6.1",
+    "react-native-qiniu": "^0.3.0",
+    "react-native-sound": "^0.10.1",
+    "react-native-sqlite-storage": "^3.3.2",
+    "react-native-storage": "^0.2.2",
+    "react-native-swiper": "^1.5.10",
+    "react-native-uuid-generator": "^2.0.0",
+    "react-native-vector-icons": "^4.2.0",
+    "react-navigation": "^1.0.0-beta.11",
+    "react-redux": "^5.0.5",
+    "react-timer-mixin": "^0.13.3",
+    "redux": "^3.6.0",
+    "redux-persist": "^4.8.0",
+    "redux-thunk": "^2.2.0",
+    "rn-workers": "^0.1.7",
+    "set-blocking": "^2.0.0",
+    "whatwg-fetch": "^2.0.3",
+    "y18n": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-jest": "20.0.3",
+    "babel-preset-react-native": "1.9.2",
+    "jest": "20.0.4",
+    "react-test-renderer": "16.0.0-alpha.6"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
 }
