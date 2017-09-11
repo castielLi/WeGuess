@@ -11,6 +11,7 @@ import * as configs from './IMconfig'
 import MessageCommandEnum from './dto/MessageCommandEnum'
 
 
+
 let _socket = new Connect("1");
 
 //网络状态

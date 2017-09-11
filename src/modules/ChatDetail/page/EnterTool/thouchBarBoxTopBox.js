@@ -122,7 +122,7 @@ class ThouchBarBoxTopBox extends Component {
     
     audio._stop(()=>{
       //初始化消息
-      let message = createResourceMessageObj('audeo','private',[{LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
+      let message = createResourceMessageObj('audeo','private',[{FileType:'image',LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
       //更新chatRecordStore
       im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
