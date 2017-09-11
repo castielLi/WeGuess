@@ -41,7 +41,6 @@ class AutoExpandingTextInput extends Component {
   _onSubmitEditing(){
     if(this.state.isLock) return;
     this.state.isLock = true;
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     //
     if(this.state.data){
       //初始化消息
