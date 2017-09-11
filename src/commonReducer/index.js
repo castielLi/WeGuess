@@ -17,6 +17,19 @@ export default function chatRecordStore(state = initialState, action) {
                 ...state
             };
 
+        case 'UPDATE_MESSAGES_STATUS':
+            state.ChatRecord[action.client].forEach(function(itemArr,index,arr) {
+                if(itemArr.MSGID === action.MSGID){
+                    itemArr.status = action.status;
+                }
+            });
+
+        case 'UPDATE_MESSAGES_REMOTESOURCE':
+            state.ChatRecord[action.client].forEach(function(itemArr,index,arr) {
+                if(itemArr.MSGID === action.MSGID){
+                    itemArr.Resource[action.index].RemoteSource = action.RemoteSource;
+                }
+            });
         default:
             return state;
     }

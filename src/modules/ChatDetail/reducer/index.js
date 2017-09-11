@@ -3,8 +3,6 @@ const initialState = {
     isExpressionPage:false,
     isPlusPage:false,
     listScrollToEnd:false,
-    inputHeight:0,
-    sendMessage:{}
 };
 export default function thouchBarStore(state = initialState,action){
 	 switch (action.type) {
