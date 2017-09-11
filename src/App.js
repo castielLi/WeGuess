@@ -48,7 +48,7 @@ export default function App() {
 
     //初始化IM
     let im = new IM();
-
+    //store.dispatch(Action.updateMessageRemoteSource(message.MSGID,item,result.url));
 
     // let sendMessage = setInterval(function(){
     //     let addMessage = new SendMessageDto();

@@ -22,6 +22,8 @@ class AutoExpandingTextInput extends Component {
     super(props); 
     this.state={
       data:'',
+      firstInputHeight:0,
+      isFirstInputHeight:true,
       inputHeight:0,
       isLock:false
     } 
@@ -43,25 +45,32 @@ class AutoExpandingTextInput extends Component {
     //
     if(this.state.data){
       //初始化消息
-      let message = createTextMessageObj(this.state.data,'private','1','2');
+      let message = createTextMessageObj(this.state.data,'private','','li');
       im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
         //更新chatRecordStore
-        this.props.addMessage('li',message,'private')
+        this.props.addMessage('li',message)
         this.state.isLock = false;
       });
      
       this.input.clear();
-      
+      this.setState({
+        inputHeight:this.state.firstInputHeight
+      })
+      this.props.changeThouchBarTopBoxHeight(this.state.firstInputHeight);
     }
     return
   }
   _onChange(event) {
-    console.log(event.nativeEvent.contentSize)
+
     let height = event.nativeEvent.contentSize.height;
-    console.log(height)
+    if(this.state.isFirstInputHeight){
+      this.state.firstInputHeight = height;
+      this.state.isFirstInputHeight = false;
+    } 
+
     //限制高度 
-    if(height>(30+26*5)) return;
+    if(height>(30+26*4)) return;
     this.setState({
       inputHeight:height
     })

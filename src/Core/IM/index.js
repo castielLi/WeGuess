@@ -9,8 +9,7 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import MessageStatus from "./dto/MessageStatus"
 import * as configs from './IMconfig'
 import MessageCommandEnum from './dto/MessageCommandEnum'
-
-
+import store from '../../store/index';
 
 let _socket = new Connect("1");
 
@@ -250,6 +249,8 @@ export default class IM {
                 console.log("上传成功" + result);
 
                 message.Resource[item].RemoteSource = result.url;
+                console.log(store)
+            
             }));
         }
 
@@ -262,7 +263,7 @@ export default class IM {
             currentObj.addMessageQueue(message);
 
         }).catch(function (values) {
-            console.log(values);
+            console.log('上传失败上传失败上传失败上传失败',values);
             callback(false,values);
         })
 

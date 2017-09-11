@@ -122,11 +122,13 @@ class ThouchBarBoxTopBox extends Component {
     
     audio._stop(()=>{
       //初始化消息
-      let message = createResourceMessageObj('audeo','private',[{LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'1','2');
-      let messageId = im.addRecMessage(message);
-      message.MSGID = messageId;
+      let message = createResourceMessageObj('audeo','private',[{LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
       //更新chatRecordStore
-      this.props.addMessage('li',message,'private')
+      im.addMessage(message,(status,messageId)=>{
+        message.MSGID = messageId;
+        //更新chatRecordStore
+        this.props.addMessage('li',message)
+      },[(tips)=>{console.log(tips)}]);
     });
     //发送
     this.setState({
@@ -176,7 +178,7 @@ class ThouchBarBoxTopBox extends Component {
 			)
 	}
   shouldComponentUpdate(nextProps,nextState){
-    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextState!==this.state){
+    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextState.thouchBarTopBoxHeight!==this.state.thouchBarTopBoxHeight||nextState.speakTxt!==this.state.speakTxt){
       return true
     }
     return false;
