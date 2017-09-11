@@ -10,7 +10,6 @@ import MessageStatus from "./dto/MessageStatus"
 import * as configs from './IMconfig'
 import MessageCommandEnum from './dto/MessageCommandEnum'
 import store from '../../store/index';
-import * as Action from '../../commonReducer/action';
 
 let _socket = new Connect("1");
 
