@@ -12,22 +12,22 @@ export default function chatRecordStore(state = initialState, action) {
             };
 
         case 'ADD_MESSAGE':
-            state.ChatRecord[action.client].push(action.message)
+            state.ChatRecord[action.client].push({status:loading,message:action.message})
             return {
                 ...state
             };
 
         case 'UPDATE_MESSAGES_STATUS':
             state.ChatRecord[action.client].forEach(function(itemArr,index,arr) {
-                if(itemArr.MSGID === action.MSGID){
-                    itemArr.status = action.status;
+                if(itemArr.message.MSGID === action.MSGID){
+                    itemArr.message.status = action.status;
                 }
             });
 
         case 'UPDATE_MESSAGES_REMOTESOURCE':
             state.ChatRecord[action.client].forEach(function(itemArr,index,arr) {
-                if(itemArr.MSGID === action.MSGID){
-                    itemArr.Resource[action.index].RemoteSource = action.RemoteSource;
+                if(itemArr.message.MSGID === action.MSGID){
+                    itemArr.message.Resource[action.index].RemoteSource = action.RemoteSource;
                 }
             });
         default:

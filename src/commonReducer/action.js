@@ -11,10 +11,10 @@ export function addMessage(client,message){
 		message
 	}
 }
-export function updateMessageStatus(client,MSGID,status){
+export function updateMessageStatus(MSGID,status){
 	return{
 		type:'UPDATE_MESSAGES_STATUS',
-		client,
+		client:InterceptionClientFromId(MSGID),
 		MSGID,
 		status
 	}
