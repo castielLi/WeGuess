@@ -42,7 +42,10 @@
     "rn-workers": "^0.1.7",
     "set-blocking": "^2.0.0",
     "whatwg-fetch": "^2.0.3",
-    "y18n": "^3.2.1"
+    "y18n": "^3.2.1",
+    "react-native-zoom-image": "^0.1.1",
+    "react-native-image-pan-zoom": "^2.0.6",
+    "react-native-image-zoom-viewer": "^2.0.10"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",

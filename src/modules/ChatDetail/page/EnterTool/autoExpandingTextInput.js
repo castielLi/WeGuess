@@ -10,10 +10,10 @@ import {bindActionCreators} from 'redux';
 import {
     connect
 } from 'react-redux';
-import * as Actions from '../reducer/action';
-import * as commonActions from '../../../Core/IM/redux/action';
+import * as Actions from '../../reducer/action';
+import * as commonActions from '../../../../Core/IM/redux/action';
 import {createTextMessageObj} from './createMessageObj';
-import IM from '../../../Core/IM/index';
+import IM from '../../../../Core/IM/index';
 var {height, width} = Dimensions.get('window');
 const im = new IM();
 
