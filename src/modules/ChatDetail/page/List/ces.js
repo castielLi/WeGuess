@@ -39,26 +39,25 @@ export default class Ces extends React.Component {
             isShow : props.isShow,
         }
     }
-
     componentWillReceiveProps(newProps){
         this.setState({
             uri : newProps.uri,
             isShow : newProps.isShow,
-        })
+        });
     }
 
-    // modalClose = ()=>{
-    //     if(timer){
-    //         alert(timer)
-    //         clearTimeout(timer);
-    //         return;
+    // shouldComponentUpdate(newProps,nextState){
+    //     if(newProps.isShow == this.props.isShow){
+    //         return false
     //     }
-    //     let timer = setTimeout(()=>{
-    //         this.setState({
-    //             isShow : false,
-    //         })
-    //     },500)
+    //     return true;
     // }
+
+    modalClose = ()=>{
+        this.setState({
+            isShow : false,
+        })
+    }
     render() {
         console.log(this.props)
         console.log(this.state.uri,this.state.isShow)
@@ -68,7 +67,7 @@ export default class Ces extends React.Component {
                     imageUrls={[{url:this.state.uri}]} // 照片路径
                     enableImageZoom={true} // 是否开启手势缩放
                     index={0} // 初始显示第几张
-                    //onClick={()=>this.modalClose()}
+                    onClick={()=>this.modalClose()}
                     //onChange={(index) => {}} // 图片切换时触发
                 />
             </Modal>
