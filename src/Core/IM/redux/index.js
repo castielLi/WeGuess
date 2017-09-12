@@ -3,35 +3,34 @@
 // {
 //     ChatRecord:{
 //         'li':[
-//             {
-//             status:'loading',//'loading',true,false
-//             message:{                 
-//                     MSGID:'',
-//                     Command:6,//
-//                     Resource:[{
-//                         FileType:0,//0:image、1:video、3:audio
-//                         LocalSource:'',//网络路径
-//                         RemoteSource:'',//本地路径
-//                     }],
-//             Data:{
-//                 IsAck :true;
-//                 IsOfflineSaved :false,
-//                 IsHistorySaved :false,
-//                 IsOfflineNotify :true,
-//                 LocalTime :"",
-//                 Command : 1,
-//                 //ServerTime :"",
-//                 Data :{
+//                 {status:'loading',
+//                 message:{                 
+//                         MSGID:'',
+//                         Command:6,//
+//                         Resource:[{
+//                             FileType:0,//0:image、1:video、3:audio
+//                             LocalSource:'',//网络路径
+//                             RemoteSource:'',//本地路径
+//                         }],
+//                 Data:{
+//                     IsAck :true;
+//                     IsOfflineSaved :false,
+//                     IsHistorySaved :false,
+//                     IsOfflineNotify :true,
+//                     LocalTime :"",
 //                     Command : 1,
-//                     Data :"",//如果非文本数据，则为空。如果是文本数据则为文本内容
-//                     Sender :"",
-//                     Receiver :"",
-//                 }
-//             },
-//             type:'',//text、image
-//             way:'',//privte、chatroom
-//             status:''//        
-//                 }
+//                     //ServerTime :"",
+//                     Data :{
+//                         Command : 1,
+//                         Data :"",//如果非文本数据，则为空。如果是文本数据则为文本内容
+//                         Sender :"",
+//                         Receiver :"",
+//                     }
+//                 },
+//                 type:'',//text、image
+//                 way:'',//privte、chatroom
+//                 status:''//        
+//                  }
 //             }
 //         ]
 //     }

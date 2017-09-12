@@ -37,7 +37,7 @@ class AutoExpandingTextInput extends Component {
       data
     })
   }
-  //multiline设为true，每次提交_onSubmitEditing会执行两次
+  //0.45.1 multiline设为true，每次提交_onSubmitEditing会执行两次
   _onSubmitEditing(){
     if(this.state.isLock) return;
     this.state.isLock = true;
@@ -89,7 +89,7 @@ class AutoExpandingTextInput extends Component {
        underlineColorAndroid = {'transparent'}  
        multiline={true}
        onChange={this._onChange}  
-       //onContentSizeChange={this._onChange}
+       //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可以
        style={[styles.textInputStyle,{height:Math.max(40,this.state.inputHeight),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
        >  
       </TextInput>  

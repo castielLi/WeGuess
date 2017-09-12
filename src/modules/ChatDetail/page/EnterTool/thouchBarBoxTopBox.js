@@ -8,7 +8,8 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  PixelRatio
 } from 'react-native';
 import {
     connect
@@ -24,6 +25,8 @@ import * as commonActions from '../../../../Core/IM/redux/action';
 import {createResourceMessageObj} from './createMessageObj';
 import IM from '../../../../Core/IM/index';
 
+const ptToPx = pt=>PixelRatio.getPixelSizeForLayoutSize(pt);
+const pxToPt = px=>PixelRatio.roundToNearestPixel(px);
 const im = new IM();
 var {height, width} = Dimensions.get('window');
 var audio;
@@ -81,28 +84,28 @@ class ThouchBarBoxTopBox extends Component {
   renderVoiceButton(){
     if(this.props.thouchBarStore.isRecordPage){
       return(
-        <Icon name="keyboard-o" size={30} color="#aaa" />
+        <Icon name="keyboard-o" size={20} color="#aaa" />
         )
     }else{
       return(
-        <Icon name="feed" size={30} color="#aaa" />
+        <Icon name="feed" size={20} color="#aaa" />
         )
     }
   }
   rendersmileButton(){
     if(this.props.thouchBarStore.isExpressionPage){
       return(
-        <Icon name="keyboard-o" size={30} color="#aaa" />
+        <Icon name="keyboard-o" size={20} color="#aaa" />
         )
     }else{
       return(
-        <Icon name="smile-o" size={30} color="#aaa" />
+        <Icon name="smile-o" size={20} color="#aaa" />
         )
     }
   }
   renderPlusButton(){
     return(
-      <Icon name="plus" size={30} color="#aaa" />
+      <Icon name="plus" size={20} color="#aaa" />
       )
   }
   _onPressIn(){
@@ -205,24 +208,24 @@ class ThouchBarBoxTopBox extends Component {
   },
   button:{
     position:'absolute',
-    height:40,
-    width:40,
-    borderWidth:1,
+    height:pxToPt(30),
+    width:pxToPt(30),
+    borderWidth:pxToPt(1),
     borderColor:'#575757',
-    borderRadius:20,
+    borderRadius:pxToPt(20),
     justifyContent:'center',
     alignItems:'center'
   },
   voiceButton:{
-    bottom:10,
+    bottom:15,
     left:5
   },
   smileButton:{
-    bottom:10,
+    bottom:15,
     right:60
   },
   plusButton:{
-    bottom:10,
+    bottom:15,
     right:5
   },
   speakBox:{
