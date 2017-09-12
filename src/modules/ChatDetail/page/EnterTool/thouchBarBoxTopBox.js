@@ -230,13 +230,13 @@ class ThouchBarBoxTopBox extends Component {
   },
   speakBox:{
     position:'absolute',
-    height:40,
+    height:pxToPt(40),
     width:width-180, 
     left:60,
     top:10,
     borderRadius:10,
     borderColor:'#ccc',
-    borderWidth:1, 
+    borderWidth:pxToPt(1), 
     justifyContent:'center',
   },
   speakTxt:{
