@@ -26,7 +26,7 @@ import SendMessageBodyDto from './Core/IM/dto/SendMessageBodyDto'
 import SendMessageDto from './Core/IM/dto/SendMessageDto'
 import messageBodyChatDto from './Core/IM/dto/messageBodyChatDto'
 
-
+import * as ActionForChatRecordStore from './Core/IM/redux/action'
 
 
 export default function App() {
@@ -48,6 +48,18 @@ export default function App() {
 
     //初始化IM
     let im = new IM();
+    //改变消息状态 {state:这里变化,message:{}}
+    let handleMessageResult = function(status,MSGID){
+       store.dispatch(ActionForChatRecordStore.updateMessageStatus(status,MSGID))
+    }
+    //改变消息数据 {state: ,message:{这里变化}}
+    let handleMessageChange = function(message){
+       store.dispatch(ActionForChatRecordStore.updateMessage(message))
+    }
+
+    im.connectIM(handleMessageResult,handleMessageChange)
+
+
     //store.dispatch(Action.updateMessageRemoteSource(message.MSGID,item,result.url));
 
     // let sendMessage = setInterval(function(){
