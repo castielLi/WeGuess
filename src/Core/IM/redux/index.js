@@ -37,7 +37,8 @@
 // }
 const initialState = {
     ChatRecord: {
-        'li': []
+        'li': [],
+        '2':[]
     }
 }
 export default function chatRecordStore(state = initialState, action) {

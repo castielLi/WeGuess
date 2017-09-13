@@ -92,7 +92,8 @@ class AutoExpandingTextInput extends Component {
        blurOnSubmit = {false}
        underlineColorAndroid = {'transparent'}  
        multiline={true}
-       onChange={this._onChange}  
+       onChange={this._onChange}
+       value={this.state.data}  
        //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可以
        style={[styles.textInputStyle,{height:Math.max(pxToPt(40),pxToPt(this.state.inputHeight)),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
        >  
@@ -103,7 +104,15 @@ class AutoExpandingTextInput extends Component {
    
     //传递TextInput组件对象到父组件，父组件可以调用子组件方法
     this.props.getInputObject(this.input);
-  }  
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.emojiText){
+      alert(nextProps.emojiText)
+      this.setState({
+        data:this.state.data+nextProps.emojiText
+      })
+    }
+  }
 }  
   
 const styles = StyleSheet.create({  

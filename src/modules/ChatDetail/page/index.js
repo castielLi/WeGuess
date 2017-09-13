@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text,StyleSheet,View ,TextInput,TouchableOpacity} from 'react-native';
+import { Text,StyleSheet,View ,TextInput,TouchableOpacity,KeyboardAvoidingView,Platform} from 'react-native';
 import NavigationTopBar from '../../../Core/Component/NavigationBar/index'
 import ContainerComponent from '../../../Core/Component/ContainerComponent'
 import ThouchBar from './EnterTool/thouchBar';
@@ -32,15 +32,16 @@ export default class ChatDetail extends ContainerComponent {
 	}
 
   render() {
+    const MyView = Platform.OS === 'ios'?KeyboardAvoidingView:View;
     return (
-    	<View style={styles.container}>
+    	<MyView style={styles.container} behavior='padding'>
     		<NavigationTopBar leftButton={this._leftButton} title={this._title} />
             {/*<View style={{flex:1,backgroundColor:'red'}}>*/}
                 {/*<Text>List</Text>*/}
             {/*</View>*/}
             <Chat ref={e => this.chat = e}/>
     		<ThouchBar></ThouchBar>
-    	</View>
+    	</MyView>
       
     );
   }

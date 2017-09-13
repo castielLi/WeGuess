@@ -4,9 +4,7 @@
 
 
 export default MessageStatus = {
-    PrepareToUpload : "PrepareToUpload",
-    PrepareToSend : "PrepareToSend",
-    WaitAck :"WaitAck",
+    WaitOpreator :"WaitOpreator",
     SendSuccess : "SendSuccess",
     SendFailed :"SendFailed"
 }

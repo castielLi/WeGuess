@@ -41,6 +41,7 @@ class ThouchBarBoxBottomBox extends Component {
     this.useCamera = this.useCamera.bind(this);
     this.useLocal = this.useLocal.bind(this);
     this.imagePikerCallBack = this.imagePikerCallBack.bind(this);
+    this.onPressEmoji = this.onPressEmoji.bind(this);
   }
   
 imagePikerCallBack(response){
@@ -76,6 +77,9 @@ useCamera(){
 useLocal(){
   ImagePicker.launchImageLibrary({},this.imagePikerCallBack);
 }  
+onPressEmoji(emojiText){
+  this.props.setEmoji(emojiText)
+}
 render(){
    let {isExpressionPage,isPlusPage} = this.props.thouchBarStore;
     if(isExpressionPage){
@@ -83,7 +87,7 @@ render(){
           <View style={styles.ThouchBarBoxBottomBox}>
           <Swiper style={styles.wrapper} showsButtons={false} activeDotColor={'#434343'} loop={false} >
              <View style={styles.swiperSlide}>
-              <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
+              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[呲牙]')}>
                 <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={()=>{alert('表情')}}>
