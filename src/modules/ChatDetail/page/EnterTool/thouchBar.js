@@ -16,14 +16,23 @@ import ThouchBarBoxBottomBox from './thouchBarBoxBottomBox';
 
 export default class ThouchBar extends Component {
   constructor(props) {  
-    super(props);  
+    super(props);
+    this.state = {
+      emojiText:''
+    }  
+    this.setEmoji = this.setEmoji.bind(this);
   }  
 
+  setEmoji(emojiText){
+    this.setState({
+      emojiText
+    })
+  }
   render() {
     return (
       <View style={styles.thouchBarBox}>
-        <ThouchBarBoxTopBox ></ThouchBarBoxTopBox>
-        <ThouchBarBoxBottomBox ></ThouchBarBoxBottomBox>
+        <ThouchBarBoxTopBox emojiText={this.state.emojiText}></ThouchBarBoxTopBox>
+        <ThouchBarBoxBottomBox setEmoji={this.setEmoji}></ThouchBarBoxBottomBox>
       </View>
     );
   }

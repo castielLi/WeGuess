@@ -144,7 +144,7 @@ class ThouchBarBoxTopBox extends Component {
         <TouchableHighlight style={[styles.speakBox,{left:this.props.thouchBarStore.isRecordPage?60:-999}]} underlayColor={'#bbb'} activeOpacity={0.5} onPressIn={this._onPressIn} onPressOut={this._onPressOut}>
            <Text style={styles.speakTxt}>{this.state.speakTxt}</Text>
         </TouchableHighlight>
-        <AutoExpandingTextInput getInputObject={this.getInputObject} changeThouchBarTopBoxHeight={this.changeThouchBarTopBoxHeight}></AutoExpandingTextInput>
+        <AutoExpandingTextInput getInputObject={this.getInputObject} changeThouchBarTopBoxHeight={this.changeThouchBarTopBoxHeight} emojiText={this.props.emojiText}></AutoExpandingTextInput>
       </View>
       )
   }

@@ -77,7 +77,6 @@ class Chat extends Component {
     }
 
     componentWillReceiveProps(newProps){
-        console.log('88888888888888888888888888888888888888888888888888888888888888888888888888888')
         // let newData = newProps.chatRecordStore.ChatRecord.li;
         // console.log(newData,11111111111111111111111111111111111)
         // this.data = newData;
@@ -89,9 +88,8 @@ class Chat extends Component {
     }
 
     componentWillMount() {
-        //this.fetchData();
+        // this.fetchData();
         // let {chatRecordStore} = this.props;
-        // console.log(chatRecordStore,11111111111111111111111111111111111)
         // let newData = chatRecordStore.ChatRecord.li;
         // this.data = newData;
         // this.data2 = this.prepareMessages(newData.concat().reverse());
