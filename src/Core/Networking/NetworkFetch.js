@@ -39,25 +39,6 @@ function promiseRequest(requestURL,requestObject,callback){
     })
 }
 
-function promiseDownload(requestURL,callback){
-
-    let promise = Promise.race([
-        //发送请求
-        fetch(requestURL)
-        ,
-        //请求超时
-        new Promise(function (resolve, reject) {
-            setTimeout(() => reject(new Error('request timeout')), config.timeOut)
-        })
-    ])
-    promise.then(response =>{
-        callback(response,null)
-    })
-    promise.catch(error => {
-        callback(null,error)
-    })
-}
-
 
 export function httpRequestGET(requestURL,headers={},callback){
     let requestObject = initRequestObject(headers,"GET",{},callback)
@@ -67,8 +48,4 @@ export function httpRequestGET(requestURL,headers={},callback){
 export function httpRequestPOST(requestURL,params,headers={},callback){
     let requestObject= initRequestObject(headers,"POST",params,callback)
     promiseRequest(requestURL,requestObject,callback);
-}
-
-export function httpRequestDownload(requestURL,callback){
-    promiseDownload(requestURL,callback);
 }

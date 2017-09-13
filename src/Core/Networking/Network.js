@@ -5,6 +5,7 @@
 // import  * as methodsAxios from './NetworkAxios'
 import  * as methodsFetch from './NetworkFetch'
 import  * as commons from '../Helper/index'
+import RNFS from 'react-native-fs';
 
 let __instance = (function () {
   let instance;
@@ -100,27 +101,14 @@ export default class netWorking {
   }
 
   methodDownload(requestURL,callback){
-      let promise = new Promise(function(res,rej){
-          gettingFrameworkMethod().httpRequestPOST(requestURL,params,networkConfig,function(result,error){
-
-              if(result!= null && result.status == 200){
-                  if(NeedAuth){
-                      AuthToken = result.response.headers["Auth_Token"];
-                  }
-                  res(result.json());
-              }else {
-                  rej(result);
-              }
-          })
-
-      }).then(
-          (result)=>{
-              callback(result);
-          },
-          (result)=>{
-              console.log(result)
-          }
-      )
+      RNFS.downloadFile({
+          fromUrl: requestURL,
+          toFile: `${RNFS.DocumentDirectoryPath}/hello.png`,
+      }).promise.then((result) => {
+          callback(result);
+      },(error)=>{
+          console.log(error);
+      });
   }
 }
 
