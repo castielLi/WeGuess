@@ -213,24 +213,19 @@ const styles = StyleSheet.create({
     borderTopWidth:1
   },
   wrapper:{
-    margin:10
+    flex:1,
   },
   swiperSlide:{
     flex:1,
     flexWrap:'wrap',
     flexDirection:'row',
   },
-  img:{
-    height:pxToPt(30),
-    width:pxToPt(30),
-    resizeMode:'stretch',
-    margin:10
-  },
   plusItemBox:{
-    marginLeft:30,//(width-20-pxToPt(52*4))/8
-    marginBottom:0,
-    marginTop:5,
-    alignItems:'center'
+    width:pxToPt(60),
+    height:pxToPt(70),
+    marginTop:20,
+    marginHorizontal:(width-4*pxToPt(60))/8,
+    alignItems:'center',
   },
   plusItemImgBox:{
     height:pxToPt(50),
@@ -240,6 +235,12 @@ const styles = StyleSheet.create({
     borderWidth:pxToPt(1), 
     justifyContent:'center',
     alignItems:'center'
+  },
+  img:{
+    height:pxToPt(25),
+    width:pxToPt(25),
+    resizeMode:'stretch',
+    margin:10
   },
   plusItemTit:{
     fontSize:12,

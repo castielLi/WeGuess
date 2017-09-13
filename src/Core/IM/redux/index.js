@@ -52,11 +52,9 @@ export default function chatRecordStore(state = initialState, action) {
         case 'ADD_MESSAGE':
             //若超过50条，删除最旧的一条消息
             state.ChatRecord[action.client].length>=50&&state.ChatRecord[action.client].shift();
-            state.ChatRecord[action.client].push({status:'loading',message:action.message})
-            return {
-                ...state
-            };
-
+            state.ChatRecord[action.client].push({status:'loading',message:action.message});
+            state.ChatRecord[action.client] = state.ChatRecord[action.client].concat([]);
+            return state;
         case 'UPDATE_MESSAGES_STATUS':
             state.ChatRecord[action.client].forEach(function(itemArr,index,arr) {
                 if(itemArr.message.MSGID === action.MSGID){

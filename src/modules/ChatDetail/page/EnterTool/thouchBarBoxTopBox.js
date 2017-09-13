@@ -125,7 +125,7 @@ class ThouchBarBoxTopBox extends Component {
     
     audio._stop(()=>{
       //初始化消息
-      let message = createResourceMessageObj('audeo','private',[{FileType:'image',LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
+      let message = createResourceMessageObj('audeo','private',[{FileType:2,LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
       //更新chatRecordStore
       im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
@@ -166,7 +166,7 @@ class ThouchBarBoxTopBox extends Component {
   }
 	render(){
 		return(
-			<View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?62:Math.max(62,this.state.thouchBarTopBoxHeight+20)}]}>
+			<View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?pxToPt(62):Math.max(pxToPt(62),pxToPt(this.state.thouchBarTopBoxHeight+20))}]}>
 	          {this.renderEnterBox()}
 	          <TouchableHighlight style={[styles.button,styles.voiceButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toRecord}>
 	            {this.renderVoiceButton()}
@@ -197,7 +197,7 @@ class ThouchBarBoxTopBox extends Component {
     backgroundColor: '#eee',
   },
   thouchBarBoxTop:{
-    height:62,//62
+    height:pxToPt(62),//62
   },
   inputBox:{
     width:width-170,
@@ -217,26 +217,26 @@ class ThouchBarBoxTopBox extends Component {
     alignItems:'center'
   },
   voiceButton:{
-    bottom:15,
+    bottom:pxToPt(15),
     left:5
   },
   smileButton:{
-    bottom:15,
+    bottom:pxToPt(15),
     right:60
   },
   plusButton:{
-    bottom:15,
+    bottom:pxToPt(15),
     right:5
   },
   speakBox:{
     position:'absolute',
-    height:40,
+    height:pxToPt(40),
     width:width-180, 
     left:60,
     top:10,
     borderRadius:10,
     borderColor:'#ccc',
-    borderWidth:1, 
+    borderWidth:pxToPt(1), 
     justifyContent:'center',
   },
   speakTxt:{
