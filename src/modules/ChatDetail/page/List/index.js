@@ -18,6 +18,7 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as commonActions from '../../../../Core/IM/redux/action'
+import ChatMessage from './ChatMessage'
 
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Sound from 'react-native-sound';
@@ -58,9 +59,6 @@ class Chat extends Component {
         this.data2 = [];
         this.footerY = null;
         this.listHeight = null;
-        this.changeType = 1;
-
-
 
         this.downloadFile = this.downloadFile.bind(this);
 
@@ -76,13 +74,12 @@ class Chat extends Component {
             imageUri : '',
         };
 
-        this.stopSoundObj = null;//记录上一个录音对象
     }
 
     componentWillReceiveProps(newProps){
-        console.log(newProps)
+        console.log(newProps,11111111111111111111111111111111111)
         let newData = newProps.chatRecordStore.ChatRecord.li;
-        console.log(newData[0])
+        console.log(newData,11111111111111111111111111111111111)
         this.data = newData;
         this.data2 = this.prepareMessages(newData.concat().reverse());
         this.setState({
@@ -94,6 +91,7 @@ class Chat extends Component {
     componentWillMount() {
         //this.fetchData();
         let {chatRecordStore} = this.props;
+        console.log(chatRecordStore,11111111111111111111111111111111111)
         let newData = chatRecordStore.ChatRecord.li;
         this.data = newData;
         this.data2 = this.prepareMessages(newData.concat().reverse());
@@ -106,11 +104,11 @@ class Chat extends Component {
     prepareMessages(messages) {
         //console.log(messages)
         return {
-            keys: messages.map(m => m._id),
+            keys: messages.map(m => m.message.MSGID),
             blob: messages.reduce((o, m, i) => { //(previousValue, currentValue, currentIndex, array1)
                 //console.log(o,m,i)
                 //console.log(o)
-                o[m._id] = {
+                o[m.message.MSGID] = {
                     ...m,
                 };
                 //console.log(o)
@@ -134,38 +132,6 @@ class Chat extends Component {
         }
         return tmp
     }
-
-    //播放音频
-    playSound = (testInfo) => {
-        let one = new Date();
-        //console.log('playSound1',testInfo,one)
-        this.stopSound(this.stopSoundObj)
-        const callback = (error, sound) => {
-            console.log('playSound2')
-            if(this.stopSoundObj && sound._filename == this.stopSoundObj._filename){
-                this.stopSoundObj = null;
-                return;
-            }
-            if (error) {
-                Alert.alert('error', error.message);
-            }
-            this.stopSoundObj = sound;
-            //console.log(new Date() - one)
-            sound.play(() => {
-                this.stopSoundObj = null;
-                // Release when it's done so we're not using up resources
-                sound.release();
-            });
-        };
-        const sound = new Sound(testInfo,'', error => callback(error, sound));
-    }
-
-    stopSound = (Sound) => {
-        if (!Sound) {
-            return;
-        }
-        Sound.stop().release();
-    };
 
     downloadFile() {
         // 图片
@@ -218,21 +184,10 @@ class Chat extends Component {
 
     renderRow = (row,sid,rowid) => {
         console.log('执行了renderRow');
-        //console.log(this.state.data.length);
-        //console.log(row);
-        if(row.who == 'daimajia'){
+        if(row.message.Data.Data.Sender == ''){
             return(
                 <View style={styles.itemViewRight}>
-                    <View style={styles.bubbleViewRight}>
-                        <Text style={styles.contentText}>{this.ToCDB('sdfdsasd sad算daggafdg电费sdasdasd'+row.who)}</Text>
-                    </View>
-                    <View style={styles.bubbleViewRight}>
-                        <TouchableOpacity onPress={()=>this.playSound(this.state.downloadDest)}>
-                            <Text>播放</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {/*<Image source={{uri:row.url}} style={styles.userImage}/>*/}
-                    {/*<Image source={require('./me.jpg')} style={styles.userImage}/>*/}
+                    <ChatMessage rowData={row}/>
                     <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fj78mpyvubj20u011idjg.jpg'}} style={styles.userImage}/>
                 </View>
             )
@@ -240,23 +195,8 @@ class Chat extends Component {
         else{
             return(
                 <View style={styles.itemView}>
-                    {/*<Image source={{uri:row.url}} style={styles.userImage}/>*/}
-                    {/*<Image source={require('./other.jpg')} style={styles.userImage}/>*/}
                     <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fj3w0emfcbj20u011iabm.jpg'}} style={styles.userImage}/>
-                    {/*<View style={styles.bubbleView}>*/}
-                        {/*<Text style={styles.contentText}>{this.ToCDB('阿萨阿达1261651 sdfdsasd sad算电费sd asdasd'+row.who)}</Text>*/}
-                    {/*</View>*/}
-                    <View style={{
-                        alignSelf:'flex-start',
-                        marginLeft:10,
-                        backgroundColor: '#fff',
-                        maxWidth:width-150,
-                        justifyContent:'center',
-                        borderRadius:5}}>
-                        <TouchableOpacity onPress={()=> this.gaibian()}>
-                            <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fivohbbwlqj20u011idmx.jpg'}} style={{width:100,height:100}}/>
-                        </TouchableOpacity>
-                    </View>
+                    <ChatMessage rowData={row}/>
                 </View>
             )
         }
@@ -369,10 +309,11 @@ class Chat extends Component {
     //界面变化触发
     _onListViewLayout = (event) =>{
         // console.log(_listHeight)
-
         const {showInvertible}=this.state
         if(!showInvertible){
-            _MaxListHeight = event.nativeEvent.layout.height;
+            if(!_MaxListHeight){
+                _MaxListHeight = event.nativeEvent.layout.height;
+            }
 
             ListLayout = event.nativeEvent.layout.height!==_listHeight;
             _listHeight = event.nativeEvent.layout.height;
