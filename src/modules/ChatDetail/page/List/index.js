@@ -104,7 +104,7 @@ class Chat extends Component {
         //this.fetchData();
         let {chatRecordStore} = this.props;
         console.log(chatRecordStore,11111111111111111111111111111111111)
-        //let newData = chatRecordStore.ChatRecord.li;
+        // let newData = chatRecordStore.ChatRecord.li;
         this.data = chatRecordStore;
         this.data2 = this.prepareMessages(chatRecordStore.concat().reverse());
         this.setState({
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-    chatRecordStore: state.chatRecordStore.ChatRecord.li
+    chatRecordStore: state.chatRecordStore.ChatRecord['li']
 });
 
 const mapDispatchToProps = dispatch => ({
