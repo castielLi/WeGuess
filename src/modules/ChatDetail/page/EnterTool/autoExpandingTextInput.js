@@ -38,9 +38,10 @@ class AutoExpandingTextInput extends Component {
   }  
   
   _onChangeText(data){
-    this.setState({
-      data
-    })
+   // this.state.data = data
+   this.setState({
+    data
+   })
   }
   //0.45.1 multiline设为true，每次提交_onSubmitEditing会执行两次
   _onSubmitEditing(){
@@ -92,6 +93,8 @@ class AutoExpandingTextInput extends Component {
        blurOnSubmit = {false}
        underlineColorAndroid = {'transparent'}  
        multiline={true}
+       returnKeyType={'send'}
+       returnKeyLabel={'发送'}
        onChange={this._onChange}
        value={this.state.data}  
        //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可以
@@ -106,8 +109,8 @@ class AutoExpandingTextInput extends Component {
     this.props.getInputObject(this.input);
   }
   componentWillReceiveProps(nextProps){
-    if(nextProps.emojiText){
-      alert(nextProps.emojiText)
+    console.log(nextProps)
+    if(nextProps.emojiText&&nextProps.emojiId!==this.props.emojiId){    
       this.setState({
         data:this.state.data+nextProps.emojiText
       })

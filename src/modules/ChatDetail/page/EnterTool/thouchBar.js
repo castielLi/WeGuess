@@ -18,20 +18,22 @@ export default class ThouchBar extends Component {
   constructor(props) {  
     super(props);
     this.state = {
-      emojiText:''
+      emojiText:'',
+      emojiId:''
     }  
     this.setEmoji = this.setEmoji.bind(this);
   }  
 
-  setEmoji(emojiText){
+  setEmoji(emojiText,emojiId){
     this.setState({
-      emojiText
+      emojiText,
+      emojiId
     })
   }
   render() {
     return (
       <View style={styles.thouchBarBox}>
-        <ThouchBarBoxTopBox emojiText={this.state.emojiText}></ThouchBarBoxTopBox>
+        <ThouchBarBoxTopBox emojiText={this.state.emojiText} emojiId={this.state.emojiId}></ThouchBarBoxTopBox>
         <ThouchBarBoxBottomBox setEmoji={this.setEmoji}></ThouchBarBoxBottomBox>
       </View>
     );

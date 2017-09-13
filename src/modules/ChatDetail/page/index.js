@@ -35,7 +35,7 @@ export default class ChatDetail extends ContainerComponent {
     return (
     	<MyView style={styles.container} behavior='padding'>
     		<NavigationTopBar leftButton={this._leftButton} title={this._title} />
-            <Chat ref={e => this.chat = e.getWrappedInstance()}/>
+            <Chat/>
             <ThouchBar></ThouchBar>
     	</MyView>
       
