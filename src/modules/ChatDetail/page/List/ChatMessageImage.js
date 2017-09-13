@@ -18,6 +18,17 @@ export default class ChatMessageImage extends Component {
     constructor(props){
         super(props)
 
+        // this.Size = {
+        //     width : 0,
+        //     height: 0,
+        // }
+
+        this.state = {
+            Size: {
+                width: 0,
+                height: 0,
+            }
+        }
     }
 
     static defaultProps = {
@@ -26,17 +37,34 @@ export default class ChatMessageImage extends Component {
     static propTypes = {
     };
 
+    getImageSize = (uri)=>{
+        Image.getSize(uri, (width, height) => {
+            // this.Size = {width,height}
+            this.setState({
+                Size : {width,height}
+            })
+            //alert(this.Size.width+"22")
+        })
+    }
+
     render() {
         let {data} = this.props;
         let {Sender,Receiver} = data.message.Data.Data;
-        let {LocalSource,RemoteSource} = data.message.Resource;
+        let {LocalSource,RemoteSource} = data.message.Resource[0];
+        let uri = LocalSource.substr(7);
+
+        // this.Size = Image.getSize(LocalSource, (width, height) => {
+        //     return {width,height}
+        // })
+        this.getImageSize(LocalSource || RemoteSource)
+        //alert(this.Size.width+"11")
         if(!Sender){
             return(
                 <View style={styles.bubbleViewRight}>
 
                         <Image
-                            source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fivohbbwlqj20u011idmx.jpg'}}
-                            style={styles.imageStyle}
+                            source={{uri:"content"+uri}}
+                            style={[this.state.Size,styles.imageStyle]}
                         />
 
                 </View>
@@ -47,8 +75,8 @@ export default class ChatMessageImage extends Component {
                 <View style={styles.bubbleView}>
 
                         <Image
-                            source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fj78mpyvubj20u011idjg.jpg'}}
-                            style={styles.imageStyle}
+                            source={{uri:"content"+uri}}
+                            style={[this.state.Size,styles.imageStyle]}
                         />
 
                 </View>
@@ -77,7 +105,5 @@ const styles = StyleSheet.create({
         borderRadius:5
     },
     imageStyle:{
-        width:60,
-        height:60,
     }
 });

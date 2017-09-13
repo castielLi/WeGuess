@@ -144,7 +144,7 @@ class ThouchBarBoxTopBox extends Component {
         <TouchableHighlight style={[styles.speakBox,{left:this.props.thouchBarStore.isRecordPage?60:-999}]} underlayColor={'#bbb'} activeOpacity={0.5} onPressIn={this._onPressIn} onPressOut={this._onPressOut}>
            <Text style={styles.speakTxt}>{this.state.speakTxt}</Text>
         </TouchableHighlight>
-        <AutoExpandingTextInput getInputObject={this.getInputObject} changeThouchBarTopBoxHeight={this.changeThouchBarTopBoxHeight} emojiText={this.props.emojiText}></AutoExpandingTextInput>
+        <AutoExpandingTextInput getInputObject={this.getInputObject} changeThouchBarTopBoxHeight={this.changeThouchBarTopBoxHeight} emojiText={this.props.emojiText} emojiId={this.props.emojiId}></AutoExpandingTextInput>
       </View>
       )
   }
@@ -181,7 +181,8 @@ class ThouchBarBoxTopBox extends Component {
 			)
 	}
   shouldComponentUpdate(nextProps,nextState){
-    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextState.thouchBarTopBoxHeight!==this.state.thouchBarTopBoxHeight||nextState.speakTxt!==this.state.speakTxt){
+    //console.log(nextProps.emojiId,this.props.emojiId)
+    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextProps.emojiText!==this.props.emojiText||nextProps.emojiId!==this.props.emojiId||nextState.thouchBarTopBoxHeight!==this.state.thouchBarTopBoxHeight||nextState.speakTxt!==this.state.speakTxt){
       return true
     }
     return false;

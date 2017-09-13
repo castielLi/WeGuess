@@ -28,15 +28,16 @@ export default class ChatDetail extends ContainerComponent {
 
 	//控制子组件Chat中的消息滚动到底部
 	goBottom(){
-        this.chat.scrollToEnd()
+        this.chat.getWrappedInstance().scrollToEnd()
 	}
+
   render() {
     const MyView = Platform.OS === 'ios'?KeyboardAvoidingView:View;
     return (
     	<MyView style={styles.container} behavior='padding'>
     		<NavigationTopBar leftButton={this._leftButton} title={this._title} />
-            <Chat/>
-            <ThouchBar></ThouchBar>
+            <Chat ref={e => this.chat = e}/>
+    		<ThouchBar></ThouchBar>
     	</MyView>
       
     );
