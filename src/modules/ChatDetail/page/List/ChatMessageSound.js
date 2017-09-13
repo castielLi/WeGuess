@@ -55,10 +55,12 @@ export default class ChatMessageSound extends Component {
 
     render() {
         let {data} = this.props;
-        if(isMe){
+        let {Sender,Receiver} = data.message.Data.Data;
+        let {LocalSource,RemoteSource} = data.message.Resource;
+        if(!Sender){
             return(
                 <View style={styles.bubbleViewRight}>
-                    <TouchableOpacity onPress={()=>this.playSound(data.path)}>
+                    <TouchableOpacity onPress={()=>this.playSound(RemoteSource)}>
                         <Text>播放</Text>
                     </TouchableOpacity>
                 </View>
@@ -67,7 +69,7 @@ export default class ChatMessageSound extends Component {
         else{
             return(
                 <View style={styles.bubbleView}>
-                    <TouchableOpacity onPress={()=>this.playSound(data.path)}>
+                    <TouchableOpacity onPress={()=>this.playSound(RemoteSource)}>
                         <Text>播放</Text>
                     </TouchableOpacity>
                 </View>

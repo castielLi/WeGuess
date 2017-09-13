@@ -4,7 +4,8 @@ import {
   Text,  
   TextInput,  
   View,
-  Dimensions
+  Dimensions,
+  PixelRatio
 } from 'react-native';  
 import {bindActionCreators} from 'redux';
 import {
@@ -14,6 +15,10 @@ import * as Actions from '../../reducer/action';
 import * as commonActions from '../../../../Core/IM/redux/action';
 import {createTextMessageObj} from './createMessageObj';
 import IM from '../../../../Core/IM/index';
+
+const ptToPx = pt=>PixelRatio.getPixelSizeForLayoutSize(pt);
+const pxToPt = px=>PixelRatio.roundToNearestPixel(px);
+
 var {height, width} = Dimensions.get('window');
 const im = new IM();
 
@@ -37,7 +42,7 @@ class AutoExpandingTextInput extends Component {
       data
     })
   }
-  //multiline设为true，每次提交_onSubmitEditing会执行两次
+  //0.45.1 multiline设为true，每次提交_onSubmitEditing会执行两次
   _onSubmitEditing(){
     if(this.state.isLock) return;
     this.state.isLock = true;
@@ -61,7 +66,6 @@ class AutoExpandingTextInput extends Component {
     return
   }
   _onChange(event) {
-
     let height = event.nativeEvent.contentSize.height;
     if(this.state.isFirstInputHeight){
       this.state.firstInputHeight = height;
@@ -89,8 +93,8 @@ class AutoExpandingTextInput extends Component {
        underlineColorAndroid = {'transparent'}  
        multiline={true}
        onChange={this._onChange}  
-       //onContentSizeChange={this._onChange}
-       style={[styles.textInputStyle,{height:Math.max(40,this.state.inputHeight),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
+       //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可以
+       style={[styles.textInputStyle,{height:Math.max(pxToPt(40),pxToPt(this.state.inputHeight)),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
        >  
       </TextInput>  
     );  
@@ -106,13 +110,13 @@ const styles = StyleSheet.create({
   textInputStyle:{ 
     position:'absolute',
     left:60,
-    top:10, 
+    top:pxToPt(10), 
     fontSize:20, 
     lineHeight:30, 
     width:width-180,  
     height:40,
     borderColor:'#ccc',
-    borderWidth:1,   
+    borderWidth:pxToPt(1),   
     backgroundColor:'#fff',  
     borderRadius:10,
     overflow:'hidden',

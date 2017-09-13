@@ -8,7 +8,8 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  PixelRatio
 } from 'react-native';
 import {
     connect
@@ -24,6 +25,8 @@ import * as commonActions from '../../../../Core/IM/redux/action';
 import {createResourceMessageObj} from './createMessageObj';
 import IM from '../../../../Core/IM/index';
 
+const ptToPx = pt=>PixelRatio.getPixelSizeForLayoutSize(pt);
+const pxToPt = px=>PixelRatio.roundToNearestPixel(px);
 const im = new IM();
 var {height, width} = Dimensions.get('window');
 var audio;
@@ -81,28 +84,28 @@ class ThouchBarBoxTopBox extends Component {
   renderVoiceButton(){
     if(this.props.thouchBarStore.isRecordPage){
       return(
-        <Icon name="keyboard-o" size={30} color="#aaa" />
+        <Icon name="keyboard-o" size={20} color="#aaa" />
         )
     }else{
       return(
-        <Icon name="feed" size={30} color="#aaa" />
+        <Icon name="feed" size={20} color="#aaa" />
         )
     }
   }
   rendersmileButton(){
     if(this.props.thouchBarStore.isExpressionPage){
       return(
-        <Icon name="keyboard-o" size={30} color="#aaa" />
+        <Icon name="keyboard-o" size={20} color="#aaa" />
         )
     }else{
       return(
-        <Icon name="smile-o" size={30} color="#aaa" />
+        <Icon name="smile-o" size={20} color="#aaa" />
         )
     }
   }
   renderPlusButton(){
     return(
-      <Icon name="plus" size={30} color="#aaa" />
+      <Icon name="plus" size={20} color="#aaa" />
       )
   }
   _onPressIn(){
@@ -122,7 +125,7 @@ class ThouchBarBoxTopBox extends Component {
     
     audio._stop(()=>{
       //初始化消息
-      let message = createResourceMessageObj('audeo','private',[{FileType:'image',LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
+      let message = createResourceMessageObj('audeo','private',[{FileType:2,LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
       //更新chatRecordStore
       im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
@@ -163,7 +166,7 @@ class ThouchBarBoxTopBox extends Component {
   }
 	render(){
 		return(
-			<View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?62:Math.max(62,this.state.thouchBarTopBoxHeight+20)}]}>
+			<View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?pxToPt(62):Math.max(pxToPt(62),pxToPt(this.state.thouchBarTopBoxHeight+20))}]}>
 	          {this.renderEnterBox()}
 	          <TouchableHighlight style={[styles.button,styles.voiceButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toRecord}>
 	            {this.renderVoiceButton()}
@@ -194,7 +197,7 @@ class ThouchBarBoxTopBox extends Component {
     backgroundColor: '#eee',
   },
   thouchBarBoxTop:{
-    height:62,//62
+    height:pxToPt(62),//62
   },
   inputBox:{
     width:width-170,
@@ -205,35 +208,35 @@ class ThouchBarBoxTopBox extends Component {
   },
   button:{
     position:'absolute',
-    height:40,
-    width:40,
-    borderWidth:1,
+    height:pxToPt(30),
+    width:pxToPt(30),
+    borderWidth:pxToPt(1),
     borderColor:'#575757',
-    borderRadius:20,
+    borderRadius:pxToPt(20),
     justifyContent:'center',
     alignItems:'center'
   },
   voiceButton:{
-    bottom:10,
+    bottom:pxToPt(15),
     left:5
   },
   smileButton:{
-    bottom:10,
+    bottom:pxToPt(15),
     right:60
   },
   plusButton:{
-    bottom:10,
+    bottom:pxToPt(15),
     right:5
   },
   speakBox:{
     position:'absolute',
-    height:40,
+    height:pxToPt(40),
     width:width-180, 
     left:60,
     top:10,
     borderRadius:10,
     borderColor:'#ccc',
-    borderWidth:1, 
+    borderWidth:pxToPt(1), 
     justifyContent:'center',
   },
   speakTxt:{

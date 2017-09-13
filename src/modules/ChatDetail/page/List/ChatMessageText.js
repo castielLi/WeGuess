@@ -25,17 +25,18 @@ export default class ChatMessageText extends Component {
 
     render() {
         let {data} = this.props;
-        if(isMe){
+        let {Sender,Data,Receiver} = data.message.Data.Data;
+        if(!Sender){
             return(
                 <View style={styles.bubbleViewRight}>
-                    <Text style={styles.contentText}>{this.ToCDB('sdfdsasd sad算daggafdg电费sdasdasd'+data.who)}</Text>
+                    <Text style={styles.contentText}>{Data}</Text>
                 </View>
             )
         }
         else{
             return(
                 <View style={styles.bubbleView}>
-                    <Text style={styles.contentText}>{this.ToCDB('阿萨阿达1261651 sdfdsasd sad算电费sd asdasd'+data.who)}</Text>
+                    <Text style={styles.contentText}>{Data}</Text>
                 </View>
             )
         }

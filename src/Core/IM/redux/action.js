@@ -13,8 +13,9 @@ export function addMessage(client,message){
 		message
 	}
 }
+
 //修改某条消息的状态 {status:'修改该状态',message:{...}}
-export function updateMessageStatus(MSGID,status){
+export function updateMessageStatus(status,MSGID){
 	return{
 		type:'UPDATE_MESSAGES_STATUS',
 		client:InterceptionClientFromId(MSGID),
@@ -23,14 +24,12 @@ export function updateMessageStatus(MSGID,status){
 	}
 }
 //修改某条消息的网络路径
-export function updateMessageRemoteSource(MSGID,index,RemoteSource){
+export function updateMessage(message){
 	return{
-		type:'UPDATE_MESSAGES_REMOTESOURCE',
-		client:InterceptionClientFromId(MSGID),
-		MSGID,
-		index,
-		RemoteSource,
-
+		type:'UPDATE_MESSAGES',
+		message,
+		client:InterceptionClientFromId(message.MSGID),
+		MSGID:message.MSGID,
 	}
 }
 

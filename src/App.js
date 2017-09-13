@@ -26,7 +26,7 @@ import SendMessageBodyDto from './Core/IM/dto/SendMessageBodyDto'
 import SendMessageDto from './Core/IM/dto/SendMessageDto'
 import messageBodyChatDto from './Core/IM/dto/messageBodyChatDto'
 
-
+import * as ActionForChatRecordStore from './Core/IM/redux/action'
 
 
 export default function App() {
@@ -48,13 +48,13 @@ export default function App() {
 
     //初始化IM
     let im = new IM();
-
-    let handleMessageResult = function(success,message){
-       console.log("发送结果来了")
+    //改变消息状态 {state:这里变化,message:{}}
+    let handleMessageResult = function(status,MSGID){
+       store.dispatch(ActionForChatRecordStore.updateMessageStatus(status,MSGID))
     }
-
+    //改变消息数据 {state: ,message:{这里变化}}
     let handleMessageChange = function(message){
-       console.log("状态改变了");
+       store.dispatch(ActionForChatRecordStore.updateMessage(message))
     }
 
     im.connectIM(handleMessageResult,handleMessageChange)
@@ -62,34 +62,34 @@ export default function App() {
 
     //store.dispatch(Action.updateMessageRemoteSource(message.MSGID,item,result.url));
 
-    // let sendMessage = setInterval(function(){
-    //     let addMessage = new SendMessageDto();
-    //     let messageBody = new SendMessageBodyDto();
-    //     let messageData = new messageBodyChatDto();
-    //
-    //     messageData.Data = "hello world";
-    //     messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
-    //     messageData.Sender = "1";
-    //     messageData.Receiver = "2";
-    //
-    //     messageBody.LocalTime = new Date().getTime();
-    //     messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
-    //     messageBody.Data = messageData;
-    //
-    //
-    //     addMessage.Command = MessageCommandEnum.MSG_BODY;
-    //     addMessage.Data = messageBody;
-    //     addMessage.type = "text";
-    //     addMessage.way = "chatroom";
-    //
-    //     im.addMessage(addMessage);
-    //
-    //     // im.addRecMessage(addMessage);
-    // },2000)
-    //
-    // setInterval(function(){
-    //     clearInterval(sendMessage)
-    // },10000)
+    let sendMessage = setInterval(function(){
+        let addMessage = new SendMessageDto();
+        let messageBody = new SendMessageBodyDto();
+        let messageData = new messageBodyChatDto();
+
+        messageData.Data = "hello world";
+        messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
+        messageData.Sender = "1";
+        messageData.Receiver = "2";
+
+        messageBody.LocalTime = new Date().getTime();
+        messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
+        messageBody.Data = messageData;
+
+
+        addMessage.Command = MessageCommandEnum.MSG_BODY;
+        addMessage.Data = messageBody;
+        addMessage.type = "text";
+        addMessage.way = "chatroom";
+
+        im.addMessage(addMessage);
+
+        // im.addRecMessage(addMessage);
+    },2000)
+
+    setInterval(function(){
+        clearInterval(sendMessage)
+    },10000)
 
 
 

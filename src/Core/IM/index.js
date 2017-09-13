@@ -7,6 +7,7 @@ import * as methods from './Common'
 import * as storeSqlite from './StoreSqlite'
 import UUIDGenerator from 'react-native-uuid-generator';
 import MessageStatus from "./dto/MessageStatus"
+import SendStatus from './dto/SendStatus'
 import * as configs from './IMconfig'
 import MessageCommandEnum from './dto/MessageCommandEnum'
 
@@ -100,6 +101,9 @@ export default class IM {
         resourceQueueState = resourceQueueType.empty;
         this.beginHeartBeat();
         this.beginRunLoop();
+
+        //获取之前没有发送出去的消息重新加入消息队列
+        this.addAllUnsendMessageToSendQueue();
     }
 
     setNetworkStatus(netState) {
@@ -109,7 +113,11 @@ export default class IM {
     }
 
     stopIM(){
-        this.checkQueue(this.stopIMRunCycle,null);
+        this.checkQueue(this.stopIMRunCycle);
+    }
+
+    waitOneLoop(){
+
     }
 
     stopIMRunCycle(){
@@ -130,11 +138,6 @@ export default class IM {
 
                 if(netState != 'NONE' && netState != 'none'){
                     clearInterval(checkNetEnvironmentInterval);
-                    // if(sendMessageQueue.length == 0 && recieveMessageQueue.length == 0){
-                    //
-                    //     loopState = loopStateType.wait;
-                    // }else
-                    //     loopState = loopStateType.normal;
 
                     //todo:恢复网络了后要重新发送消息
 
@@ -151,8 +154,6 @@ export default class IM {
             networkStatus = networkStatuesType.normal;
         }
     }
-
-
 
 
     //检查send 和 rec队列执行回调
@@ -177,6 +178,16 @@ export default class IM {
         storeSqlite.deleteMessage(message,chatType,client);
     }
 
+
+    //获取当前所有未发出去的消息添加入消息队列
+    addAllUnsendMessageToSendQueue(){
+        storeSqlite.getAllCurrentSendMessage(function(currentSendMessages){
+            console.log(currentSendMessages);
+            sendMessageQueue = currentSendMessages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+        });
+    }
+
+
     //外部接口，添加消息
     addMessage(message,callback=function(success,content){},onprogess="undefined") {
 
@@ -192,22 +203,23 @@ export default class IM {
             message.MSGID = messageId;
             messageUUID = messageId;
 
+            //把消息存入消息sqlite中
+            message.status = MessageStatus.WaitOpreator;
+
             this.storeSendMessage(message);
+
+            //把消息存入发送队列sqlite中
+            storeSqlite.addMessageToSendSqlite(message);
 
 
             switch (message.type) {
                 case "text":
-
-                    message.status = MessageStatus.PrepareToSend;
-                    handleSqliteQueue.push(message)
 
                     this.addMessageQueue(message);
                     callback(true,message.MSGID);
                     break;
                 case "image":
 
-                    message.status = MessageStatus.PrepareToUpload;
-                    handleSqliteQueue.push(message)
                     resourceQueue.push({onprogress:onprogess,message:message})
                     callback(true,message.MSGID);
                     break;
@@ -223,13 +235,8 @@ export default class IM {
     //向resource队列中添加对象
     addResourceQueue(object){
 
-        // if(resourceQueueState == resourceQueueType.excuting){
-        //     waitResourceQueue.push(object);
-        //     // console.log("message 加入等待资源队列")
-        // }else{
-            resourceQueue.push(object);
-            console.log("message 加入资源队列")
-        // }
+        resourceQueue.push(object);
+        console.log("message 加入资源队列")
     }
 
     //执行resource队列
@@ -270,8 +277,8 @@ export default class IM {
         Promise.all(uploadQueue).then(function(values){
             console.log(values);
 
-            message.status = MessageStatus.PrepareToSend;
-            handleSqliteQueue.push(message)
+            message.status = SendStatus.PrepareToSend;
+            currentObj.addUpdateSqliteQueue(message,UpdateMessageSqliteType.changeSendMessage)
 
             currentObj.addMessageQueue(message);
 
@@ -289,13 +296,10 @@ export default class IM {
 
     //添加消息至消息队列
     addMessageQueue(message){
-        // if(sendMessageQueueState == sendMessageQueueType.excuting){
-        //     waitSendMessageQueue.push(message);
-        //     console.log("message 加入等待发送队列")
-        // }else{
-            sendMessageQueue.push(message);
-            console.log("message 加入发送队列")
-        // }
+
+        sendMessageQueue.push(message);
+        console.log("message 加入发送队列")
+
     }
 
     //处理消息队列
@@ -319,10 +323,6 @@ export default class IM {
         //发送websocket
         console.log("开始发送消息了")
 
-        if(message.Command != MessageCommandEnum.MSG_HEART){
-            storeSqlite.addMessageToSendSqlite(message);
-        }
-
         if(networkStatus == networkStatuesType.normal) {
             let success = this.socket.sendMessage(message);
 
@@ -334,12 +334,12 @@ export default class IM {
                 obj.addAckQueue(message, 1);
                 console.log("ack queue 长度" + ackMessageQueue.length);
 
-                message.status = MessageStatus.WaitAck;
-                handleSqliteQueue.push(message)
+                message.status = SendStatus.WaitAck;
+                this.addUpdateSqliteQueue(message,UpdateMessageSqliteType.changeSendMessage)
             }
         }else{
-            message.status = MessageStatus.PrepareToSend;
-            handleSqliteQueue.push(message)
+            message.status = SendStatus.PrepareToSend;
+            this.addUpdateSqliteQueue(message,UpdateMessageSqliteType.changeSendMessage)
         }
     }
 
@@ -353,6 +353,10 @@ export default class IM {
     }
 
 
+    //向sqlite队列中push元素
+    addUpdateSqliteQueue(message,type){
+        handleSqliteQueue.push({message:message,type:type});
+    }
 
 
     //处理更新sqlite队列
@@ -363,7 +367,7 @@ export default class IM {
             console.log(handleSqliteQueueState);
             for(let item in handleSqliteQueue){
 
-                obj.updateSqliteMessage(handleSqliteQueue[item]);
+                obj.updateSqliteMessage(handleSqliteQueue[item].message,handleSqliteQueue[item].type);
                 handleSqliteQueue.shift();
             }
 
@@ -374,8 +378,16 @@ export default class IM {
     }
 
     //更改消息状态
-    updateSqliteMessage(message){
-        storeSqlite.updateMessageStatus(message);
+    updateSqliteMessage(message,way){
+        //根据类别修改消息结果或者是发送消息的消息状态
+        if(way == UpdateMessageSqliteType.storeMessage){
+            //修改message表中message状态
+            storeSqlite.updateMessageStatus(message);
+        }else{
+            //修改发送队列中message状态
+            storeSqlite.updateSendMessageStatus(message);
+        }
+
     }
 
     //删除数据库中发送队列的message
@@ -390,13 +402,9 @@ export default class IM {
     //websocket接口,添加接受消息队列
     addRecMessage(message){
 
-        // if(recMessageQueueState == recMessageQueueType.excuting){
-        //     waitRecMessageQueue.push(message);
-        //     console.log("message 加入等待接受队列")
-        // }else{
-            recieveMessageQueue.push(message);
-            console.log("message 加入接受队列")
-        // }
+        recieveMessageQueue.push(message);
+        console.log("message 加入接受队列")
+
     }
 
     handleRecieveMessageQueue(obj){
@@ -449,7 +457,7 @@ export default class IM {
         AppMessageResultHandle(true,message);
 
         updateMessage.status = MessageStatus.SendSuccess;
-        handleSqliteQueue.push(updateMessage);
+        currentObj.addUpdateSqliteQueue(updateMessage,UpdateMessageSqliteType.storeMessage)
     }
 
 
@@ -457,13 +465,8 @@ export default class IM {
     //添加消息至ack队列
     addAckQueue(message,times){
         let time = new Date().getTime();
-        // if(ackMessageQueueState == ackQueueType.excuting){
-        //     waitAckMessageQueue.push({"message":message,"time":time,"hasSend":times});
-        //     console.log("message 加入等待队列")
-        // }else{
         ackMessageQueue.push({"message":message,"time":time,"hasSend":times});
         console.log("message 加入发送队列")
-        // }
     }
 
     //处理ack队列
@@ -484,7 +487,7 @@ export default class IM {
                     AppMessageResultHandle(false,message);
 
                     ackMessageQueue[item].message.status = MessageStatus.SendFailed;
-                    handleSqliteQueue.push(ackMessageQueue[item].message);
+                    obj.addUpdateSqliteQueue(message,UpdateMessageSqliteType.storeMessage)
 
                     ackMessageQueue.splice(item, 1);
                     obj.popCurrentMessageSqlite(message.MSGID)
@@ -505,8 +508,6 @@ export default class IM {
     //心跳包
     beginHeartBeat(){
         heartBeatInterval = setInterval(function () {
-
-
         }, 10000);
     }
 
@@ -535,7 +536,7 @@ export default class IM {
 
             handleAckQueue(obj);
 
-        }, 200);
+        }, configs.RunloopIntervalTime);
     }
 }
 
@@ -574,4 +575,9 @@ let ackQueueType = {
 let networkStatuesType = {
     none : "none",
     normal : "normal"
+}
+
+let UpdateMessageSqliteType = {
+    storeMessage:"storeMessage",
+    changeSendMessage:"changeSendMessage"
 }

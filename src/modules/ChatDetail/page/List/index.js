@@ -15,11 +15,15 @@ import {
     TextInput,
     Modal,
 } from 'react-native';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as commonActions from '../../../../Core/IM/redux/action'
+import ChatMessage from './ChatMessage'
+
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Sound from 'react-native-sound';
 import RNFS from 'react-native-fs'
 import Ces from './ces';
-import Types from './typeConfig';
 
 
 let _listHeight = 0; //list显示高度
@@ -31,12 +35,11 @@ let _MaxListHeight = 0; //记录最大list高度
 let FooterLayout = false;
 let ListLayout = false;
 
-const showTimeInterval = 300000
 
 
 let {width, height} = Dimensions.get('window');
 
-export default class Chat extends Component {
+class Chat extends Component {
     constructor(props){
         super(props)
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2)=> {
@@ -52,16 +55,10 @@ export default class Chat extends Component {
             return r1._id !== r2._id;
         }});
 
-        this.index = 1;
         this.data = [];
         this.data2 = [];
         this.footerY = null;
         this.listHeight = null;
-        this.changeType = 1;
-        this.jc = [];
-        this.jc2 = [];
-
-
 
         this.downloadFile = this.downloadFile.bind(this);
 
@@ -77,20 +74,41 @@ export default class Chat extends Component {
             imageUri : '',
         };
 
-        this.stopSoundObj = null;
     }
+
+    componentWillReceiveProps(newProps){
+        console.log('88888888888888888888888888888888888888888888888888888888888888888888888888888')
+        // let newData = newProps.chatRecordStore.ChatRecord.li;
+        // console.log(newData,11111111111111111111111111111111111)
+        // this.data = newData;
+        // this.data2 = this.prepareMessages(newData.concat().reverse());
+        // this.setState({
+        //     dataSource: this.state.dataSource.cloneWithRows(this.data),
+        //     dataSourceO: this.state.dataSourceO.cloneWithRows(this.data2.blob, this.data2.keys)
+        // });
+    }
+
     componentWillMount() {
-        this.fetchData();
+        //this.fetchData();
+        // let {chatRecordStore} = this.props;
+        // console.log(chatRecordStore,11111111111111111111111111111111111)
+        // let newData = chatRecordStore.ChatRecord.li;
+        // this.data = newData;
+        // this.data2 = this.prepareMessages(newData.concat().reverse());
+        // this.setState({
+        //     dataSource: this.state.dataSource.cloneWithRows(this.data),
+        //     dataSourceO: this.state.dataSourceO.cloneWithRows(this.data2.blob, this.data2.keys)
+        // });
     }
 
     prepareMessages(messages) {
         //console.log(messages)
         return {
-            keys: messages.map(m => m._id),
+            keys: messages.map(m => m.message.MSGID),
             blob: messages.reduce((o, m, i) => { //(previousValue, currentValue, currentIndex, array1)
                 //console.log(o,m,i)
                 //console.log(o)
-                o[m._id] = {
+                o[m.message.MSGID] = {
                     ...m,
                 };
                 //console.log(o)
@@ -99,27 +117,6 @@ export default class Chat extends Component {
         };
     }
 
-    fetchData = () => {
-        //console.log('fetchData');
-        fetch('http://gank.io/api/data/福利/10/'+this.index)
-            .then((response) => response.json())
-            .then((responseData) => {
-                let {results} = responseData;
-                this.index = this.index + 1;
-                this.jc = results;
-                this.jc2 = results.concat().reverse()
-                this.data = this.jc.slice(0);
-                this.data2 = this.jc2.slice(0);
-                console.log(this.data2)
-                const messagesData = this.prepareMessages(this.data2);
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(this.data),
-                    dataSourceO: this.state.dataSourceO.cloneWithRows(messagesData.blob, messagesData.keys)
-                });
-                //console.log(this.data);
-            })
-            .done();
-    }
     ToCDB(str) {
         var tmp = "";
         for(var i=0;i<str.length;i++)
@@ -135,38 +132,6 @@ export default class Chat extends Component {
         }
         return tmp
     }
-
-
-    playSound = (testInfo) => {
-        let one = new Date();
-        //console.log('playSound1',testInfo,one)
-        this.stopSound(this.stopSoundObj)
-        const callback = (error, sound) => {
-            console.log('playSound2')
-            if(this.stopSoundObj && sound._filename == this.stopSoundObj._filename){
-                this.stopSoundObj = null;
-                return;
-            }
-            if (error) {
-                Alert.alert('error', error.message);
-            }
-            this.stopSoundObj = sound;
-            //console.log(new Date() - one)
-            sound.play(() => {
-                this.stopSoundObj = null;
-                // Release when it's done so we're not using up resources
-                sound.release();
-            });
-        };
-        const sound = new Sound(testInfo,'', error => callback(error, sound));
-    }
-
-    stopSound = (Sound) => {
-        if (!Sound) {
-            return;
-        }
-        Sound.stop().release();
-    };
 
     downloadFile() {
         // 图片
@@ -201,6 +166,7 @@ export default class Chat extends Component {
                 console.log('success', res);
 
                 console.log('file://' + downloadDest)
+                alert('file://' + downloadDest)
                 this.setState({
                     downloadDest:downloadDest,
                 })
@@ -218,21 +184,10 @@ export default class Chat extends Component {
 
     renderRow = (row,sid,rowid) => {
         console.log('执行了renderRow');
-        //console.log(this.state.data.length);
-        //console.log(row);
-        if(row.who == 'daimajia'){
+        if(row.message.Data.Data.Sender == ''){
             return(
                 <View style={styles.itemViewRight}>
-                    <View style={styles.bubbleViewRight}>
-                        <Text style={styles.contentText}>{this.ToCDB('sdfdsasd sad算daggafdg电费sdasdasd'+row.who)}</Text>
-                    </View>
-                    <View style={styles.bubbleViewRight}>
-                        <TouchableOpacity onPress={()=>this.playSound(this.state.downloadDest)}>
-                            <Text>播放</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {/*<Image source={{uri:row.url}} style={styles.userImage}/>*/}
-                    {/*<Image source={require('./me.jpg')} style={styles.userImage}/>*/}
+                    <ChatMessage rowData={row}/>
                     <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fj78mpyvubj20u011idjg.jpg'}} style={styles.userImage}/>
                 </View>
             )
@@ -240,23 +195,8 @@ export default class Chat extends Component {
         else{
             return(
                 <View style={styles.itemView}>
-                    {/*<Image source={{uri:row.url}} style={styles.userImage}/>*/}
-                    {/*<Image source={require('./other.jpg')} style={styles.userImage}/>*/}
                     <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fj3w0emfcbj20u011iabm.jpg'}} style={styles.userImage}/>
-                    {/*<View style={styles.bubbleView}>*/}
-                        {/*<Text style={styles.contentText}>{this.ToCDB('阿萨阿达1261651 sdfdsasd sad算电费sd asdasd'+row.who)}</Text>*/}
-                    {/*</View>*/}
-                    <View style={{
-                        alignSelf:'flex-start',
-                        marginLeft:10,
-                        backgroundColor: '#fff',
-                        maxWidth:width-150,
-                        justifyContent:'center',
-                        borderRadius:5}}>
-                        <TouchableOpacity onPress={()=> this.gaibian()}>
-                            <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fivohbbwlqj20u011idmx.jpg'}} style={{width:100,height:100}}/>
-                        </TouchableOpacity>
-                    </View>
+                    <ChatMessage rowData={row}/>
                 </View>
             )
         }
@@ -269,41 +209,8 @@ export default class Chat extends Component {
         },()=>console.log(this.state))
 
     }
-    push = () => {
-        //console.log('push');
-        this.changeType = 1;
-        this.jc.push({
-            _id: "59a755a2421aa901c85e5fec",
-            createdAt: "2017-08-31T08:17:38.117Z",
-            desc: "8-31",
-            publishedAt: "2017-08-31T08:22:07.982Z",
-            source: "chrome",
-            type: "\u798f\u5229",
-            url: "https://ws1.sinaimg.cn/large/610dc034ly1fj2ld81qvoj20u00xm0y0.jpg",
-            used: true,
-            who: "发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息"
-        });
-        this.jc2.unshift({
-            _id: Math.round(Math.random() * 1000000),
-            createdAt: "2017-08-31T08:17:38.117Z",
-            desc: "8-31",
-            publishedAt: "2017-08-31T08:22:07.982Z",
-            source: "chrome",
-            type: "\u798f\u5229",
-            url: "https://ws1.sinaimg.cn/large/610dc034ly1fj2ld81qvoj20u00xm0y0.jpg",
-            used: true,
-            who: "发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息发送消息"
-        });
-        //this.data.unshift({});
-        this.data = this.jc.slice(0);
-        this.data2 = this.jc2.slice(0);
-        //console.log(this.data)
-        const messagesData = this.prepareMessages(this.data2);
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(this.data),
-            dataSourceO: this.state.dataSourceO.cloneWithRows(messagesData.blob, messagesData.keys)
-        });
-        if(this.state.showInvertible && this.changeType){
+    scrollToEnd = () => {
+        if(this.state.showInvertible){
             if (this._invertibleScrollViewRef === null) { return }
             //console.log(this)
             this._invertibleScrollViewRef.scrollTo({
@@ -313,30 +220,30 @@ export default class Chat extends Component {
         }
     }
     oldMsg = () => {
-        console.log('oldMsg');
-        this.changeType = 0;
-        this.setState({
-            isRefreshing : true
-        })
-        fetch('http://gank.io/api/data/福利/5/'+this.index*10)
-            .then((response) => response.json())
-            .then((responseData) => {
-                let {results} = responseData;
-                this.index = this.index + 1;
-                this.jc = results.concat(this.jc)
-                this.jc2 = this.jc2.concat(results)
-                this.data = this.jc.slice(0);
-                this.data2 = this.jc2.slice(0);
-                console.log(this.data2)
-                const messagesData = this.prepareMessages(this.data2);
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(this.data),
-                    dataSourceO: this.state.dataSourceO.cloneWithRows(messagesData.blob, messagesData.keys),
-                    isRefreshing:false
-                });
-                //console.log(this.data);
-            })
-            .done();
+        // console.log('oldMsg');
+        // this.changeType = 0;
+        // this.setState({
+        //     isRefreshing : true
+        // })
+        // fetch('http://gank.io/api/data/福利/5/'+this.index*10)
+        //     .then((response) => response.json())
+        //     .then((responseData) => {
+        //         let {results} = responseData;
+        //         this.index = this.index + 1;
+        //         this.jc = results.concat(this.jc)
+        //         this.jc2 = this.jc2.concat(results)
+        //         this.data = this.jc.slice(0);
+        //         this.data2 = this.jc2.slice(0);
+        //         console.log(this.data2)
+        //         const messagesData = this.prepareMessages(this.data2);
+        //         this.setState({
+        //             dataSource: this.state.dataSource.cloneWithRows(this.data),
+        //             dataSourceO: this.state.dataSourceO.cloneWithRows(messagesData.blob, messagesData.keys),
+        //             isRefreshing:false
+        //         });
+        //         //console.log(this.data);
+        //     })
+        //     .done();
     }
 
     myRenderFooter(){
@@ -402,10 +309,11 @@ export default class Chat extends Component {
     //界面变化触发
     _onListViewLayout = (event) =>{
         // console.log(_listHeight)
-
         const {showInvertible}=this.state
         if(!showInvertible){
-            _MaxListHeight = event.nativeEvent.layout.height;
+            if(!_MaxListHeight){
+                _MaxListHeight = event.nativeEvent.layout.height;
+            }
 
             ListLayout = event.nativeEvent.layout.height!==_listHeight;
             _listHeight = event.nativeEvent.layout.height;
@@ -422,15 +330,12 @@ export default class Chat extends Component {
 
     }
 
-
     render() {
-        console.log('render执行了')
-        //console.log(this.data)
-        //console.log(this.data.concat().reverse())
+        //console.log('render执行了')
         const {showInvertible}=this.state
         if(!showInvertible){
             return (
-                <View style={styles.chatListView}>
+                <View style={styles.chatListView} click={()=>this.push()}>
                     <View style={styles.container}>
                         <Text style={styles.msg}>正</Text>
                         <View style={styles.triangle}/>
@@ -454,6 +359,7 @@ export default class Chat extends Component {
 
                         renderFooter={this.myRenderFooter.bind(this)}
                         onLayout={this._onListViewLayout}
+                        enableEmptySections={true}
 
                         //renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
                     />
@@ -496,8 +402,6 @@ export default class Chat extends Component {
         }
     }
 }
-
-
 
 const styles = StyleSheet.create({
     container: {
@@ -568,3 +472,15 @@ const styles = StyleSheet.create({
         fontSize:16
     }
 });
+
+const mapStateToProps = state => ({
+    chatRecordStore: state.chatRecordStore.ChatRecord['li']
+});
+
+const mapDispatchToProps = dispatch => ({
+    ...bindActionCreators(commonActions,dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps,null,{withRef : true})(Chat);
+//通过connect连接后 父组件中ref取不到子组件 方法
+// 需添加{withRef : true}配置 并在 父组件中设置 ref={e => this.chat = e.getWrappedInstance()}

@@ -14,11 +14,10 @@ import Sound from 'react-native-sound';
 
 let {width, height} = Dimensions.get('window');
 
-export default class ChatMessageSound extends Component {
+export default class ChatMessageImage extends Component {
     constructor(props){
         super(props)
 
-        this.stopSoundObj = null;
     }
 
     static defaultProps = {
@@ -27,50 +26,31 @@ export default class ChatMessageSound extends Component {
     static propTypes = {
     };
 
-    playSound = (SoundUrl) => {
-        this.stopSound(this.stopSoundObj)
-        const callback = (error, sound) => {
-            if(this.stopSoundObj && sound._filename == this.stopSoundObj._filename){
-                this.stopSoundObj = null;
-                return;
-            }
-            if (error) {
-                Alert.alert('error', error.message);
-            }
-            this.stopSoundObj = sound;
-            sound.play(() => {
-                this.stopSoundObj = null;
-                // Release when it's done so we're not using up resources
-                sound.release();
-            });
-        };
-        const sound = new Sound(SoundUrl,'', error => callback(error, sound));
-    }
-
-    stopSound = (Sound) => {
-        if (!Sound) {
-            return;
-        }
-        Sound.stop().release();
-    };
-
     render() {
         let {data} = this.props;
-        if(isMe){
+        let {Sender,Receiver} = data.message.Data.Data;
+        let {LocalSource,RemoteSource} = data.message.Resource;
+        if(!Sender){
             return(
                 <View style={styles.bubbleViewRight}>
-                    <TouchableOpacity>
-                        <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fivohbbwlqj20u011idmx.jpg'}}/>
-                    </TouchableOpacity>
+
+                        <Image
+                            source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fivohbbwlqj20u011idmx.jpg'}}
+                            style={styles.imageStyle}
+                        />
+
                 </View>
             )
         }
         else{
             return(
                 <View style={styles.bubbleView}>
-                    <TouchableOpacity>
-                        <Image source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fj78mpyvubj20u011idjg.jpg'}}/>
-                    </TouchableOpacity>
+
+                        <Image
+                            source={{uri:'https://ws1.sinaimg.cn/large/610dc034ly1fj78mpyvubj20u011idjg.jpg'}}
+                            style={styles.imageStyle}
+                        />
+
                 </View>
             )
         }
@@ -96,4 +76,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         borderRadius:5
     },
+    imageStyle:{
+        width:60,
+        height:60,
+    }
 });

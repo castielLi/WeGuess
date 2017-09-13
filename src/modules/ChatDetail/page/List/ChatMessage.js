@@ -9,6 +9,10 @@ import {
     Dimensions,
 } from 'react-native';
 
+import ChatMessageText from './ChatMessageText';
+import ChatMessageImage from './ChatMessageImage';
+import ChatMessageSound from './ChatMessageSound';
+
 let {width, height} = Dimensions.get('window');
 
 export default class ChatMessage extends Component {
@@ -24,9 +28,9 @@ export default class ChatMessage extends Component {
     };
 
     typeOption = (data)=> {
-        let {type} = data;
+        let {type} = data.message;
         switch (type) {
-            case Const.messageText: {
+            case 'text': {
                 return (
                     <ChatMessageText
                         data={data}
@@ -34,7 +38,7 @@ export default class ChatMessage extends Component {
                 )
             }
                 break;
-            case Const.messageImage: {
+            case 'image': {
                 return (
                     <ChatMessageImage
                         data={data}
@@ -42,20 +46,22 @@ export default class ChatMessage extends Component {
                 )
             }
                 break;
-            case Const.messageVoice: {
-                return (
-                    <ChatMessageSound
-                        data={data}
-                    />
-                )
-            }
-                break;
+            // case 'Voice': {
+            //     return (
+            //         <ChatMessageSound
+            //             data={data}
+            //         />
+            //     )
+            // }
+            //     break;
         }
     };
 
     render() {
         let {rowData} = this.props;
-        this.typeOption(rowData);
+        return (
+            this.typeOption(rowData)
+        )
     }
 }
 

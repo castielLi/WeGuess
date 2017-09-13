@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text,StyleSheet,View ,TextInput} from 'react-native';
+import { Text,StyleSheet,View ,TextInput,TouchableOpacity} from 'react-native';
 import NavigationTopBar from '../../../Core/Component/NavigationBar/index'
 import ContainerComponent from '../../../Core/Component/ContainerComponent'
 import ThouchBar from './EnterTool/thouchBar';
@@ -25,6 +25,11 @@ export default class ChatDetail extends ContainerComponent {
 	        title:"聊天"
 	    }
 	}
+
+	//控制子组件Chat中的消息滚动到底部
+	goBottom(){
+        this.chat.scrollToEnd()
+	}
   render() {
     return (
     	<View style={styles.container}>
@@ -32,7 +37,7 @@ export default class ChatDetail extends ContainerComponent {
             {/*<View style={{flex:1,backgroundColor:'red'}}>*/}
                 {/*<Text>List</Text>*/}
             {/*</View>*/}
-            <Chat/>
+            <Chat ref={e => this.chat = e.getWrappedInstance()}/>
     		<ThouchBar></ThouchBar>
     	</View>
       

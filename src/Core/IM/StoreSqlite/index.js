@@ -41,7 +41,12 @@ export function getAllCurrentSendMessage(callback){
     return IMFMDB.getAllCurrentSendMessages(callback)
 }
 
-export function updateMessageStatus(message) {
+//修改发送队列中的消息状态
+export function updateSendMessageStatus(message) {
+    IMFMDB.UpdateSendMessageStatues(message)
+}
+//修改消息列表中的消息状态
+export function updateMessageStatus(message){
     IMFMDB.UpdateMessageStatues(message)
 }
 
@@ -151,7 +156,29 @@ IMFMDB.DeleteChatByClientId = function(name,chatType){
     }, errorDB);
 }
 
-//更新消息的isSend
+//更新发送消息队列消息的状态
+IMFMDB.UpdateSendMessageStatues = function(message){
+
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+        db.transaction((tx) => {
+            let updateSql = "";
+
+
+            updateSql = sqls.ExcuteIMSql.UpdateSendMessageStatusByMessageId;
+            updateSql = commonMethods.sqlFormat(updateSql,[message.status,message.MSGID]);
+
+
+            tx.executeSql(updateSql, [], (tx, results) => {
+                console.log("update sendmessage sqlite " + message.MSGID + "is send statues:" + message.status);
+            }, (err)=>{errorDB('更新消息状态',err)});
+
+        });
+    }, (err)=>{errorDB('初始化数据库',err)});
+}
+
+//更新消息状态
 IMFMDB.UpdateMessageStatues = function(message){
 
     var db = SQLite.openDatabase({
@@ -160,28 +187,17 @@ IMFMDB.UpdateMessageStatues = function(message){
         db.transaction((tx) => {
             let updateSql = "";
 
-            if(message.Resource!= null && message.Resource.length > 0){
-
-
-                let remoteSource = "";
-                for(let item in message.Resource){
-                    remoteSource += message.Resource[item].RemoteSource + ",";
-                }
-
-                updateSql = sqls.ExcuteIMSql.UpdateMessageStatusAndResourceByMessageId;
-                updateSql = commonMethods.sqlFormat(updateSql,[message.status,remoteSource,message.MSGID]);
-            }else{
-                updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
-                updateSql = commonMethods.sqlFormat(updateSql,[message.status,message.MSGID]);
-            }
+            updateSql = sqls.ExcuteIMSql.UpdateMessageStatusByMessageId;
+            updateSql = commonMethods.sqlFormat(updateSql,[message.status,message.MSGID]);
 
             tx.executeSql(updateSql, [], (tx, results) => {
-                console.log("update " + message.MSGID + "is send statues:" + message.status);
+                console.log("update message sqlite " + message.MSGID + "is send statues:" + message.status);
             }, (err)=>{errorDB('更新消息状态',err)});
 
         });
     }, (err)=>{errorDB('初始化数据库',err)});
 }
+
 
 //删除聊天室聊天记录
 IMFMDB.DeleteChatByChatRoomId = function(chatRoom){
