@@ -90,11 +90,7 @@ export default function App() {
     // setInterval(function(){
     //     clearInterval(sendMessage)
     // },10000)
-
-
-    network.methodDownload("https://ws1.sinaimg.cn/large/610dc034ly1fivohbbwlqj20u011idmx.jpg",function(){
-        console.log("hello i have download a beautiful picture.")
-    })
+    
 
 
     // //todo:使用chatwayenum枚举来控制类型

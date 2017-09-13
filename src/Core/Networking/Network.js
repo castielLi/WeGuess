@@ -100,10 +100,10 @@ export default class netWorking {
      }
   }
 
-  methodDownload(requestURL,callback){
+  methodDownload(requestURL,filePath,callback){
       RNFS.downloadFile({
           fromUrl: requestURL,
-          toFile: `${RNFS.DocumentDirectoryPath}/hello.png`,
+          toFile: filePath
       }).promise.then((result) => {
           callback(result);
       },(error)=>{
