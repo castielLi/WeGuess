@@ -39,6 +39,7 @@ class AutoExpandingTextInput extends Component {
   
   _onChangeText(data){
    // this.state.data = data
+   this.state.isLock = false;
    this.setState({
     data
    })
@@ -54,11 +55,12 @@ class AutoExpandingTextInput extends Component {
       im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
         //更新chatRecordStore
-        this.props.addMessage('li',message)
-        this.state.isLock = false;
+        this.props.addMessage('li',message);
+        this.input.clear();
+        this.state.data = '';
       });
      
-      this.input.clear();
+      
       this.setState({
         inputHeight:this.state.firstInputHeight
       })
