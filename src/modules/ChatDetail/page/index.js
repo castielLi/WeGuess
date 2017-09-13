@@ -28,8 +28,9 @@ export default class ChatDetail extends ContainerComponent {
 
 	//控制子组件Chat中的消息滚动到底部
 	goBottom(){
-        this.chat.scrollToEnd()
+        this.chat.getWrappedInstance().scrollToEnd()
 	}
+
   render() {
     return (
     	<View style={styles.container}>
@@ -37,7 +38,7 @@ export default class ChatDetail extends ContainerComponent {
             {/*<View style={{flex:1,backgroundColor:'red'}}>*/}
                 {/*<Text>List</Text>*/}
             {/*</View>*/}
-            <Chat ref={e => this.chat = e.getWrappedInstance()}/>
+            <Chat ref={e => this.chat = e}/>
     		<ThouchBar></ThouchBar>
     	</View>
       
