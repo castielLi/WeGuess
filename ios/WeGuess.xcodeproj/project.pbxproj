@@ -59,6 +59,10 @@
 		DF8EB10CD77543BB92941E74 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2BB59BF754E54ED3B8D34D53 /* EvilIcons.ttf */; };
 		ECE053CA12664E758AFD0979 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 697F2D528C704AD0973E81DF /* Entypo.ttf */; };
 		20AB04D684ED49CCB13535BA /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 190BFFD6384945A2BA0B132B /* libRNImagePicker.a */; };
+		E16A4288CA1F4E0B8D9D63E2 /* libRCTFile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D2927C276B74FBE8F29ACA4 /* libRCTFile.a */; };
+		D6AB3520B6884638B88BA1AA /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E5849891CF4109BA71E3F9 /* libRNFetchBlob.a */; };
+		4C594A9E07414745AA845734 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F642F2424CB4C899F5C79AB /* libReactNativeNavigation.a */; };
+		F574F8AB76BD4C039FF7B3C0 /* libRNNetworkInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7A760506F14D2CA50B5D5A /* libRNNetworkInfo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -399,6 +403,14 @@
 		F9429E33AF584E369B60B6B8 /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		FDF6FA9855954386A34EF7F7 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; name = "RNImagePicker.xcodeproj"; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		190BFFD6384945A2BA0B132B /* libRNImagePicker.a */ = {isa = PBXFileReference; name = "libRNImagePicker.a"; path = "libRNImagePicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F7FF95D26AC54A43A0D13A78 /* RCTFile.xcodeproj */ = {isa = PBXFileReference; name = "RCTFile.xcodeproj"; path = "../node_modules/@remobile/react-native-file/ios/RCTFile.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		0D2927C276B74FBE8F29ACA4 /* libRCTFile.a */ = {isa = PBXFileReference; name = "libRCTFile.a"; path = "libRCTFile.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		4BC5C0E13BE5480D9008A981 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		B4E5849891CF4109BA71E3F9 /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		9FE86FA853AD477691DA637B /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeNavigation.xcodeproj"; path = "../node_modules/react-native-navigation/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		0F642F2424CB4C899F5C79AB /* libReactNativeNavigation.a */ = {isa = PBXFileReference; name = "libReactNativeNavigation.a"; path = "libReactNativeNavigation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		9455BAB4670B483195A54F46 /* RNNetworkInfo.xcodeproj */ = {isa = PBXFileReference; name = "RNNetworkInfo.xcodeproj"; path = "../node_modules/react-native-network-info/ios/RNNetworkInfo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		FA7A760506F14D2CA50B5D5A /* libRNNetworkInfo.a */ = {isa = PBXFileReference; name = "libRNNetworkInfo.a"; path = "libRNNetworkInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -438,6 +450,10 @@
 				04150A4F021F4880A29CB965 /* libRNWorkers.a in Frameworks */,
 				3A1DEB07C7FF4094A7E4F0E4 /* libRCTCamera.a in Frameworks */,
 				20AB04D684ED49CCB13535BA /* libRNImagePicker.a in Frameworks */,
+				E16A4288CA1F4E0B8D9D63E2 /* libRCTFile.a in Frameworks */,
+				D6AB3520B6884638B88BA1AA /* libRNFetchBlob.a in Frameworks */,
+				4C594A9E07414745AA845734 /* libReactNativeNavigation.a in Frameworks */,
+				F574F8AB76BD4C039FF7B3C0 /* libRNNetworkInfo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,6 +740,10 @@
 				B201700A7FA24DE88999EA3D /* RNWorkers.xcodeproj */,
 				F9429E33AF584E369B60B6B8 /* RCTCamera.xcodeproj */,
 				FDF6FA9855954386A34EF7F7 /* RNImagePicker.xcodeproj */,
+				F7FF95D26AC54A43A0D13A78 /* RCTFile.xcodeproj */,
+				4BC5C0E13BE5480D9008A981 /* RNFetchBlob.xcodeproj */,
+				9FE86FA853AD477691DA637B /* ReactNativeNavigation.xcodeproj */,
+				9455BAB4670B483195A54F46 /* RNNetworkInfo.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1419,12 +1439,20 @@
 					"$(SRCROOT)/../node_modules/rn-workers/ios/RNWorkers",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)/../node_modules/@remobile/react-native-file/ios/RCTFile",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-navigation/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = WeGuessTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1457,12 +1485,20 @@
 					"$(SRCROOT)/../node_modules/rn-workers/ios/RNWorkers",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)/../node_modules/@remobile/react-native-file/ios/RCTFile",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-navigation/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = WeGuessTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1497,6 +1533,10 @@
 					"$(SRCROOT)/../node_modules/rn-workers/ios/RNWorkers",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)/../node_modules/@remobile/react-native-file/ios/RCTFile",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-navigation/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = WeGuess/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1531,6 +1571,10 @@
 					"$(SRCROOT)/../node_modules/rn-workers/ios/RNWorkers",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)/../node_modules/@remobile/react-native-file/ios/RCTFile",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-navigation/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = WeGuess/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1571,11 +1615,19 @@
 					"$(SRCROOT)/../node_modules/rn-workers/ios/RNWorkers",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)/../node_modules/@remobile/react-native-file/ios/RCTFile",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-navigation/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = "WeGuess-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1618,11 +1670,19 @@
 					"$(SRCROOT)/../node_modules/rn-workers/ios/RNWorkers",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)/../node_modules/@remobile/react-native-file/ios/RCTFile",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-navigation/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = "WeGuess-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1656,6 +1716,10 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.WeGuess-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1681,6 +1745,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);

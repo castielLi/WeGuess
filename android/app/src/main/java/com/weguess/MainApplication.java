@@ -3,6 +3,10 @@ package com.weguess;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.pusherman.networkinfo.RNNetworkInfoPackage;
+import com.reactnativenavigation.NavigationReactPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.remobile.file.RCTFilePackage;
 import com.imagepicker.ImagePickerPackage;
 import com.bubblemessage.BubbleMessagePackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
@@ -36,6 +40,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNNetworkInfoPackage(),
+            new NavigationReactPackage(),
+            new RNFetchBlobPackage(),
+            new RCTFilePackage(),
             new ImagePickerPackage(),
             new BubbleMessagePackage(),
             new RNFSPackage(),

@@ -98,6 +98,30 @@ export default class netWorking {
        )
      }
   }
+
+  methodDownload(requestURL,callback){
+      let promise = new Promise(function(res,rej){
+          gettingFrameworkMethod().httpRequestPOST(requestURL,params,networkConfig,function(result,error){
+
+              if(result!= null && result.status == 200){
+                  if(NeedAuth){
+                      AuthToken = result.response.headers["Auth_Token"];
+                  }
+                  res(result.json());
+              }else {
+                  rej(result);
+              }
+          })
+
+      }).then(
+          (result)=>{
+              callback(result);
+          },
+          (result)=>{
+              console.log(result)
+          }
+      )
+  }
 }
 
 function setAuthToken(){

@@ -15,9 +15,6 @@ import {
     Platform,
     PermissionsAndroid,
 } from 'react-native';
-import {
-    Worker
-} from 'rn-workers'
 
 import Sound from 'react-native-sound';
 import {
