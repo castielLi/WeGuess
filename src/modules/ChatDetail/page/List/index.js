@@ -78,7 +78,7 @@ class Chat extends Component {
 
     componentWillReceiveProps(newProps){
         console.log(newProps,11111111111111111111111111111111111)
-        let newData = newProps.chatRecordStore.ChatRecord.li;
+        let newData = newProps.chatRecordStore;
         console.log(newData,11111111111111111111111111111111111)
         this.data = newData;
         this.data2 = this.prepareMessages(newData.concat().reverse());
@@ -88,13 +88,25 @@ class Chat extends Component {
         });
     }
 
+    // shouldComponentUpdate(nextProps,nextState) {
+    //     // let newData = nextProps.chatRecordStore;
+    //     // if(newData != this.props.chatRecordStore)
+    //     // console.log(newData,11111111111111111111111111111111111)
+    //     // this.data = newData;
+    //     // this.data2 = this.prepareMessages(newData.concat().reverse());
+    //     // this.setState({
+    //     //     dataSource: this.state.dataSource.cloneWithRows(this.data),
+    //     //     dataSourceO: this.state.dataSourceO.cloneWithRows(this.data2.blob, this.data2.keys)
+    //     // });
+    // }
+
     componentWillMount() {
         //this.fetchData();
         let {chatRecordStore} = this.props;
         console.log(chatRecordStore,11111111111111111111111111111111111)
-        let newData = chatRecordStore.ChatRecord.li;
-        this.data = newData;
-        this.data2 = this.prepareMessages(newData.concat().reverse());
+        //let newData = chatRecordStore.ChatRecord.li;
+        this.data = chatRecordStore;
+        this.data2 = this.prepareMessages(chatRecordStore.concat().reverse());
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(this.data),
             dataSourceO: this.state.dataSourceO.cloneWithRows(this.data2.blob, this.data2.keys)
@@ -474,7 +486,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-    chatRecordStore: state.chatRecordStore
+    chatRecordStore: state.chatRecordStore.ChatRecord.li
 });
 
 const mapDispatchToProps = dispatch => ({
