@@ -30,12 +30,12 @@ class AutoExpandingTextInput extends Component {
       firstInputHeight:0,
       isFirstInputHeight:true,
       inputHeight:0,
-      isLock:false
+      isLock:false,
+      moreLine:true
     } 
     this._onChangeText = this._onChangeText.bind(this);
     this._onSubmitEditing = this._onSubmitEditing.bind(this);
     this._onChange = this._onChange.bind(this);
-    this._onKeyPress = this._onKeyPress.bind(this);
   }  
   
   _onChangeText(data){
@@ -48,6 +48,9 @@ class AutoExpandingTextInput extends Component {
   //0.45.1 multiline设为true，每次提交_onSubmitEditing会执行两次
   _onSubmitEditing(){
     if(this.state.isLock) return;
+    this.setState({
+        moreLine:false
+      })
     this.state.isLock = true;
     //
     if(this.state.data){
@@ -59,6 +62,9 @@ class AutoExpandingTextInput extends Component {
         this.props.addMessage('li',message);
         this.input.clear();
         this.state.data = '';
+        this.setState({
+        moreLine:true
+      })
       });
      
       
@@ -68,11 +74,6 @@ class AutoExpandingTextInput extends Component {
       this.props.changeThouchBarTopBoxHeight(this.state.firstInputHeight);
     }
     return
-  }
-  _onKeyPress(e){
-    if(e.nativeEvent.key === 'Enter'){
-      this._onSubmitEditing();
-    }
   }
   _onChange(event) {
     let height = event.nativeEvent.contentSize.height;
@@ -100,11 +101,10 @@ class AutoExpandingTextInput extends Component {
        onSubmitEditing = {this._onSubmitEditing}
        blurOnSubmit = {false}
        underlineColorAndroid = {'transparent'}  
-       multiline={true}
+       multiline={this.state.moreLine}
        enablesReturnKeyAutomatically = {true} //ios专用  如果为true，键盘会在文本框内没有文字的时候禁用确认按钮
        returnKeyType='send'
        returnKeyLabel='发送'
-       onKeyPress = {this._onKeyPress} //ios
        onChange={this._onChange}
        defaultValue={this.state.data}  
        //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可以
