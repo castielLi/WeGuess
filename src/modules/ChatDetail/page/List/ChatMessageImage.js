@@ -40,6 +40,7 @@ export default class ChatMessageImage extends Component {
     getImageSize = (uri)=>{
         Image.getSize(uri, (width, height) => {
             // this.Size = {width,height}
+
             this.setState({
                 Size : {width,height}
             })
@@ -47,11 +48,16 @@ export default class ChatMessageImage extends Component {
         })
     }
 
+    localSourceObj = (Source)=>{
+        return {uri:Source}
+    }
+
     render() {
         let {data} = this.props;
         let {Sender,Receiver} = data.message.Data.Data;
         let {LocalSource,RemoteSource} = data.message.Resource[0];
-        let uri = LocalSource.substr(7);
+        //let uri = LocalSource.substr(7);
+
 
         // this.Size = Image.getSize(LocalSource, (width, height) => {
         //     return {width,height}
@@ -63,8 +69,8 @@ export default class ChatMessageImage extends Component {
                 <View style={styles.bubbleViewRight}>
 
                         <Image
-                            source={{uri:"content"+uri}}
-                            style={[this.state.Size,styles.imageStyle]}
+                            source={this.localSourceObj(LocalSource || RemoteSource)}
+                            style={[styles.imageStyle]}
                         />
 
                 </View>
@@ -75,8 +81,8 @@ export default class ChatMessageImage extends Component {
                 <View style={styles.bubbleView}>
 
                         <Image
-                            source={{uri:"content"+uri}}
-                            style={[this.state.Size,styles.imageStyle]}
+                            source={this.localSourceObj(LocalSource || RemoteSource)}
+                            style={[styles.imageStyle]}
                         />
 
                 </View>
@@ -91,19 +97,21 @@ const styles = StyleSheet.create({
     bubbleView:{
         alignSelf:'flex-start',
         marginLeft:10,
-        backgroundColor: '#fff',
-        maxWidth:width-150,
-        justifyContent:'center',
-        borderRadius:5
+        //backgroundColor: '#fff',
+        //maxWidth:width-150,
+        //justifyContent:'center',
+        //borderRadius:5
     },
     bubbleViewRight:{
         alignSelf:'flex-start',
         marginRight:10,
-        backgroundColor: '#98E165',
-        maxWidth:width-150,
-        justifyContent:'center',
-        borderRadius:5
+        //backgroundColor: '#98E165',
+        //maxWidth:width-150,
+        //justifyContent:'center',
+        //borderRadius:5
     },
     imageStyle:{
+        width:80,
+        height:80,
     }
 });
