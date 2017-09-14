@@ -325,12 +325,25 @@ IMFMDB.getAllCurrentSendMessages = function(callback){
 
             tx.executeSql(querySql, [], (tx, results) => {
 
-                callback(results.rows.raw());
+                if(results.rows.length <= 0){
+                    callback(null);
+                }
 
-                // tx.executeSql(sqls.ExcuteIMSql.DeleteAllFailedMessages, [], (tx, results) => {
-                //
-                //     console.log("已经删除failedmessage")
-                // }, errorDB);
+                let messageIds = results.rows.raw();
+
+                let ids = [];
+                messageIds.forEach(function(item){
+                    ids.push(item.messageId);
+                })
+
+                let selectFailMessageSql = sqls.ExcuteIMSql.GetAllSendFailedMessagesInMessageTable;
+
+                selectFailMessageSql = commonMethods.sqlQueueFormat(selectFailMessageSql,ids);
+
+                tx.executeSql(sqls.ExcuteIMSql.DeleteAllFailedMessages, [], (tx, results) => {
+
+                    callback(results.rows.raw());
+                }, errorDB);
 
             }, errorDB);
 

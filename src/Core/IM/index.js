@@ -103,7 +103,7 @@ export default class IM {
         this.beginRunLoop();
 
         //获取之前没有发送出去的消息重新加入消息队列
-        this.addAllUnsendMessageToSendQueue();
+        // this.addAllUnsendMessageToSendQueue();
     }
 
     setNetworkStatus(netState) {
@@ -484,13 +484,13 @@ export default class IM {
                 if(ackMessageQueue[item].hasSend > 3) {
 
                     //回调App上层发送失败
-                    AppMessageResultHandle(false,message);
+                    // AppMessageResultHandle(false,ackMessageQueue[item].message);
 
                     ackMessageQueue[item].message.status = MessageStatus.SendFailed;
                     obj.addUpdateSqliteQueue(message,UpdateMessageSqliteType.storeMessage)
 
                     ackMessageQueue.splice(item, 1);
-                    obj.popCurrentMessageSqlite(message.MSGID)
+                    obj.popCurrentMessageSqlite(ackMessageQueue[item].message.MSGID)
                 }else {
                     obj.socket.sendMessage(ackMessageQueue[item].message);
                     console.log("重新发送" + ackMessageQueue[item].message.MSGID);
