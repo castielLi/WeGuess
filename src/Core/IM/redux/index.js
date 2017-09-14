@@ -27,7 +27,7 @@
 //                         Receiver :"",
 //                     }
 //                 },
-//                 type:'',//text、image
+//                 type:'',//text、image 
 //                 way:'',//privte、chatroom
 //                 status:''//        
 //                  }

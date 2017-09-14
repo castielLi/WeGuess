@@ -50,7 +50,6 @@ class ThouchBarBoxTopBox extends Component {
     this.renderEnterBox = this.renderEnterBox.bind(this);
     this._onPressIn = this._onPressIn.bind(this);
     this._onPressOut = this._onPressOut.bind(this);
-    this.getInputObject = this.getInputObject.bind(this);
   }  
   changeThouchBarTopBoxHeight(height){
     this.setState({
@@ -59,25 +58,31 @@ class ThouchBarBoxTopBox extends Component {
   }
   toRecord(){
     if(this.props.thouchBarStore.isRecordPage){
-      this.input.focus();
+      //this.input.focus();
+      this.focus();
     }else{
-      this.input.blur();
+      //this.input.blur();
+      this.blur();
     }
     this.props.pressRecord();
   }
   toExpression(){
     if(this.props.thouchBarStore.isExpressionPage){
-      this.input.focus();
+      //this.input.focus();
+      this.focus();
     }else if(!this.props.thouchBarStore.isRecordPage&&!this.props.thouchBarStore.isExpressionPage){
-      this.input.blur();
+      //this.input.blur();
+      this.blur();
     }
    this.props.pressExpression();
   }
   toPlus(){
     if(this.props.thouchBarStore.isPlusPage){
-      this.input.focus();
+      //this.input.focus();
+      this.focus();
     }else if(!this.props.thouchBarStore.isRecordPage&&!this.props.thouchBarStore.isPlusPage){
-      this.input.blur();
+      //this.input.blur();
+      this.blur();
     }
     this.props.pressPlus();
   }
@@ -125,7 +130,7 @@ class ThouchBarBoxTopBox extends Component {
     
     audio._stop(()=>{
       //初始化消息
-      let message = createResourceMessageObj('audeo','private',[{FileType:2,LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
+      let message = createResourceMessageObj('audio','private',[{FileType:2,LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
       //更新chatRecordStore
       im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
@@ -138,20 +143,30 @@ class ThouchBarBoxTopBox extends Component {
       speakTxt:'按住说话'
     })
   }
+  //获取TextInput组件方法
+  focus(){
+    this.input.getWrappedInstance().input.focus();
+  }
+  blur(){
+    this.input.getWrappedInstance().input.blur();
+  }
+  _onSubmitEditing(){
+    this.input.getWrappedInstance()._onSubmitEditing();
+  }
   renderEnterBox(){
     return(
       <View style={{overflow:"hidden",flex:1}}>
         <TouchableHighlight style={[styles.speakBox,{left:this.props.thouchBarStore.isRecordPage?60:-999}]} underlayColor={'#bbb'} activeOpacity={0.5} onPressIn={this._onPressIn} onPressOut={this._onPressOut}>
            <Text style={styles.speakTxt}>{this.state.speakTxt}</Text>
         </TouchableHighlight>
-        <AutoExpandingTextInput getInputObject={this.getInputObject} changeThouchBarTopBoxHeight={this.changeThouchBarTopBoxHeight} emojiText={this.props.emojiText} emojiId={this.props.emojiId}></AutoExpandingTextInput>
+        <AutoExpandingTextInput ref={e => this.input = e} getInputObject={this.getInputObject} changeThouchBarTopBoxHeight={this.changeThouchBarTopBoxHeight} emojiText={this.props.emojiText} emojiId={this.props.emojiId} setTextInputData={this.props.setTextInputData}></AutoExpandingTextInput>
       </View>
       )
   }
   //获取TextInput组件对象
-  getInputObject(input){
-    this.input = input;
-  }
+  // getInputObject(input){
+  //   this.input = input;
+  // }
   componentWillMount(){
     //创建文件夹
       let path = RNFS.DocumentDirectoryPath + '/' + 'Li';
@@ -257,5 +272,5 @@ const mapDispatchToProps = dispatch => ({
     ...bindActionCreators(commonActions,dispatch)
 });
 
- export default connect(mapStateToProps, mapDispatchToProps)(ThouchBarBoxTopBox);
+ export default connect(mapStateToProps, mapDispatchToProps,null,{withRef : true})(ThouchBarBoxTopBox);
 

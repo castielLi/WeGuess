@@ -19,9 +19,12 @@ export default class ThouchBar extends Component {
     super(props);
     this.state = {
       emojiText:'',
-      emojiId:''
+      emojiId:'',
+      textInputData:''
     }  
+    this.setTextInputData = this.setTextInputData.bind(this);
     this.setEmoji = this.setEmoji.bind(this);
+    this._onSubmitEditing = this._onSubmitEditing.bind(this);
   }  
 
   setEmoji(emojiText,emojiId){
@@ -30,11 +33,19 @@ export default class ThouchBar extends Component {
       emojiId
     })
   }
+  setTextInputData(data){
+    this.setState({
+     textInputData:data
+    })
+  }
+  _onSubmitEditing(){
+    this.bar.getWrappedInstance()._onSubmitEditing();
+  }
   render() {
     return (
       <View style={styles.thouchBarBox}>
-        <ThouchBarBoxTopBox emojiText={this.state.emojiText} emojiId={this.state.emojiId}></ThouchBarBoxTopBox>
-        <ThouchBarBoxBottomBox setEmoji={this.setEmoji}></ThouchBarBoxBottomBox>
+        <ThouchBarBoxTopBox ref={e => this.bar = e} emojiText={this.state.emojiText} emojiId={this.state.emojiId} setTextInputData={this.setTextInputData}></ThouchBarBoxTopBox>
+        <ThouchBarBoxBottomBox setEmoji={this.setEmoji} _onSubmitEditing={this._onSubmitEditing} textInputData={this.state.textInputData}></ThouchBarBoxBottomBox>
       </View>
     );
   }

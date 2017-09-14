@@ -40,25 +40,25 @@ render(){
                 <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[微笑]')}>
+                <Image source={require('../../resource/weixiao.png')} style={styles.img}></Image>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[屎]')}>
+                <Image source={require('../../resource/poo.png')} style={styles.img}></Image>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[微笑]')}>
+                <Image source={require('../../resource/weixiao.png')} style={styles.img}></Image>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[呲牙]')}>
                 <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[屎]')}>
+                <Image source={require('../../resource/poo.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[呲牙]')}>
                 <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[微笑]')}>
-                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[呲牙]')}>
-                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[微笑]')}>
-                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[呲牙]')}>
-                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.onPressEmoji.bind(this,'[微笑]')}>
-                <Image source={require('../../resource/sm.png')} style={styles.img}></Image>
+                <Image source={require('../../resource/weixiao.png')} style={styles.img}></Image>
               </TouchableWithoutFeedback>
             </View>
             <View style={styles.swiperSlide}>
@@ -72,6 +72,13 @@ render(){
               </TouchableWithoutFeedback>
             </View>
           </Swiper>
+          <View style={styles.sendBox}>
+            <TouchableWithoutFeedback onPress={this.props._onSubmitEditing}>
+              <View style={[styles.send,{backgroundColor:this.props.textInputData?'#3399ff':'#fff'}]}>
+                <Text style={styles.sendText}>发送</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
         )
     }
@@ -116,5 +123,21 @@ const styles = StyleSheet.create({
   plusItemTit:{
     fontSize:12,
     color:'#bbb'
+  },
+  sendBox:{
+    height:40,
+    backgroundColor:'#fff',
+    flexDirection:'row',
+    justifyContent:'flex-end',
+    alignItems:'center',
+  },
+  send:{
+    width:60,
+    height:40,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  sendText:{
+    color:'#aaa'
   }
 });

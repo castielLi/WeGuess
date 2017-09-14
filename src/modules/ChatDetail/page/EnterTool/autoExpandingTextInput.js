@@ -30,8 +30,7 @@ class AutoExpandingTextInput extends Component {
       firstInputHeight:0,
       isFirstInputHeight:true,
       inputHeight:0,
-      isLock:false,
-      moreLine:true
+      isLock:false
     } 
     this._onChangeText = this._onChangeText.bind(this);
     this._onSubmitEditing = this._onSubmitEditing.bind(this);
@@ -41,6 +40,7 @@ class AutoExpandingTextInput extends Component {
   _onChangeText(data){
    this.state.isLock = false;
    this.state.data = data; 
+   this.props.setTextInputData(data)
    // this.setState({
    //  data
    // })
@@ -48,9 +48,6 @@ class AutoExpandingTextInput extends Component {
   //0.45.1 multiline设为true，每次提交_onSubmitEditing会执行两次
   _onSubmitEditing(){
     if(this.state.isLock) return;
-    this.setState({
-        moreLine:false
-      })
     this.state.isLock = true;
     //
     if(this.state.data){
@@ -61,10 +58,9 @@ class AutoExpandingTextInput extends Component {
         //更新chatRecordStore
         this.props.addMessage('li',message);
         this.input.clear();
+        //在表情栏提交后不会获得焦点
+        if(!this.props.thouchBarStore.isExpressionPage) this.input.focus();
         this.state.data = '';
-        this.setState({
-        moreLine:true
-      })
       });
      
       
@@ -98,29 +94,32 @@ class AutoExpandingTextInput extends Component {
        ref={(refInput)=>{this.input = refInput}}
        onFocus = {this.props.focusInput}
        onChangeText = {this._onChangeText}
-       onSubmitEditing = {this._onSubmitEditing}
-       blurOnSubmit = {false}
+       onSubmitEditing = {this._onSubmitEditing}   //0.45.1 multiline为true，并且blurOnSubmit为false时，ios点击确定会换行而不触发onSubmitEditing；Android无论怎么样点击确定都会触发onSubmitEditing
+       blurOnSubmit = {true}// 提交失去焦点
        underlineColorAndroid = {'transparent'}  
-       multiline={this.state.moreLine}
+       multiline={true}
        enablesReturnKeyAutomatically = {true} //ios专用  如果为true，键盘会在文本框内没有文字的时候禁用确认按钮
        returnKeyType='send'
        returnKeyLabel='发送'
        onChange={this._onChange}
        defaultValue={this.state.data}  
-       //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可以
+       //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可用
        style={[styles.textInputStyle,{height:Math.max(pxToPt(40),pxToPt(this.state.inputHeight)),left:this.props.thouchBarStore.isRecordPage?-999:60}]}  
        >  
       </TextInput>  
     );  
   }
-  componentDidMount(){
+  // componentDidMount(){
    
-    //传递TextInput组件对象到父组件，父组件可以调用子组件方法
-    this.props.getInputObject(this.input);
-  }
+  //   //传递TextInput组件对象到父组件，父组件可以调用子组件方法
+  //   this.props.getInputObject(this.input);
+  // }
+
   componentWillReceiveProps(nextProps){
     if(nextProps.emojiText&&nextProps.emojiId!==this.props.emojiId){    
-      this.state.data = this.state.data+nextProps.emojiText
+      this.state.data = this.state.data+nextProps.emojiText   //输入框添加emoji文字成功，但是onChange事件无法监听到，输入框高度无法改变
+      this.state.isLock = false;
+      this.props.setTextInputData(true)
     }
   }
 }  
@@ -157,4 +156,4 @@ const mapDispatchToProps = (dispatch) => {
     ...bindActionCreators(commonActions,dispatch)
 }};
 
- export default connect(mapStateToProps, mapDispatchToProps)(AutoExpandingTextInput);
+ export default connect(mapStateToProps, mapDispatchToProps,null,{withRef : true})(AutoExpandingTextInput);
