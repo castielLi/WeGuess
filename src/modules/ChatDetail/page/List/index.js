@@ -196,7 +196,8 @@ class Chat extends Component {
 
     renderRow = (row,sid,rowid) => {
         console.log('执行了renderRow');
-        if(row.message.Data.Data.Sender == ''){
+        let isSender = row.message.Data.Data.Sender;
+        if(isSender == ''){
             return(
                 <View style={styles.itemViewRight}>
                     <ChatMessage rowData={row}/>
@@ -348,20 +349,6 @@ class Chat extends Component {
         if(!showInvertible){
             return (
                 <View style={styles.chatListView} click={()=>this.push()}>
-                    <View style={styles.container}>
-                        <Text style={styles.msg}>正</Text>
-                        <View style={styles.triangle}/>
-                        <TouchableOpacity onPress={this.push}>
-                            <View style={{width:40,height:40,backgroundColor:'red'}}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.oldMsg}>
-                            <View style={{width:40,height:40,backgroundColor:'blue'}}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.downloadFile}>
-                            <View style={{width:40,height:40,backgroundColor:'black'}}/>
-                        </TouchableOpacity>
-                    </View>
-
                     <ListView
                         ref={(lv) => this.listView = lv}
                         dataSource={this.state.dataSource}
@@ -375,25 +362,12 @@ class Chat extends Component {
 
                         //renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
                     />
+                    <Ces uri={this.state.imageUri} isShow={this.state.imageShow}/>
                 </View>
             );
         }else{
             return(
                 <View style={styles.chatListView}>
-                    <View style={styles.container}>
-                        <Text style={styles.msg}>反</Text>
-                        <View style={styles.triangle}/>
-                        <TouchableOpacity onPress={this.push}>
-                            <View style={{width:40,height:40,backgroundColor:'red'}}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.oldMsg}>
-                            <View style={{width:40,height:40,backgroundColor:'blue'}}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.downloadFile}>
-                            <View style={{width:40,height:40,backgroundColor:'black'}}/>
-                        </TouchableOpacity>
-                    </View>
-
                     <ListView
                         ref={(lv) => this.listView = lv}
                         dataSource={this.state.dataSourceO}

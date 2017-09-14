@@ -29,3 +29,17 @@ export function listLoadMore(){
 		type:'LIST_LOADMORE'
 	}
 }
+
+
+
+export function showImageModal(urls){
+	return{
+		type:'SHOW_MODAL',
+		urls:urls
+	}
+}
+export function hideImageModal(){
+	return{
+		type:'HIDE_MODAL'
+	}
+}

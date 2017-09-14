@@ -8,13 +8,17 @@ import {
     View,
     Image,
     Dimensions,
+    TouchableOpacity,
 } from 'react-native';
 
 import Sound from 'react-native-sound';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as Actions from '../../reducer/action'
 
 let {width, height} = Dimensions.get('window');
 
-export default class ChatMessageImage extends Component {
+class ChatMessageImage extends Component {
     constructor(props){
         super(props)
 
@@ -67,12 +71,13 @@ export default class ChatMessageImage extends Component {
         if(!Sender){
             return(
                 <View style={styles.bubbleViewRight}>
-
+                    <TouchableOpacity onPress={()=>this.props.showImageModal(LocalSource || RemoteSource)}>
                         <Image
+                            resizeMode={Image.resizeMode.cover}
                             source={this.localSourceObj(LocalSource || RemoteSource)}
                             style={[styles.imageStyle]}
                         />
-
+                    </TouchableOpacity>
                 </View>
             )
         }
@@ -115,3 +120,13 @@ const styles = StyleSheet.create({
         height:80,
     }
 });
+
+const mapStateToProps = state => ({
+    imageModalStore: state.imageModalStore
+});
+
+const mapDispatchToProps = dispatch => ({
+    ...bindActionCreators(Actions,dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatMessageImage);

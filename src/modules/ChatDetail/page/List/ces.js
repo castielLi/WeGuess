@@ -1,4 +1,4 @@
-/**
+/*
  * Created by Hsu. on 2017/9/8.
  */
 import React, { Component } from 'react';
@@ -21,6 +21,10 @@ import ZoomImage from 'react-native-zoom-image';
 
 import ImageViewer from 'react-native-image-zoom-viewer';
 
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as Actions from '../../reducer/action'
+
 const images = [{
     url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460'
 }, {
@@ -31,7 +35,7 @@ const images = [{
 
 const uri = 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460';
 
-export default class Ces extends React.Component {
+class Ces extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -54,17 +58,18 @@ export default class Ces extends React.Component {
     // }
 
     modalClose = ()=>{
-        this.setState({
-            isShow : false,
-        })
+        // this.setState({
+        //     isShow : false,
+        // })
+        this.props.hideImageModal();
     }
     render() {
         console.log(this.props)
         console.log(this.state.uri,this.state.isShow)
         return (
-            <Modal onRequestClose={()=>{}} animationType={'fade'} visible={this.state.isShow}>
+            <Modal onRequestClose={()=>{}} animationType={'fade'} visible={this.props.imageModalStore.isShow}>
                 <ImageViewer
-                    imageUrls={[{url:this.state.uri}]} // 照片路径
+                    imageUrls={this.props.imageModalStore.urls} // 照片路径
                     enableImageZoom={true} // 是否开启手势缩放
                     index={0} // 初始显示第几张
                     onClick={()=>this.modalClose()}
@@ -76,39 +81,12 @@ export default class Ces extends React.Component {
 
 }
 
-/*
- * <Modal>
- <ImageViewer
- imageUrls={images} // 照片路径
- enableImageZoom={true} // 是否开启手势缩放
- index={0} // 初始显示第几张
- onChange={(index) => {}} // 图片切换时触发
- />
- </Modal>
- * */
+const mapStateToProps = state => ({
+    imageModalStore: state.imageModalStore
+});
 
+const mapDispatchToProps = dispatch => ({
+    ...bindActionCreators(Actions,dispatch)
+});
 
-/*
- *
- * <ZoomImage
- source={{uri: 'https://ooo.0o0.ooo/2017/03/31/58de0e9b287f6.jpg'}}
- imgStyle={{width: 250, height: 230}}
- duration={200}
- enableScaling={false}
- easingFunc={Easing.ease}
- />
- *
- * */
-
-
-/*
- * <ImageZoom cropWidth={Dimensions.get('window').width}
- cropHeight={Dimensions.get('window').height}
- imageWidth={200}
- imageHeight={200}
- panToMove={true}
- >
- <Image style={{width:200, height:200}}
- source={{uri:'http://v1.qzone.cc/avatar/201407/07/00/24/53b9782c444ca987.jpg!200x200.jpg'}}/>
- </ImageZoom>
- * */
+export default connect(mapStateToProps, mapDispatchToProps)(Ces);

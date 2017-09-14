@@ -4,7 +4,7 @@ const initialState = {
     isPlusPage:false,
     listScrollToEnd:false,
 };
-export default function thouchBarStore(state = initialState,action){
+export function thouchBarStore(state = initialState,action){
 	 switch (action.type) {
         case 'PRESS_RECORD':
             return {
@@ -48,6 +48,30 @@ export default function thouchBarStore(state = initialState,action){
             return {
                  ...state,
                 listScrollToEnd:false,
+            };
+        default:
+            return state;
+    }
+}
+
+
+
+
+const initialModalState = {
+    isShow: false,
+    urls:[],
+};
+export function imageModalStore(state = initialModalState,action){
+     switch (action.type) {
+        case 'SHOW_MODAL':
+            return {
+                urls:[{url:action.urls}],
+                isShow:true,
+            };
+        case 'HIDE_MODAL':
+            return {
+                ...state,
+                isShow:false,
             };
         default:
             return state;
