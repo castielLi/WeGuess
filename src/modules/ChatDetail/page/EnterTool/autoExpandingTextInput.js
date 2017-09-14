@@ -104,7 +104,7 @@ class AutoExpandingTextInput extends Component {
        enablesReturnKeyAutomatically = {true} //ios专用  如果为true，键盘会在文本框内没有文字的时候禁用确认按钮
        returnKeyType='send'
        returnKeyLabel='发送'
-       //onKeyPress = {this._onKeyPress} //ios
+       onKeyPress = {this._onKeyPress} //ios
        onChange={this._onChange}
        defaultValue={this.state.data}  
        //onContentSizeChange={this._onChange} 0.45.1 TextInput组件onContentSizeChange属性不可以
