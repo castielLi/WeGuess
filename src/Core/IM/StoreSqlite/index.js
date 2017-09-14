@@ -340,7 +340,7 @@ IMFMDB.getAllCurrentSendMessages = function(callback){
 
                 selectFailMessageSql = commonMethods.sqlQueueFormat(selectFailMessageSql,ids);
 
-                tx.executeSql(sqls.ExcuteIMSql.DeleteAllFailedMessages, [], (tx, results) => {
+                tx.executeSql(selectFailMessageSql, [], (tx, results) => {
 
                     callback(results.rows.raw());
                 }, errorDB);

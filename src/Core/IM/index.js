@@ -103,7 +103,7 @@ export default class IM {
         this.beginRunLoop();
 
         //获取之前没有发送出去的消息重新加入消息队列
-        // this.addAllUnsendMessageToSendQueue();
+        this.addAllUnsendMessageToSendQueue();
     }
 
     setNetworkStatus(netState) {
@@ -182,7 +182,10 @@ export default class IM {
     //获取当前所有未发出去的消息添加入消息队列
     addAllUnsendMessageToSendQueue(){
         storeSqlite.getAllCurrentSendMessage(function(currentSendMessages){
-            console.log(currentSendMessages);
+            console.log("复制未发送的消息进入发送队列");
+            if(currentSendMessages == null){
+                return;
+            }
             sendMessageQueue = currentSendMessages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
         });
     }
@@ -277,8 +280,10 @@ export default class IM {
         Promise.all(uploadQueue).then(function(values){
             console.log(values);
 
-            message.status = SendStatus.PrepareToSend;
-            currentObj.addUpdateSqliteQueue(message,UpdateMessageSqliteType.changeSendMessage)
+            let copyMessage = Object.assign({}, message);
+
+            copyMessage.status = SendStatus.PrepareToSend;
+            currentObj.addUpdateSqliteQueue(copyMessage,UpdateMessageSqliteType.changeSendMessage)
 
             currentObj.addMessageQueue(message);
 
@@ -323,6 +328,9 @@ export default class IM {
         //发送websocket
         console.log("开始发送消息了")
 
+
+        let copyMessage = Object.assign({}, message);
+
         if(networkStatus == networkStatuesType.normal) {
             let success = this.socket.sendMessage(message);
 
@@ -334,12 +342,12 @@ export default class IM {
                 obj.addAckQueue(message, 1);
                 console.log("ack queue 长度" + ackMessageQueue.length);
 
-                message.status = SendStatus.WaitAck;
-                this.addUpdateSqliteQueue(message,UpdateMessageSqliteType.changeSendMessage)
+                copyMessage.status = SendStatus.WaitAck;
+                this.addUpdateSqliteQueue(copyMessage,UpdateMessageSqliteType.changeSendMessage)
             }
         }else{
-            message.status = SendStatus.PrepareToSend;
-            this.addUpdateSqliteQueue(message,UpdateMessageSqliteType.changeSendMessage)
+            copyMessage.status = SendStatus.PrepareToSend;
+            this.addUpdateSqliteQueue(copyMessage,UpdateMessageSqliteType.changeSendMessage)
         }
     }
 
@@ -539,6 +547,14 @@ export default class IM {
         }, configs.RunloopIntervalTime);
     }
 }
+
+
+function reInitMessage(sqliteMessage){
+
+
+    return message;
+}
+
 
 
 let loopStateType = {
