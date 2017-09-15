@@ -104,7 +104,7 @@ export default class IM {
         this.beginRunLoop();
 
         //获取之前没有发送出去的消息重新加入消息队列
-        this.addAllUnsendMessageToSendQueue();
+        // this.addAllUnsendMessageToSendQueue();
     }
 
     setNetworkStatus(netState) {
