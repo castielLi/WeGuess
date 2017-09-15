@@ -54,7 +54,7 @@ export function updateMessageStatus(message){
 }
 
 //获取range范围的消息
-export function queryRecentMessage(account,range){
+export function queryRecentMessage(account,way,range){
 
 }
 
@@ -321,7 +321,6 @@ IMFMDB.popMessageInSendMessageSqlite = function(messageId){
     }, errorDB);
 }
 
-
 //获取所有发送失败的消息
 IMFMDB.getAllCurrentSendMessages = function(callback){
     var db = SQLite.openDatabase({
@@ -344,7 +343,7 @@ IMFMDB.getAllCurrentSendMessages = function(callback){
                     ids.push(item.messageId);
                 })
 
-                let selectFailMessageSql = sqls.ExcuteIMSql.GetAllSendFailedMessagesInMessageTable;
+                let selectFailMessageSql = sqls.ExcuteIMSql.GetMessagesInMessageTableByIds;
 
                 selectFailMessageSql = commonMethods.sqlQueueFormat(selectFailMessageSql,ids);
 
@@ -358,6 +357,27 @@ IMFMDB.getAllCurrentSendMessages = function(callback){
         });
     }, errorDB);
 }
+
+// IMFMDB.getRangeMessages = function(account,range){
+//
+//     var db = SQLite.openDatabase({
+//         ...databaseObj
+//     }, () => {
+//         db.transaction((tx) => {
+//
+//             let querySql = sqls.ExcuteIMSql.QueryChatRecodeByClient;
+//
+//             querySql = commonMethods.sqlFormat(querySql,[]);
+//
+//             tx.executeSql(deleteSql, [], (tx, results) => {
+//
+//                 console.log("已经删除current send message")
+//
+//             }, errorDB);
+//
+//         });
+//     }, errorDB);
+// }
 
 
 //添加消息进总消息表

@@ -25,14 +25,14 @@ export const ExcuteIMSql = {
     "UpdateMessageStatusByMessageId":"update MessageRecode set status = ? where messageId = ?",
     "AddSendMessage":"insert into SendMessageRecode (messageId,status,times) values (?,?,'0')",
     "GetAllSendMessages":"select messageId from SendMessageRecode",
-    "GetAllSendFailedMessagesInMessageTable":"select * from MessageRecode where messageId in (?)",
+    "GetMessagesInMessageTableByIds":"select * from MessageRecode where messageId in (?)",
     "DeleteAllSendMessages":"delete from SendMessageRecode",
     "DeleteSendMessageByMessageId":"delete from SendMessageRecode where messageId = ?",
     "UpdateChatLastContent":"update ChatRecode set LastMessage = ? where Client = ?",
     "InsertMessageToRecode":"insert into MessageRecode (messageId,send,rec,time,content,type,localPath,url,status) values (?,?,?,?,?,?,?,?,?)",
     "InsertUploadFileRecode":"insert into ResourceRecode(messageId,localResource) values (?,?)",
     "DeleteUploadFileRecodeById":"Delete from ResourceRecode where messageId = ?",
-    // "QueryChatRecodeByClient":"select messageId from ? order by Id"
+    "QueryChatRecodeByClient":"select messageId from ? order by Id desc LIMIT ?,?",
 }
 
 
