@@ -24,6 +24,7 @@ import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Sound from 'react-native-sound';
 import RNFS from 'react-native-fs'
 import Ces from './ces';
+import IM from '../../../../Core/IM';
 
 
 let _listHeight = 0; //list显示高度
@@ -57,10 +58,6 @@ class Chat extends Component {
 
         this.data = [];
         this.data2 = [];
-        this.footerY = null;
-        this.listHeight = null;
-
-        this.downloadFile = this.downloadFile.bind(this);
 
         this.state = {
             dataSource: ds,
@@ -68,10 +65,6 @@ class Chat extends Component {
             showInvertible:false,
             isRefreshing:false,
 
-            downloadDest:'',
-
-            imageShow : false,
-            imageUri : '',
         };
 
     }
@@ -102,6 +95,7 @@ class Chat extends Component {
     // }
 
     componentWillMount() {
+        this.im = new IM()
         //this.fetchData();
         let {chatRecordStore} = this.props;
         console.log(chatRecordStore,11111111111111111111111111111111111)
@@ -145,55 +139,6 @@ class Chat extends Component {
         }
         return tmp
     }
-
-    downloadFile() {
-        // 图片
-        //const downloadDest = `${RNFS.DocumentDirectoryPath}/${((Math.random() * 1000) | 0)}.jpg`;
-        //const formUrl = 'http://img.kaiyanapp.com/c7b46c492261a7c19fa880802afe93b3.png?imageMogr2/quality/60/format/jpg';
-
-        // 音频
-        const downloadDest = `${RNFS.DocumentDirectoryPath}/${((Math.random() * 1000) | 0)}.mp3`;
-         //http://wvoice.spriteapp.cn/voice/2015/0902/55e6fc6e4f7b9.mp3
-        //http://www.w3school.com.cn/i/song.mp3
-        //http://wvoice.spriteapp.cn/voice/2015/0818/55d2248309b09.mp3
-        const formUrl = 'http://www.w3school.com.cn/i/song.mp3';
-
-        const options = {
-            fromUrl: formUrl,
-            toFile: downloadDest,
-            background: true,
-            begin: (res) => {
-                console.log('begin', res);
-                console.log('contentLength:', res.contentLength / 1024 / 1024, 'M');
-            },
-            progress: (res) => {
-
-                let pro = res.bytesWritten / res.contentLength;
-
-                console.log(pro)
-            }
-        };
-        try {
-            const ret = RNFS.downloadFile(options);
-            ret.promise.then(res => {
-                console.log('success', res);
-
-                console.log('file://' + downloadDest)
-                alert('file://' + downloadDest)
-                this.setState({
-                    downloadDest:downloadDest,
-                })
-
-            }).catch(err => {
-                console.log('err', err);
-            });
-        }
-        catch (e) {
-            console.log(error);
-        }
-
-    }
-
 
     renderRow = (row,sid,rowid) => {
         console.log('执行了renderRow');
@@ -250,6 +195,7 @@ class Chat extends Component {
         //         //console.log(this.data);
         //     })
         //     .done();
+       // alert(this.im.getRecentChatRecode('li'))
 
     }
 
@@ -279,6 +225,7 @@ class Chat extends Component {
     //聊天信息变化触发
     _onFooterLayout = (event) =>{
         //console.log('_onFooterLayout')
+        //alert(1)
         const {showInvertible}=this.state
         if(!showInvertible) {
             //console.log(1111111111111)
@@ -288,7 +235,7 @@ class Chat extends Component {
             //console.log('FooterLayout:'+FooterLayout,'_footerY:'+_footerY)
 
             this.scrollToBottom();
-
+            //alert(_footerY+'-'+_MaxListHeight)
             if(_footerY>_MaxListHeight&&_MaxListHeight!==0){
                 this.setState({
                     showInvertible:true
@@ -320,13 +267,17 @@ class Chat extends Component {
     //界面变化触发
     _onListViewLayout = (event) =>{
         // console.log(_listHeight)
+        //alert(2)
         const {showInvertible}=this.state
         if(!showInvertible){
             if(!_MaxListHeight){
                 _MaxListHeight = event.nativeEvent.layout.height;
+
+                //alert(_MaxListHeight)
             }
 
             ListLayout = event.nativeEvent.layout.height!==_listHeight;
+            //alert(ListLayout)
             _listHeight = event.nativeEvent.layout.height;
 
             //console.log('_MaxListHeight:'+_MaxListHeight,'ListLayout:'+ListLayout,'_listHeight:'+_listHeight)
@@ -347,6 +298,7 @@ class Chat extends Component {
         if(!showInvertible){
             return (
                 <View style={styles.chatListView} click={()=>this.push()}>
+                    <View style={{width:40,height:40,backgroundColor:'red'}}/>
                     <ListView
                         ref={(lv) => this.listView = lv}
                         dataSource={this.state.dataSource}

@@ -37,7 +37,290 @@
 // }
 const initialState = {
     ChatRecord: {
-        'li': [],
+        'li': [
+            {status:'loading',
+                message:{
+                        MSGID:'1',
+                        Command:6,//
+                        Resource:[{
+                            FileType:0,//0:image、1:video、3:audio
+                            LocalSource:'',//网络路径
+                            RemoteSource:'',//本地路径
+                        }],
+                Data:{
+                    IsAck :true,
+                    IsOfflineSaved :false,
+                    IsHistorySaved :false,
+                    IsOfflineNotify :true,
+                    LocalTime :"",
+                    Command : 1,
+                    //ServerTime :"",
+                    Data :{
+                        Command : 1,
+                        Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                        Sender :"",
+                        Receiver :"",
+                    }
+                },
+                type:'text',//text、image
+                way:'',//privte、chatroom
+                status:''//
+                 }
+            },{status:'loading',
+                message:{
+                    MSGID:'2',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"1",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },
+            {status:'loading',
+                message:{
+                    MSGID:'3',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },{status:'loading',
+                message:{
+                    MSGID:'4',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"2",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },{status:'loading',
+                message:{
+                    MSGID:'5',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },{status:'loading',
+                message:{
+                    MSGID:'6',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"2",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },{status:'loading',
+                message:{
+                    MSGID:'7',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },{status:'loading',
+                message:{
+                    MSGID:'8',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"2",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },{status:'loading',
+                message:{
+                    MSGID:'9',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            },{status:'loading',
+                message:{
+                    MSGID:'10',
+                    Command:6,//
+                    Resource:[{
+                        FileType:0,//0:image、1:video、3:audio
+                        LocalSource:'',//网络路径
+                        RemoteSource:'',//本地路径
+                    }],
+                    Data:{
+                        IsAck :true,
+                        IsOfflineSaved :false,
+                        IsHistorySaved :false,
+                        IsOfflineNotify :true,
+                        LocalTime :"",
+                        Command : 1,
+                        //ServerTime :"",
+                        Data :{
+                            Command : 1,
+                            Data :"Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮Hi 你是真皮",//如果非文本数据，则为空。如果是文本数据则为文本内容
+                            Sender :"2",
+                            Receiver :"",
+                        }
+                    },
+                    type:'text',//text、image
+                    way:'',//privte、chatroom
+                    status:''//
+                }
+            }
+        ],
         '2':[]
     }
 }
