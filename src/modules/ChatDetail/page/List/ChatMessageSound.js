@@ -7,6 +7,7 @@ import {
     Text,
     View,
     Dimensions,
+    TouchableOpacity
 } from 'react-native';
 
 import Sound from 'react-native-sound';

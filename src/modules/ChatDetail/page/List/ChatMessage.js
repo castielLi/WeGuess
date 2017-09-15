@@ -46,14 +46,14 @@ export default class ChatMessage extends Component {
                 )
             }
                 break;
-            // case 'audio': {
-            //     return (
-            //         <ChatMessageSound
-            //             data={data}
-            //         />
-            //     )
-            // }
-            //     break;
+            case 'audio': {
+                return (
+                    <ChatMessageSound
+                        data={data}
+                    />
+                )
+            }
+                break;
         }
     };
 
