@@ -29,14 +29,17 @@ export function deleteMessage(message,chatType,client){
     IMFMDB.DeleteChatMessage(message,chatType,client);
 }
 
+//向消息列表中添加消息
 export function addMessageToSendSqlite(message){
     IMFMDB.addSendMessage(message);
 }
 
+//删除消息列表中的message记录
 export function popMessageInSendSqlite(messageId){
     IMFMDB.popMessageInSendMessageSqlite(messageId);
 }
 
+//获取所有消息列表中的消息记录
 export function getAllCurrentSendMessage(callback){
     return IMFMDB.getAllCurrentSendMessages(callback)
 }
@@ -48,6 +51,11 @@ export function updateSendMessageStatus(message) {
 //修改消息列表中的消息状态
 export function updateMessageStatus(message){
     IMFMDB.UpdateMessageStatues(message)
+}
+
+//获取range范围的消息
+export function queryRecentMessage(account,range){
+
 }
 
 
@@ -351,19 +359,6 @@ IMFMDB.getAllCurrentSendMessages = function(callback){
     }, errorDB);
 }
 
-//为Tablename的表添加索引
-// function insertIndexForTable(tableName,tx){
-//     let insertSql = sqls.ExcuteIMSql.CreateChatTableIndex;
-//
-//     insertSql = commonMethods.sqlFormat(insertSql,[tableName]);
-//
-//     tx.executeSql(insertSql, [], (tx, results) => {
-//
-//         console.log("insert index success for" + tableName);
-//
-//     }, (err)=>{errorDB('向'+tableName + "添加索引",err)
-//     });
-// }
 
 //添加消息进总消息表
 function insertChat(message,tx){
@@ -490,6 +485,7 @@ function InterceptionClientFromTable(str){
     client = str.slice(str.indexOf('_')+1);
     return client;
 }
+
 function errorDB(type,err) {
     console.log("SQL Error: " +type,err);
 }

@@ -10,6 +10,7 @@ import MessageStatus from "./dto/MessageStatus"
 import SendStatus from './dto/SendStatus'
 import * as configs from './IMconfig'
 import MessageCommandEnum from './dto/MessageCommandEnum'
+import * as DtoMethods from './dto/Common'
 
 
 
@@ -179,6 +180,14 @@ export default class IM {
     }
 
 
+    //获取当前用户或者群组的聊天记录
+    getRecentChatRecode(account,range = {start:0,end:10}){
+
+    }
+
+
+
+
     //获取当前所有未发出去的消息添加入消息队列
     addAllUnsendMessageToSendQueue(){
         storeSqlite.getAllCurrentSendMessage(function(currentSendMessages){
@@ -186,7 +195,13 @@ export default class IM {
             if(currentSendMessages == null){
                 return;
             }
-            sendMessageQueue = currentSendMessages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+
+            let messages = [];
+
+            currentSendMessages.forEach(function (item) {
+                messages.push(DtoMethods.sqliteMessageToMessage(item))
+            })
+            sendMessageQueue = messages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
         });
     }
 
@@ -217,12 +232,15 @@ export default class IM {
 
             switch (message.type) {
                 case "text":
-
                     this.addMessageQueue(message);
                     callback(true,message.MSGID);
                     break;
                 case "image":
 
+                    resourceQueue.push({onprogress:onprogess,message:message})
+                    callback(true,message.MSGID);
+                    break;
+                case "audio":
                     resourceQueue.push({onprogress:onprogess,message:message})
                     callback(true,message.MSGID);
                     break;
@@ -495,7 +513,7 @@ export default class IM {
                     // AppMessageResultHandle(false,ackMessageQueue[item].message);
 
                     ackMessageQueue[item].message.status = MessageStatus.SendFailed;
-                    obj.addUpdateSqliteQueue(message,UpdateMessageSqliteType.storeMessage)
+                    obj.addUpdateSqliteQueue(ackMessageQueue[item].message,UpdateMessageSqliteType.storeMessage)
 
                     ackMessageQueue.splice(item, 1);
                     obj.popCurrentMessageSqlite(ackMessageQueue[item].message.MSGID)

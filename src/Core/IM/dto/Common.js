@@ -30,9 +30,9 @@ export function sqliteMessageToMessage(sqliteMessage){
     messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
     messageBody.Data = messageData;
 
-
     message.Command = MessageCommandEnum.MSG_BODY;
     message.Data = messageBody;
+    message.MSGID = sqliteMessage.messageId;
 
     if(sqliteMessage.type != MessageType.image){
          message.type = "image"

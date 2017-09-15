@@ -32,6 +32,7 @@ export const ExcuteIMSql = {
     "InsertMessageToRecode":"insert into MessageRecode (messageId,send,rec,time,content,type,localPath,url,status) values (?,?,?,?,?,?,?,?,?)",
     "InsertUploadFileRecode":"insert into ResourceRecode(messageId,localResource) values (?,?)",
     "DeleteUploadFileRecodeById":"Delete from ResourceRecode where messageId = ?",
+    // "QueryChatRecodeByClient":"select messageId from ? order by Id"
 }
 
 
