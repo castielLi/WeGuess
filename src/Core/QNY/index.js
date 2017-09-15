@@ -52,7 +52,7 @@ export default class QNY {
 
 
 	//todo:做成多张图片可以统一上传 promise.race
-	uploadFile(fileUri,index, onprogress,success) {
+	uploadFile(fileUri,index, onprogress,success,error) {
 		return new Promise((resolve, reject) => {
 			let keys = fileUri.split("/");
 			let key = keys[keys.length - 1];
@@ -82,9 +82,11 @@ export default class QNY {
 					success(result);
 					resolve && resolve(index);
 				}, (xhr) => {
+					error(index);
 					reject && reject(index);
 				});
 			}).catch(e => {
+				error(index);
 				reject && reject(index);
 			});
 		});

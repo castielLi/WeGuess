@@ -41,7 +41,6 @@ export function sqliteMessageToMessage(sqliteMessage){
          file.LocalSource =  message.localPath;
          message.Resource = [file];
     }else{
-
         message.type = "text"
     }
     return message;

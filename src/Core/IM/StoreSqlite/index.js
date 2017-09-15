@@ -27,6 +27,14 @@ export function deleteMessage(message,chatType,client){
     IMFMDB.DeleteChatMessage(message,chatType,client);
 }
 
+export function InsertResource(messageId,localPath){
+    IMFMDB.InsertResource(messageId,localPath);
+}
+
+export function DeleteResource(messageId,localPath){
+   IMFMDB.DeleteResource(messageId,localPath);
+}
+
 //向消息列表中添加消息
 export function addMessageToSendSqlite(message){
     IMFMDB.addSendMessage(message);
@@ -388,6 +396,26 @@ IMFMDB.getRangeMessages = function(account,way,range,callback){
             }, errorDB);
 
         });
+    }, errorDB);
+}
+
+IMFMDB.InsertResource = function(messageId,localPath){
+
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+
+
+    }, errorDB);
+}
+
+IMFMDB.DeleteResource = function(messageId,localPath){
+
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+
+
     }, errorDB);
 }
 

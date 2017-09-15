@@ -197,11 +197,20 @@ export default class IM {
             }
 
             let messages = [];
+            let sendMessage = [];
 
             currentSendMessages.forEach(function (item) {
-                messages.push(DtoMethods.sqliteMessageToMessage(item))
+                let message = DtoMethods.sqliteMessageToMessage(item);
+
+                //根据消息类型加入队列
+                if(message.type == "text"){
+                    sendMessage.push(message);
+                }else{
+                    resourceQueue.push(message);
+                }
             })
-            sendMessageQueue = messages.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
+
+            sendMessageQueue = sendMessage.reduce(function(prev, curr){ prev.push(curr); return prev; },sendMessageQueue);
         });
     }
 
@@ -283,6 +292,12 @@ export default class IM {
         let progressHandles = obj["onprogress"];
         let callback = obj["callback"];
 
+        //把资源存入数据库
+        for(let item in message.Resource){
+            storeSqlite.InsertResource(message.MSGID,message.Resource[item].LocalSource);
+        }
+
+
         let uploadQueue = [];
         for(let item in message.Resource) {
             uploadQueue.push(methods.getUploadPathFromServer(message.Resource[item].LocalSource,item,function(progress,index){
@@ -292,7 +307,13 @@ export default class IM {
             },function(result){
                 console.log("上传成功" + result);
                 message.Resource[item].RemoteSource = result.url;
-            }));
+
+                //pop上传成功的资源
+                storeSqlite.DeleteResource(message.MSGID,message.Resource[index].LocalSource);
+
+            }),function(index){
+                console.log("上传失败" + index);
+            });
         }
 
         Promise.all(uploadQueue).then(function(values){
