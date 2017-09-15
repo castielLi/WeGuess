@@ -54,7 +54,7 @@ imagePikerCallBack(response){
     console.log('User tapped custom button: ', response.customButton);
   }
   else {
-    console.log(response.uri)// 选择本地content://media/external/images/media/30；拍照file:///storage/emulated/0/Pictures/image-ad930ba1-fc6f-44c5-afb4-dda910fccc8c.jpg
+    //console.log(response.uri)// 选择本地content://media/external/images/media/30；拍照file:///storage/emulated/0/Pictures/image-ad930ba1-fc6f-44c5-afb4-dda910fccc8c.jpg
     //alert(response.path)
     // You can also display the image using data:
     // let source = { uri: 'data:image/jpeg;base64,' + response.data };
