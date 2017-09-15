@@ -56,7 +56,7 @@ export default class ChatMessageSound extends Component {
     render() {
         let {data} = this.props;
         let {Sender,Receiver} = data.message.Data.Data;
-        let {LocalSource,RemoteSource} = data.message.Resource;
+        let {LocalSource,RemoteSource} = data.message.Resource[0];
         if(!Sender){
             return(
                 <View style={styles.bubbleViewRight}>

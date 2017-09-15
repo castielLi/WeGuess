@@ -80,6 +80,7 @@ class Chat extends Component {
         console.log(newProps,11111111111111111111111111111111111)
         let newData = newProps.chatRecordStore;
         console.log(newData,11111111111111111111111111111111111)
+        //alert(newData.length)
         this.data = newData;
         this.data2 = this.prepareMessages(newData.concat().reverse());
         this.setState({
@@ -214,14 +215,6 @@ class Chat extends Component {
             )
         }
     }
-
-    gaibian(){
-        this.setState({
-            imageShow : true,
-            imageUri:'https://ws1.sinaimg.cn/large/610dc034ly1fivohbbwlqj20u011idmx.jpg'
-        },()=>console.log(this.state))
-
-    }
     scrollToEnd = () => {
         if(this.state.showInvertible){
             if (this._invertibleScrollViewRef === null) { return }
@@ -257,6 +250,7 @@ class Chat extends Component {
         //         //console.log(this.data);
         //     })
         //     .done();
+
     }
 
     myRenderFooter(){
@@ -298,7 +292,11 @@ class Chat extends Component {
             if(_footerY>_MaxListHeight&&_MaxListHeight!==0){
                 this.setState({
                     showInvertible:true
-                })
+                },()=>this.listView.scrollTo({
+                    y: 0,
+                    x: 0,
+                    animated:false,
+                }))
             }
         }
     }

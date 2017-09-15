@@ -46,7 +46,7 @@ export default class ChatMessage extends Component {
                 )
             }
                 break;
-            // case 'Voice': {
+            // case 'audio': {
             //     return (
             //         <ChatMessageSound
             //             data={data}

@@ -11,7 +11,6 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import Sound from 'react-native-sound';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as Actions from '../../reducer/action'
@@ -42,11 +41,11 @@ class ChatMessageImage extends Component {
     };
 
     getImageSize = (uri)=>{
-        Image.getSize(uri, (width, height) => {
+        Image.getSize(uri, (w, h) => {
             // this.Size = {width,height}
 
             this.setState({
-                Size : {width,height}
+                Size : {width:w,height:h}
             })
             //alert(this.Size.width+"22")
         })
@@ -116,8 +115,8 @@ const styles = StyleSheet.create({
         //borderRadius:5
     },
     imageStyle:{
-        width:80,
-        height:80,
+        height:100,
+        width:100,
     }
 });
 
