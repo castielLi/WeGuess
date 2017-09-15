@@ -7,7 +7,11 @@ export function sqlFormat(sql,parameters=[]){
     for(let i = 0; i<parameters.length;i++){
         // parameters[i] == "" ? parameters[i] = "blank":parameters[i];
         (typeof(parameters[i])=== "boolean") ? (parameters[i] ? "true":"false"):parameters[i];
-       currentSql = currentSql.replace("?", "'" + parameters[i] + "'");
+        if(typeof(parameters[i]) === "number"){
+            currentSql = currentSql.replace("?", parameters[i]);
+        }else {
+            currentSql = currentSql.replace("?", "'" + parameters[i] + "'");
+        }
     }
     return currentSql;
 }

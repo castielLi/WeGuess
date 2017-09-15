@@ -181,8 +181,8 @@ export default class IM {
 
 
     //获取当前用户或者群组的聊天记录
-    getRecentChatRecode(account,range = {start:0,end:10}){
-
+    getRecentChatRecode(account,way,range = {start:0,limit:10},callback){
+        storeSqlite.queryRecentMessage(account,way,range,callback);
     }
 
 
