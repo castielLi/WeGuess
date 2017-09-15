@@ -16,7 +16,7 @@ export default class Audio {
       currentTime: 0.0,
       recording: false,
       finished: false,
-      audioPath: AudioUtils.DocumentDirectoryPath + '/' + name + '/' + fileName,
+      audioPath: AudioUtils.DocumentDirectoryPath + '/audio/' + name + '/' + fileName+'.aac',
       hasPermission: undefined,
     };
 
@@ -41,11 +41,10 @@ export default class Audio {
   }
 
   init(fn) {
-    console.log(123)
     this._checkPermission().then((hasPermission) => {
       this.state.hasPermission = hasPermission;
       if (!hasPermission) return;
-
+      console.log('audioPath:', this.state.audioPath);
       this.prepareRecordingPath(this.state.audioPath);
       //录音过程中，每秒触发一次，回调函数参数data 是一个对象{currentTime:已经记录的秒数}
       AudioRecorder.onProgress = (data) => {

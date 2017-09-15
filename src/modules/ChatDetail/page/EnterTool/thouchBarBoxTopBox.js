@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   PixelRatio,
-
+  Modal
 } from 'react-native';
 import {
     connect
@@ -30,16 +30,19 @@ const ptToPx = pt=>PixelRatio.getPixelSizeForLayoutSize(pt);
 const pxToPt = px=>PixelRatio.roundToNearestPixel(px);
 const im = new IM();
 var {height, width} = Dimensions.get('window');
-var audio;
+var audio,recordTimer,modalTimer;
 class ThouchBarBoxTopBox extends Component {  
  	constructor(props) {  
     super(props);  
     this.state = {  
       speakTxt:'按住说话', 
       sendMessage:{data:'',from:'',id:'',uri:'',type:''},
-      path:'',
+      audioPath:'',
+      imagePath:'',
       fileName:'',
       thouchBarTopBoxHeight:0,
+      isShowModal:false,
+      recordingModalStatus:0//0:录音中 1:时间太短 2：取消发送
     };  
     this.changeThouchBarTopBoxHeight = this.changeThouchBarTopBoxHeight.bind(this);
     this.toRecord = this.toRecord.bind(this);
@@ -51,6 +54,9 @@ class ThouchBarBoxTopBox extends Component {
     this.renderEnterBox = this.renderEnterBox.bind(this);
     this._onPressIn = this._onPressIn.bind(this);
     this._onPressOut = this._onPressOut.bind(this);
+    this.renderModalBoxContent = this.renderModalBoxContent.bind(this);
+    this.renderModal = this.renderModal.bind(this);
+    this._onRequestClose = this._onRequestClose.bind(this);
   }  
   changeThouchBarTopBoxHeight(height){
     this.setState({
@@ -114,24 +120,47 @@ class ThouchBarBoxTopBox extends Component {
       <Icon name="plus" size={20} color="#aaa" />
       )
   }
+
   _onPressIn(){
     //开始录音
     let fileName = uuidv1();
     this.state.fileName = fileName;
-    audio = new Audio('Li', fileName);
-    audio._record();  
+    startTime = Date.now();
+    recordTimer = setTimeout(()=>{
+        audio = new Audio('Li', fileName);
+        audio._record();
+    },500)
     this.setState({
+      isShowModal:true,
+      recordingModalStatus:0,
       speakTxt:'松开结束'
     })
-
   }
+
   _onPressOut(){
-    //检查录音时间
-    //...
     
+    //检查录音时间
+    if (Date.now() - startTime < 500) {
+        startTime = 0;
+        // 不录音
+        clearTimeout(recordTimer);
+        this.setState({
+          recordingModalStatus:1
+        })
+        //延迟一秒隐藏Modal
+        modalTimer = setTimeout(()=>{
+          this.setState({
+          isShowModal:false,
+        })
+        },1000)
+        return;
+    }
     audio._stop(()=>{
+      this.setState({
+        isShowModal:false,
+      })
       //初始化消息
-      let message = createResourceMessageObj('audio','private',[{FileType:2,LocalSource:this.state.path+'/'+this.state.fileName,RemoteSource:''}],'','li');
+      let message = createResourceMessageObj('audio','private',[{FileType:2,LocalSource:this.state.audioPath+'/'+this.state.fileName+'.aac',RemoteSource:''}],'','li');
       //更新chatRecordStore
       im.addMessage(message,(status,messageId)=>{
         message.MSGID = messageId;
@@ -142,6 +171,11 @@ class ThouchBarBoxTopBox extends Component {
     //发送
     this.setState({
       speakTxt:'按住说话'
+    })
+  }
+  _onRequestClose(){
+    this.setState({
+      isShowModal:false,
     })
   }
   //获取TextInput组件方法
@@ -166,9 +200,11 @@ class ThouchBarBoxTopBox extends Component {
   }
   componentWillMount(){
     //创建文件夹
-      let path = RNFS.DocumentDirectoryPath + '/' + 'Li';
-      this.state.path = path;
-      RNFS.mkdir(path)
+      let audioPath = RNFS.DocumentDirectoryPath + '/audio/' + 'Li';
+      let imagePath = RNFS.DocumentDirectoryPath + '/image/' + 'Li';
+      this.state.audioPath = audioPath;
+      this.state.imagePath = imagePath;
+      RNFS.mkdir(audioPath)
         .then((success) => {
           console.log('create new dir success!');
         })
@@ -176,25 +212,65 @@ class ThouchBarBoxTopBox extends Component {
           console.log(err.message);
         });
   }
+  renderModal(){
+    //if(this.state.isShowModal){
+      return  <Modal 
+                animationType='fade'
+                transparent={true}
+                onRequestClose={()=>{}}
+                visible={this.state.isShowModal}
+              >
+                <View style={styles.recordingModalBox}>
+                  <View style={styles.recordingModal}>
+                    {this.renderModalBoxContent()}
+                  </View>
+                </View>
+              </Modal>
+    // }else{
+    //   return null;
+    // }
+  }
+  renderModalBoxContent(){
+    if(this.state.recordingModalStatus === 0){
+      return <View style={styles.recordingModalItem}>
+                <Icon name="microphone" size={50} color="#eee" />
+                <Text style={styles.recordingModalText}>录音中...</Text>
+             </View>
+    }else if(this.state.recordingModalStatus === 1){
+      return <View style={styles.recordingModalItem}>
+                <Icon name="exclamation" size={50} color="#eee" />
+                <Text style={styles.recordingModalText}>录音时间太短</Text>
+             </View>
+    }else if(this.state.recordingModalStatus === 2){
+      return <View style={styles.recordingModalItem}>
+                <Icon name="undo" size={50} color="#eee" />
+                <Text style={styles.recordingModalText}>松开手指，取消发送</Text>
+             </View>
+    }
+  }
 	render(){
 		return(
-			<View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?pxToPt(62):Math.max(pxToPt(62),pxToPt(this.state.thouchBarTopBoxHeight+20))}]}>
-	          {this.renderEnterBox()}
-	          <TouchableHighlight style={[styles.button,styles.voiceButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toRecord}>
-	            {this.renderVoiceButton()}
-	          </TouchableHighlight>
-	          <TouchableHighlight style={[styles.button,styles.smileButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toExpression}>
-	            {this.rendersmileButton()}
-	          </TouchableHighlight>
-	          <TouchableHighlight style={[styles.button,styles.plusButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toPlus}>
-	            {this.renderPlusButton()}
-	          </TouchableHighlight>
-	        </View>
+      <View>
+        <View style={[styles.thouchBarBoxTop,{height:this.props.thouchBarStore.isRecordPage?pxToPt(62):Math.max(pxToPt(62),pxToPt(this.state.thouchBarTopBoxHeight+20))}]}>
+            {this.renderEnterBox()}
+            <TouchableHighlight style={[styles.button,styles.voiceButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toRecord}>
+              {this.renderVoiceButton()}
+            </TouchableHighlight>
+            <TouchableHighlight style={[styles.button,styles.smileButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toExpression}>
+              {this.rendersmileButton()}
+            </TouchableHighlight>
+            <TouchableHighlight style={[styles.button,styles.plusButton]} underlayColor={'#bbb'} activeOpacity={0.5} onPress={this.toPlus}>
+              {this.renderPlusButton()}
+            </TouchableHighlight>
+        </View>
+        {this.renderModal()}     
+      </View>
+			
 			)
 	}
   shouldComponentUpdate(nextProps,nextState){
     //console.log(nextProps.emojiId,this.props.emojiId)
-    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextProps.emojiText!==this.props.emojiText||nextProps.emojiId!==this.props.emojiId||nextState.thouchBarTopBoxHeight!==this.state.thouchBarTopBoxHeight||nextState.speakTxt!==this.state.speakTxt){
+    if(nextProps.thouchBarStore.isRecordPage!==this.props.thouchBarStore.isRecordPage||nextProps.thouchBarStore.isExpressionPage!==this.props.thouchBarStore.isExpressionPage||nextProps.thouchBarStore.isPlusPage!==this.props.thouchBarStore.isPlusPage||nextProps.emojiText!==this.props.emojiText||nextProps.emojiId!==this.props.emojiId||nextState.thouchBarTopBoxHeight!==this.state.thouchBarTopBoxHeight||nextState.speakTxt!==this.state.speakTxt||nextState.isShowModal!==this.state.isShowModal||nextState.recordingModalStatus!==this.state.recordingModalStatus){
       return true
     }
     return false;
@@ -258,6 +334,28 @@ class ThouchBarBoxTopBox extends Component {
     fontWeight:'bold'
   },
 
+
+  //录音modal
+  recordingModalBox:{
+    flex:1,
+    backgroundColor:'transparent',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  recordingModal:{
+    height:pxToPt(100),
+    width:pxToPt(100), 
+    backgroundColor:'rgba(0,0,0,0.5)',
+  },
+  recordingModalItem:{
+    flex:1,
+    paddingTop:10,
+    alignItems:'center'
+  },
+  recordingModalText:{
+    color:'#eee',
+    marginTop:20
+  }
 });
 
 const mapStateToProps = state => ({
