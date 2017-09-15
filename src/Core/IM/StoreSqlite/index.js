@@ -9,8 +9,6 @@ import * as commonMethods from './formatQuerySql'
 import ChatWayEnum from '../dto/ChatWayEnum'
 import ResourceTypeEnum from '../dto/ResourceTypeEnum'
 
-let chatList = [];
-
 export function storeSendMessage(message,way){
 
     IMFMDB.InsertMessageWithCondition(message,message.Data.Data.Receiver)
@@ -54,8 +52,8 @@ export function updateMessageStatus(message){
 }
 
 //获取range范围的消息
-export function queryRecentMessage(account,way,range){
-
+export function queryRecentMessage(account,way,range,callback){
+    IMFMDB.getRangeMessages(account,way,range,callback)
 }
 
 
@@ -253,11 +251,6 @@ IMFMDB.DeleteChatMessage = function(message,chatType,client){
     }, errorDB);
 }
 
-//按照需求获取当前用户的聊天记录
-IMFMDB.getQueryChatListByClientId = function(){
-
-}
-
 //获取所有聊天用户
 IMFMDB.getAllChatClientList = function(){
     var db = SQLite.openDatabase({
@@ -268,7 +261,6 @@ IMFMDB.getAllChatClientList = function(){
             tx.executeSql(sqls.ExcuteIMSql.GetChatList, [], (tx, results) => {
 
                 console.log(results);
-                chatList = results;
 
             }, errorDB);
 
@@ -358,26 +350,46 @@ IMFMDB.getAllCurrentSendMessages = function(callback){
     }, errorDB);
 }
 
-// IMFMDB.getRangeMessages = function(account,range){
-//
-//     var db = SQLite.openDatabase({
-//         ...databaseObj
-//     }, () => {
-//         db.transaction((tx) => {
-//
-//             let querySql = sqls.ExcuteIMSql.QueryChatRecodeByClient;
-//
-//             querySql = commonMethods.sqlFormat(querySql,[]);
-//
-//             tx.executeSql(deleteSql, [], (tx, results) => {
-//
-//                 console.log("已经删除current send message")
-//
-//             }, errorDB);
-//
-//         });
-//     }, errorDB);
-// }
+IMFMDB.getRangeMessages = function(account,way,range,callback){
+
+    var db = SQLite.openDatabase({
+        ...databaseObj
+    }, () => {
+        db.transaction((tx) => {
+
+            let tabName = way  == ChatWayEnum.Private?"Private_" + account:"ChatRoom_" + account;
+
+            let querySql = sqls.ExcuteIMSql.QueryChatRecodeByClient;
+
+            querySql = commonMethods.sqlFormat(querySql,[tabName,range.start,range.limit]);
+
+            tx.executeSql(querySql, [], (tx, results) => {
+
+                if(results.rows.length > 0){
+
+                    let messageIds = results.rows.raw();
+
+                    let ids = [];
+                    messageIds.forEach(function(item){
+                        ids.push(item.messageId);
+                    })
+
+                    let selectMessages = sqls.ExcuteIMSql.GetMessagesInMessageTableByIds;
+
+                    selectMessages = commonMethods.sqlQueueFormat(selectMessages,ids);
+
+                    tx.executeSql(selectMessages, [], (tx, results) => {
+                        callback(results.rows.raw());
+                    }, errorDB);
+                }else{
+                    callback(null);
+                }
+
+            }, errorDB);
+
+        });
+    }, errorDB);
+}
 
 
 //添加消息进总消息表

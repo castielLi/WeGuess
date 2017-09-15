@@ -62,34 +62,38 @@ export default function App() {
 
     im.connectIM(handleMessageResult,handleMessageChange)
 
-    let sendMessage = setInterval(function(){
-        let addMessage = new SendMessageDto();
-        let messageBody = new SendMessageBodyDto();
-        let messageData = new messageBodyChatDto();
+    // let sendMessage = setInterval(function(){
+    //     let addMessage = new SendMessageDto();
+    //     let messageBody = new SendMessageBodyDto();
+    //     let messageData = new messageBodyChatDto();
+    //
+    //     messageData.Data = "hello world";
+    //     messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
+    //     messageData.Sender = "1";
+    //     messageData.Receiver = "2";
+    //
+    //     messageBody.LocalTime = new Date().getTime();
+    //     messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
+    //     messageBody.Data = messageData;
+    //
+    //
+    //     addMessage.Command = MessageCommandEnum.MSG_BODY;
+    //     addMessage.Data = messageBody;
+    //     addMessage.type = "text";
+    //     addMessage.way = "chatroom";
+    //
+    //     im.addMessage(addMessage);
+    //
+    //     // im.addRecMessage(addMessage);
+    // },2000)
+    //
+    // setInterval(function(){
+    //     clearInterval(sendMessage)
+    // },10000)
 
-        messageData.Data = "hello world";
-        messageData.Command = ChatCommandEnum.MSG_BODY_CHAT_C2C
-        messageData.Sender = "1";
-        messageData.Receiver = "2";
-
-        messageBody.LocalTime = new Date().getTime();
-        messageBody.Command = MessageBodyTypeEnum.MSG_BODY_CHAT;
-        messageBody.Data = messageData;
-
-
-        addMessage.Command = MessageCommandEnum.MSG_BODY;
-        addMessage.Data = messageBody;
-        addMessage.type = "text";
-        addMessage.way = "chatroom";
-
-        im.addMessage(addMessage);
-
-        // im.addRecMessage(addMessage);
-    },2000)
-
-    setInterval(function(){
-        clearInterval(sendMessage)
-    },10000)
+    im.getRecentChatRecode("2","chatroom",{start:2,limit:10},function (messages) {
+        console.log("消息记录为" + messages);
+    })
 
 
 
