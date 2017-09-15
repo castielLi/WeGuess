@@ -9,7 +9,8 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  PixelRatio
+  PixelRatio,
+
 } from 'react-native';
 import {
     connect
@@ -38,7 +39,7 @@ class ThouchBarBoxTopBox extends Component {
       sendMessage:{data:'',from:'',id:'',uri:'',type:''},
       path:'',
       fileName:'',
-      thouchBarTopBoxHeight:0
+      thouchBarTopBoxHeight:0,
     };  
     this.changeThouchBarTopBoxHeight = this.changeThouchBarTopBoxHeight.bind(this);
     this.toRecord = this.toRecord.bind(this);
@@ -163,10 +164,6 @@ class ThouchBarBoxTopBox extends Component {
       </View>
       )
   }
-  //获取TextInput组件对象
-  // getInputObject(input){
-  //   this.input = input;
-  // }
   componentWillMount(){
     //创建文件夹
       let path = RNFS.DocumentDirectoryPath + '/' + 'Li';

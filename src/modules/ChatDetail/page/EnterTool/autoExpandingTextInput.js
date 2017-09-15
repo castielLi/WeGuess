@@ -61,6 +61,7 @@ class AutoExpandingTextInput extends Component {
         //在表情栏提交后不会获得焦点
         if(!this.props.thouchBarStore.isExpressionPage) this.input.focus();
         this.state.data = '';
+        this.props.setTextInputData('');
       });
      
       
