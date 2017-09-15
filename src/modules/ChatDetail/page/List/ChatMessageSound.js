@@ -61,7 +61,7 @@ export default class ChatMessageSound extends Component {
         if(!Sender){
             return(
                 <View style={styles.bubbleViewRight}>
-                    <TouchableOpacity onPress={()=>this.playSound(RemoteSource)}>
+                    <TouchableOpacity onPress={()=>this.playSound(LocalSource || RemoteSource)}>
                         <Text>播放</Text>
                     </TouchableOpacity>
                 </View>
@@ -70,7 +70,7 @@ export default class ChatMessageSound extends Component {
         else{
             return(
                 <View style={styles.bubbleView}>
-                    <TouchableOpacity onPress={()=>this.playSound(RemoteSource)}>
+                    <TouchableOpacity onPress={()=>this.playSound(LocalSource || RemoteSource)}>
                         <Text>播放</Text>
                     </TouchableOpacity>
                 </View>
